@@ -17,6 +17,7 @@ import { Images, Fonts } from "@/assets";
 import { styles as S } from "./styles";
 import { LANDING_CONFIG } from "../../config";
 import { useTheme } from "@rneui/themed";
+import ElevatedView from "react-native-elevated-view";
 
 export const Body = () => {
   const { theme } = useTheme();
@@ -66,24 +67,29 @@ export const Body = () => {
 
   const _renderButton = () => {
     return (
-      <TouchableOpacity
-        style={StyleSheet.flatten([
-          S.button,
-          {
-            backgroundColor: theme.colors.primary,
-          },
-        ])}
-        activeOpacity={0.8}
+      <ElevatedView
+        style={StyleSheet.flatten([S.buttonContainer])}
+        elevation={5}
       >
-        <Text
+        <TouchableOpacity
           style={StyleSheet.flatten([
-            S.buttonTitle,
-            { color: theme.colors.white, fontFamily: Fonts.semibold },
+            S.button,
+            {
+              backgroundColor: theme.colors.primary,
+            },
           ])}
+          activeOpacity={0.8}
         >
-          {LANDING_CONFIG.buttonTitle}
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={StyleSheet.flatten([
+              S.buttonTitle,
+              { color: theme.colors.white, fontFamily: Fonts.semibold },
+            ])}
+          >
+            {LANDING_CONFIG.buttonTitle}
+          </Text>
+        </TouchableOpacity>
+      </ElevatedView>
     );
   };
 

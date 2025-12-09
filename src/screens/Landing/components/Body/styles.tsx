@@ -46,11 +46,18 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 25,
   },
-  button: {
+  buttonContainer: {
     display: "flex",
     alignItems: "center",
     alignSelf: "center",
     marginVertical: 40,
+    width: ScreenWidth * 0.8,
+    borderRadius: 12,
+  },
+  button: {
+    display: "flex",
+    alignItems: "center",
+    alignSelf: "center",
     width: ScreenWidth * 0.8,
     paddingVertical: 16,
     borderRadius: 12,
