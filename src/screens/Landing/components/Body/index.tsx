@@ -19,7 +19,11 @@ import { LANDING_CONFIG } from "../../config";
 import { useTheme } from "@rneui/themed";
 import ElevatedView from "react-native-elevated-view";
 
-export const Body = () => {
+export interface IBody {
+  navigateToLogin: () => void;
+}
+
+export const Body = ({ navigateToLogin }: IBody) => {
   const { theme } = useTheme();
 
   const _renderLandingImage = () => {
@@ -79,6 +83,7 @@ export const Body = () => {
             },
           ])}
           activeOpacity={0.8}
+          onPress={navigateToLogin}
         >
           <Text
             style={StyleSheet.flatten([

@@ -9,7 +9,7 @@ import { View, StyleSheet } from "react-native";
 import { styles as S } from "./styles";
 import React, { useState, useEffect } from "react";
 import { Keyboard, KeyboardAvoidingView, Platform } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useThemeMode } from "@/hooks";
 
 export const PageContainer = ({ children }: any) => {
@@ -32,20 +32,21 @@ export const PageContainer = ({ children }: any) => {
   }, []);
 
   return (
-    <SafeAreaView
-      style={StyleSheet.flatten([
-        S.container,
-        { backgroundColor: theme.colors.white },
-      ])}
-    >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
-        style={flexToggle ? { flexGrow: 1 } : { flex: 1 }}
-        enabled={!flexToggle}
+    <SafeAreaProvider>
+      <SafeAreaView
+        style={StyleSheet.flatten([
+          S.container,
+          { backgroundColor: theme.colors.white },
+        ])}
       >
-        <View style={StyleSheet.flatten([S.container])}>{children}</View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 2}
+          style={{ flex: 1 }}
+        >
+          <View style={StyleSheet.flatten([S.container])}>{children}</View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };

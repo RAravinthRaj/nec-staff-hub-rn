@@ -10,9 +10,12 @@ import { ScreenWidth } from "@rneui/base";
 export const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 13,
-    alignSelf: "center",
-    paddingTop: 4,
+    bottom: 15,
+    left: 0,
+    right: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     width: ScreenWidth,
   },
   text: {

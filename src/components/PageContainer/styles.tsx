@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
   },
 
   container: {
-    display: "flex",
     flex: 1,
     padding: 10,
     gap: 10,

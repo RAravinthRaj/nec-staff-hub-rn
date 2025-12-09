@@ -8,19 +8,24 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 export const Images = {
   logo: require("./images/logo.png"),
   landing: require("./images/landing.png"),
+  login: require("./images/login.png"),
+  google: require("./images/google.png"),
 };
 
-export const ImagesCache = [Images.logo, Images.landing];
+export const ImagesCache = [
+  Images.logo,
+  Images.landing,
+  Images.login,
+  Images.google,
+];
 
 export const FontFamily = {
-  "Inter-Thin": require("./fonts/Inter-Thin.ttf"),
   "Inter-Regular": require("./fonts/Inter-Regular.ttf"),
   "Inter-SemiBold": require("./fonts/Inter-SemiBold.ttf"),
   "Inter-Bold": require("./fonts/Inter-Bold.ttf"),
 };
 
 export const Fonts = {
-  thin: "Inter-Thin",
   regular: "Inter-Regular",
   semibold: "Inter-SemiBold",
   bold: "Inter-Bold",
