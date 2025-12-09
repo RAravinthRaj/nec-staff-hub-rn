@@ -7,17 +7,14 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 
 import { PageContainer, LogoHeader, Footer } from "@/components";
 import { Body } from "./components";
+import { Text } from "react-native";
 
-export const LoginScreen = ({ navigation }: any) => {
-  const _navigateToOtp = () => {
-    return navigation.navigate("Otp");
-  };
-
+export const OtpScreen = ({ navigation }: any) => {
   return (
     <>
       <PageContainer>
         <LogoHeader />
-        <Body navigateToOtp={_navigateToOtp} />
+        <Body />
       </PageContainer>
       <Footer />
     </>

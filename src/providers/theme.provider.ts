@@ -16,6 +16,8 @@ const lightColors = {
   red: "#E60023",
   orange: "#FF6F00",
   green: "#39FF14",
+  secondaryBackground: "#FAFAFC",
+  border: "#A8A8A8",
 };
 
 const darkColors = {
@@ -28,6 +30,8 @@ const darkColors = {
   red: "#E60023",
   orange: "#FF6F00",
   green: "#39FF14",
+  secondaryBackground: "#FAFAFC",
+  border: "#A8A8A8",
 };
 
 type ThemeMode = "light" | "dark";

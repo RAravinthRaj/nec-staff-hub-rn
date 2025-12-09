@@ -21,7 +21,11 @@ import { useTheme } from "@rneui/themed";
 import ElevatedView from "react-native-elevated-view";
 import { useState } from "react";
 
-export const Body = () => {
+export interface IBody {
+  navigateToOtp: () => void;
+}
+
+export const Body = ({ navigateToOtp }: IBody) => {
   const { theme } = useTheme();
   const [email, setEmail] = useState("");
 
@@ -82,6 +86,7 @@ export const Body = () => {
             },
           ])}
           activeOpacity={0.8}
+          onPress={navigateToOtp}
         >
           <Text
             style={StyleSheet.flatten([
@@ -106,7 +111,7 @@ export const Body = () => {
           style={StyleSheet.flatten([
             S.button,
             {
-              backgroundColor: theme.colors.white,
+              backgroundColor: theme.colors.secondaryBackground,
               borderWidth: 0.2,
             },
           ])}
@@ -155,7 +160,11 @@ export const Body = () => {
         <TextInput
           style={StyleSheet.flatten([
             S.input,
-            { borderColor: theme.colors.background, borderWidth: 1 },
+            {
+              borderColor: theme.colors.background,
+              borderWidth: 1,
+              backgroundColor: theme.colors.secondaryBackground,
+            },
           ])}
         />
 

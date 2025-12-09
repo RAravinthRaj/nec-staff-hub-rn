@@ -10,6 +10,7 @@ export const Images = {
   landing: require("./images/landing.png"),
   login: require("./images/login.png"),
   google: require("./images/google.png"),
+  otp: require("./images/otp.png"),
 };
 
 export const ImagesCache = [
@@ -17,6 +18,7 @@ export const ImagesCache = [
   Images.landing,
   Images.login,
   Images.google,
+  Images.otp,
 ];
 
 export const FontFamily = {

@@ -19,16 +19,16 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 15,
   },
-  loginImage: {
+  otpImage: {
     width: ScreenWidth * 0.7,
     height: ScreenHeight * 0.3,
-    marginTop: -10,
   },
   textContainer: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     gap: 3,
+    marginVertical: 20,
   },
   header: {
     fontSize: 33,
@@ -39,12 +39,14 @@ export const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: 3,
-    margin: 5,
+    gap: 2,
+    margin: 10,
+    paddingHorizontal: 20,
   },
   description: {
     textAlign: "center",
-    fontSize: 17,
+    fontSize: 15,
+    lineHeight: 23,
   },
   buttonContainer: {
     display: "flex",
@@ -67,49 +69,36 @@ export const styles = StyleSheet.create({
   buttonTitle: {
     fontSize: 19,
   },
-  formContainer: {
-    position: "relative",
+  otpMainContainer: {
     display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    marginVertical: 20,
+  },
+  otpContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: ScreenWidth * 0.8,
+    gap: 20,
+  },
+  otpInput: {
+    height: ScreenHeight * 0.07,
+    width: ScreenWidth * 0.15,
+    borderWidth: 1.5,
+  },
+  resendContainer: {
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center",
     alignSelf: "center",
-    marginTop: 40,
-    marginHorizontal: 50,
     gap: 5,
+    marginVertical: 10,
   },
-  input: {
-    borderWidth: 0.05,
-    width: ScreenWidth * 0.8,
-    paddingVertical: 18,
-    paddingHorizontal: 18,
-    fontSize: 18,
-    borderRadius: 12,
-  },
-  label: {
-    position: "absolute",
-    top: -14,
-    left: 12,
-    fontSize: 17,
-    padding: 3,
-  },
-  labelContainer: {
-    position: "absolute",
-    top: -14,
-    left: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 3,
-    zIndex: 10,
-    opacity: 0.6,
-    borderRadius: 10,
-  },
-  labelText: {
-    fontSize: 14,
-  },
-  googleImage: {
-    width: 18,
-    height: 18,
-  },
-  separator: {
-    fontSize: 18,
-    opacity: 0.8,
+  resend: {
+    fontSize: 16,
   },
 });
