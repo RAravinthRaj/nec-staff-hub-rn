@@ -41,7 +41,7 @@ export const PageContainer = ({ children }: any) => {
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : undefined}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 2}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
           style={{ flex: 1 }}
         >
           <View style={StyleSheet.flatten([S.container])}>{children}</View>

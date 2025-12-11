@@ -7,3 +7,4 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 export * from "./Landing/Landing";
 export * from "./Login/Login";
 export * from "./Otp/Otp";
+export * from "./Home/Home";

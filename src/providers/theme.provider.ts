@@ -13,11 +13,12 @@ const lightColors = {
   background: "#e2e2e2",
   white: "#ffffff",
   black: "#000000",
-  red: "#E60023",
+  red: "#EA0000",
   orange: "#FF6F00",
   green: "#39FF14",
   secondaryBackground: "#FAFAFC",
   border: "#A8A8A8",
+  badgeGreen: "#008000",
 };
 
 const darkColors = {
@@ -27,7 +28,7 @@ const darkColors = {
   background: "#121212",
   white: "#ffffff",
   black: "#000000",
-  red: "#E60023",
+  red: "#EA0000",
   orange: "#FF6F00",
   green: "#39FF14",
   secondaryBackground: "#FAFAFC",

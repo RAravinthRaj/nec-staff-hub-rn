@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 15,
+    marginBottom: 20,
   },
   otpImage: {
     width: ScreenWidth * 0.7,
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     gap: 3,
-    marginVertical: 20,
+    marginVertical: 5,
   },
   header: {
     fontSize: 33,
@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    marginVertical: 20,
+    marginVertical: 15,
   },
   otpContainer: {
     display: "flex",

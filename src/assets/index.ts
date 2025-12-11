@@ -11,6 +11,7 @@ export const Images = {
   login: require("./images/login.png"),
   google: require("./images/google.png"),
   otp: require("./images/otp.png"),
+  noData: require("./images/noclass.png"),
 };
 
 export const ImagesCache = [

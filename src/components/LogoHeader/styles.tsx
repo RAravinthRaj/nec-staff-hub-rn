@@ -9,7 +9,7 @@ import { ScreenHeight, ScreenWidth } from "@rneui/base";
 
 export const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    margin: 15,
   },
   logo: {
     height: ScreenHeight * 0.08,

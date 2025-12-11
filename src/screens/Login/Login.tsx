@@ -6,9 +6,30 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import { PageContainer, LogoHeader, Footer } from "@/components";
+import { useEffect, useState } from "react";
+import { Keyboard, Platform } from "react-native";
 import { Body } from "./components";
 
 export const LoginScreen = ({ navigation }: any) => {
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
+      () => setKeyboardOpen(true)
+    );
+
+    const hideSub = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+      () => setKeyboardOpen(false)
+    );
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
   const _navigateToOtp = () => {
     return navigation.navigate("Otp");
   };
@@ -19,7 +40,8 @@ export const LoginScreen = ({ navigation }: any) => {
         <LogoHeader />
         <Body navigateToOtp={_navigateToOtp} />
       </PageContainer>
-      <Footer />
+
+      {!keyboardOpen && <Footer />}
     </>
   );
 };

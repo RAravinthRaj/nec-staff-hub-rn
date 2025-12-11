@@ -12,7 +12,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
+  Pressable,
 } from "react-native";
 import { Images, Fonts } from "@/assets";
 import { styles as S } from "./styles";
@@ -21,9 +21,21 @@ import { useTheme } from "@rneui/themed";
 import ElevatedView from "react-native-elevated-view";
 import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 
-export const Body = () => {
+export interface IBody {
+  navigateToHome: () => void;
+}
+
+export const Body = ({ navigateToHome }: IBody) => {
   const { theme } = useTheme();
+  const [otp, setOtp] = useState("");
+
+  const _navigateToHome = () => {
+    if (otp === "0000") {
+      return navigateToHome();
+    }
+  };
 
   const _renderLandingImage = () => {
     return (
@@ -59,10 +71,10 @@ export const Body = () => {
   const _renderOtp = () => {
     return (
       <SafeAreaProvider>
-        <View style={StyleSheet.flatten([S.otpMainContainer])}>
+        <SafeAreaView style={StyleSheet.flatten([S.otpMainContainer])}>
           <OtpInput
             numberOfDigits={4}
-            onTextChange={(text) => console.log(text)}
+            onTextChange={(text) => setOtp(text)}
             theme={{
               containerStyle: StyleSheet.flatten([S.otpContainer]),
               pinCodeContainerStyle: StyleSheet.flatten([
@@ -90,7 +102,8 @@ export const Body = () => {
               ]),
             }}
           />
-        </View>
+        </SafeAreaView>
+        <View></View>
       </SafeAreaProvider>
     );
   };
@@ -108,6 +121,7 @@ export const Body = () => {
               backgroundColor: theme.colors.primary,
             },
           ])}
+          onPress={_navigateToHome}
           activeOpacity={0.8}
         >
           <Text
@@ -134,14 +148,21 @@ export const Body = () => {
         >
           {OTP_CONFIG.otpResend}
         </Text>
-        <Text
-          style={StyleSheet.flatten([
-            S.resend,
-            { color: theme.colors.primary, fontFamily: Fonts.semibold },
-          ])}
-        >
-          {OTP_CONFIG.resend}
-        </Text>
+        <Pressable>
+          {({ pressed }) => (
+            <Text
+              style={StyleSheet.flatten([
+                S.resend,
+                { color: theme.colors.primary, fontFamily: Fonts.semibold },
+                pressed && {
+                  textDecorationLine: "underline",
+                },
+              ])}
+            >
+              {OTP_CONFIG.resend}
+            </Text>
+          )}
+        </Pressable>
       </View>
     );
   };
