@@ -5,20 +5,15 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useState, useRef } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Animated,
-  StyleSheet,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import Collapsible from "react-native-collapsible";
 import { useTheme } from "@rneui/themed";
-import { styles as S } from "./styles";
 import ElevatedView from "react-native-elevated-view";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Fonts } from "@/assets";
 import { HOME_CONFIG } from "../../config";
+import { styles as S } from "./styles";
 
 export interface IAccordian {
   data: any;
@@ -27,12 +22,18 @@ export interface IAccordian {
 
 export const Accordion = ({ data, date }: IAccordian) => {
   const [expanded, setExpanded] = useState(false);
-  const [contentHeight, setContentHeight] = useState(0);
-  const animation = useRef(new Animated.Value(0)).current;
   const { theme } = useTheme();
 
   const startTime = data?.startTime;
   const endTime = data?.endTime;
+
+  useEffect(() => {
+    getBatchStatus();
+  }, [data]);
+
+  const toggleAccordion = () => {
+    setExpanded((prev) => !prev);
+  };
 
   const convertTo24Hour = (time12h?: string): string | null => {
     if (!time12h) return null;
@@ -71,16 +72,8 @@ export const Accordion = ({ data, date }: IAccordian) => {
       if (now >= start && now <= end) return "Ongoing";
       return "Upcoming";
     }
-  };
 
-  const toggleAccordion = () => {
-    setExpanded((prev) => !prev);
-
-    Animated.timing(animation, {
-      toValue: expanded ? 0 : 1,
-      duration: 250,
-      useNativeDriver: false,
-    }).start();
+    return "Upcoming";
   };
 
   const _renderBadge = () => {
@@ -117,126 +110,108 @@ export const Accordion = ({ data, date }: IAccordian) => {
     );
   };
 
-  const _renderHeader = () => {
-    return (
-      <View style={StyleSheet.flatten([S.cardContainer])}>
-        <View
-          style={StyleSheet.flatten([
-            S.logoContainer,
-            {
-              backgroundColor: expanded
-                ? theme.colors.white
-                : theme.colors.secondary,
-            },
-          ])}
-        >
-          <Text
-            style={StyleSheet.flatten([
-              S.logo,
-              {
-                color: expanded ? theme.colors.secondary : theme.colors.white,
-              },
-            ])}
-          >
-            {data?.subName.charAt(10)}
-          </Text>
-        </View>
-
-        <View style={StyleSheet.flatten([S.textContainer])}>
-          <Text
-            numberOfLines={1}
-            style={StyleSheet.flatten([
-              S.subName,
-              { color: expanded ? theme.colors.white : theme.colors.black },
-            ])}
-          >
-            {data.subName.substring(0, 25) + "..."}
-          </Text>
-
-          <View style={StyleSheet.flatten([S.timeContainer])}>
-            <Text
-              style={StyleSheet.flatten([
-                S.time,
-                { color: expanded ? theme.colors.white : theme.colors.primary },
-              ])}
-            >
-              {data.startTime + " - " + data.endTime}
-            </Text>
-
-            {_renderBadge()}
-          </View>
-        </View>
-
-        <View style={StyleSheet.flatten([S.arrowContainer])}>
-          <Entypo
-            name={expanded ? "chevron-up" : "chevron-down"}
-            size={24}
-            color={expanded ? "white" : "black"}
-          />
-        </View>
-      </View>
-    );
-  };
-
-  const _renderButton = () => {
-    return (
-      <ElevatedView
-        style={StyleSheet.flatten([S.buttonContainer])}
-        elevation={5}
-      >
-        <TouchableOpacity
-          style={StyleSheet.flatten([
-            S.button,
-            {
-              backgroundColor: theme.colors.primary,
-            },
-          ])}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={StyleSheet.flatten([
-              S.buttonTitle,
-              { color: theme.colors.white, fontFamily: Fonts.semibold },
-            ])}
-          >
-            {HOME_CONFIG.attendanceButton}
-          </Text>
-        </TouchableOpacity>
-      </ElevatedView>
-    );
-  };
-
-  const _renderSubContent = (key: string, value: any) => {
-    return (
-      <View style={StyleSheet.flatten([S.yearContainer])}>
-        <View style={StyleSheet.flatten([S.yearSubContainer])}>
-          <Text style={StyleSheet.flatten([S.styledKey])}>{key}</Text>
-        </View>
-        <View style={StyleSheet.flatten([S.yearSubContainer])}>
-          <Text style={StyleSheet.flatten([S.styledValue])}>{value}</Text>
-        </View>
-      </View>
-    );
-  };
-
-  const _renderBody = () => {
-    return (
+  const _renderHeader = () => (
+    <View style={StyleSheet.flatten([S.cardContainer])}>
       <View
-        style={StyleSheet.flatten([S.bodyContainer])}
-        onLayout={(e) => setContentHeight(e.nativeEvent.layout.height)}
+        style={StyleSheet.flatten([
+          S.logoContainer,
+          {
+            backgroundColor: expanded
+              ? theme.colors.white
+              : theme.colors.secondary,
+          },
+        ])}
       >
-        <Text style={StyleSheet.flatten([S.bodyTitle])}>{data?.subName}</Text>
-        <View style={StyleSheet.flatten([S.yearMainContainer])}>
-          {_renderSubContent(HOME_CONFIG.batch, data?.batch)}
-          {_renderSubContent(HOME_CONFIG.year, data?.year)}
-        </View>
-
-        {_renderSubContent(HOME_CONFIG.faculty, data?.faculty)}
-        {_renderSubContent(HOME_CONFIG.semester, data?.semester)}
-        {_renderButton()}
+        <Text
+          style={StyleSheet.flatten([
+            S.logo,
+            {
+              color: expanded ? theme.colors.secondary : theme.colors.white,
+            },
+          ])}
+        >
+          {data?.subName.charAt(10)}
+        </Text>
       </View>
-    );
-  };
+
+      <View style={StyleSheet.flatten([S.textContainer])}>
+        <Text
+          numberOfLines={1}
+          style={StyleSheet.flatten([
+            S.subName,
+            { color: expanded ? theme.colors.white : theme.colors.black },
+          ])}
+        >
+          {data.subName.substring(0, 25) + "..."}
+        </Text>
+
+        <View style={StyleSheet.flatten([S.timeContainer])}>
+          <Text
+            style={StyleSheet.flatten([
+              S.time,
+              { color: expanded ? theme.colors.white : theme.colors.primary },
+            ])}
+          >
+            {data.startTime} - {data.endTime}
+          </Text>
+
+          {_renderBadge()}
+        </View>
+      </View>
+
+      <View style={StyleSheet.flatten([S.arrowContainer])}>
+        <Entypo
+          name={expanded ? "chevron-up" : "chevron-down"}
+          size={24}
+          color={expanded ? "white" : "black"}
+        />
+      </View>
+    </View>
+  );
+
+  const _renderSubContent = (key: string, value: any) => (
+    <View style={StyleSheet.flatten([S.yearContainer])}>
+      <View style={S.yearSubContainer}>
+        <Text style={S.styledKey}>{key}</Text>
+      </View>
+      <View style={S.yearSubContainer}>
+        <Text style={S.styledValue}>{value}</Text>
+      </View>
+    </View>
+  );
+
+  const _renderButton = () => (
+    <ElevatedView style={S.buttonContainer} elevation={5}>
+      <TouchableOpacity
+        style={[S.button, { backgroundColor: theme.colors.primary }]}
+        activeOpacity={0.8}
+      >
+        <Text
+          style={[
+            S.buttonTitle,
+            { color: theme.colors.white, fontFamily: Fonts.semibold },
+          ]}
+        >
+          {HOME_CONFIG.attendanceButton}
+        </Text>
+      </TouchableOpacity>
+    </ElevatedView>
+  );
+
+  const _renderBody = () => (
+    <View style={S.bodyContainer}>
+      <Text style={S.bodyTitle}>{data?.subName}</Text>
+
+      <View style={S.yearMainContainer}>
+        {_renderSubContent(HOME_CONFIG.batch, data?.batch)}
+        {_renderSubContent(HOME_CONFIG.year, data?.year)}
+      </View>
+
+      {_renderSubContent(HOME_CONFIG.faculty, data?.faculty)}
+      {_renderSubContent(HOME_CONFIG.semester, data?.semester)}
+      {_renderButton()}
+    </View>
+  );
 
   return (
     <ElevatedView
@@ -253,28 +228,25 @@ export const Accordion = ({ data, date }: IAccordian) => {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={toggleAccordion}
-        style={StyleSheet.flatten([S.header])}
+        style={S.header}
       >
         {_renderHeader()}
       </TouchableOpacity>
 
-      <Animated.View
-        style={StyleSheet.flatten([
-          S.contentContainer,
-          {
-            overflow: "hidden",
-            borderWidth: expanded ? 1 : 0,
-            borderColor: expanded ? theme.colors.secondary : theme.colors.white,
-            backgroundColor: theme.colors.white,
-            height: animation.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, contentHeight],
-            }),
-          },
-        ])}
-      >
-        {_renderBody()}
-      </Animated.View>
+      <Collapsible collapsed={!expanded} duration={280}>
+        <View
+          style={[
+            S.contentContainer,
+            {
+              borderWidth: expanded ? 1 : 0,
+              borderColor: theme.colors.secondary,
+              backgroundColor: theme.colors.white,
+            },
+          ]}
+        >
+          {_renderBody()}
+        </View>
+      </Collapsible>
     </ElevatedView>
   );
 };

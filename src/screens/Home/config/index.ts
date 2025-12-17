@@ -95,7 +95,7 @@ export const HOME_CONFIG = {
       semester: "V",
       date: "11-12-2025",
       startTime: "03:10 PM",
-      endTime: "10:00 PM",
+      endTime: "11:45 PM",
     },
   ],
 };

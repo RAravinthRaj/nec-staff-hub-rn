@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
   weekContainer: {
     display: "flex",
     flexDirection: "row",
-    padding: 2.5,
+    padding: 4,
     marginBottom: 10,
   },
   weekCard: {

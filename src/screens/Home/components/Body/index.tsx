@@ -111,7 +111,7 @@ export const Body: React.FC<IBody> = ({ setDate }) => {
       data={weekDates}
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 10 }}
+      contentContainerStyle={{ paddingHorizontal: 7 }}
       keyExtractor={(item) => item}
       style={StyleSheet.flatten([S.weekContainer])}
       renderItem={({ item }) => {
