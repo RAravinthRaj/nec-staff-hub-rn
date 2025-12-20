@@ -166,6 +166,8 @@ export const Body = ({ navigateToOtp }: IBody) => {
               backgroundColor: theme.colors.secondaryBackground,
             },
           ])}
+          returnKeyType="send"
+          onSubmitEditing={navigateToOtp}
         />
 
         {_renderLoginButton()}

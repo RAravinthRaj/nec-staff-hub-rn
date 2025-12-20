@@ -10,20 +10,27 @@ import { Body, Header, Schedules } from "./components";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { HOME_CONFIG } from "./config";
+import { ScrollView } from "react-native";
 
 export const HomeScreen = ({ navigation }: any) => {
   const today = dayjs().format("YYYY-MM-DD");
   const [date, setDate] = useState(today);
 
-  const _navigateToHome = () => {
-    return navigation.navigate("Landing");
+  const _navigateToAttendance = () => {
+    return navigation.navigate("Attendance");
   };
 
   return (
-    <PageContainer>
-      <Header navigateToHome={_navigateToHome} />
-      <Body setDate={setDate} />
-      <Schedules date={date} data={HOME_CONFIG.data} />
+    <PageContainer isLightStatusBar={true}>
+      <Header />
+      <ScrollView>
+        <Body setDate={setDate} />
+        <Schedules
+          date={date}
+          data={HOME_CONFIG.data}
+          navigateToAttendance={_navigateToAttendance}
+        />
+      </ScrollView>
     </PageContainer>
   );
 };

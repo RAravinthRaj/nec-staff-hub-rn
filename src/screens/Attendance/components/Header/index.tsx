@@ -9,16 +9,17 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { styles as S } from "./styles";
 import { useTheme } from "@rneui/themed";
 import { Fonts } from "@/assets";
-import { HOME_CONFIG } from "../../config";
-import Octicons from "@expo/vector-icons/Octicons";
-import { Badge } from "react-native-paper";
+import { ATTENDANCE_CONFIG } from "../../config";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useState } from "react";
+import ElevatedView from "react-native-elevated-view";
 
-export interface IHeader {}
+export interface IHeader {
+  goBack: () => void;
+}
 
-export const Header = ({}: IHeader) => {
+export const Header = ({ goBack }: IHeader) => {
   const { theme } = useTheme();
-  const [showBadge, setShowBadge] = useState(true);
 
   const _renderDesign = () => {
     return (
@@ -39,7 +40,25 @@ export const Header = ({}: IHeader) => {
     );
   };
 
-  const _renderUserDetails = () => {
+  const _renderButton = () => (
+    <ElevatedView style={S.buttonContainer} elevation={5}>
+      <TouchableOpacity
+        style={[S.button, { backgroundColor: theme.colors.white }]}
+        activeOpacity={0.8}
+      >
+        <Text
+          style={[
+            S.buttonTitle,
+            { color: theme.colors.primary, fontFamily: Fonts.semibold },
+          ]}
+        >
+          {ATTENDANCE_CONFIG.saveButton}
+        </Text>
+      </TouchableOpacity>
+    </ElevatedView>
+  );
+
+  const _renderHeaderTitle = () => {
     return (
       <View
         style={StyleSheet.flatten([
@@ -48,53 +67,26 @@ export const Header = ({}: IHeader) => {
         ])}
       >
         <View style={StyleSheet.flatten([S.textContainer])}>
-          <Text
-            style={StyleSheet.flatten([
-              S.greet,
-              { fontFamily: Fonts.regular, color: theme.colors.white },
-            ])}
-          >
-            {HOME_CONFIG.greet}
-          </Text>
-          <View style={StyleSheet.flatten([S.userNameContainer])}>
+          <View style={StyleSheet.flatten([S.titleContainer])}>
+            <FontAwesome6
+              name="arrow-left-long"
+              size={25}
+              color="white"
+              onPress={() => {
+                goBack();
+              }}
+            />
             <Text
               style={StyleSheet.flatten([
-                S.userName,
+                S.title,
                 { color: theme.colors.white, fontFamily: Fonts.semibold },
               ])}
             >
-              {HOME_CONFIG.userName}
-            </Text>
-            <Text style={StyleSheet.flatten([S.userName])}>
-              {HOME_CONFIG.waveSign}
+              {ATTENDANCE_CONFIG.attendance}
             </Text>
           </View>
         </View>
-        {_renderNotification()}
-      </View>
-    );
-  };
-
-  const _renderNotification = () => {
-    return (
-      <View style={StyleSheet.flatten([S.bellIcon])}>
-        <TouchableOpacity
-          style={StyleSheet.flatten([S.badgeContainer])}
-          onPress={() => {
-            setShowBadge(!showBadge);
-          }}
-        >
-          <Octicons name="bell" size={24} color="white" />
-          {showBadge && (
-            <Badge
-              size={10}
-              style={StyleSheet.flatten([
-                S.badge,
-                { borderColor: theme.colors.white },
-              ])}
-            />
-          )}
-        </TouchableOpacity>
+        {_renderButton()}
       </View>
     );
   };
@@ -102,7 +94,7 @@ export const Header = ({}: IHeader) => {
   const _renderHeader = () => {
     return (
       <View>
-        {_renderUserDetails()}
+        {_renderHeaderTitle()}
         <View style={StyleSheet.flatten([S.designMainContainer])}>
           {_renderDesign()}
         </View>

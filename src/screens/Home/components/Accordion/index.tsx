@@ -18,9 +18,10 @@ import { styles as S } from "./styles";
 export interface IAccordian {
   data: any;
   date: string;
+  navigateToAttendance: () => void;
 }
 
-export const Accordion = ({ data, date }: IAccordian) => {
+export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
   const [expanded, setExpanded] = useState(false);
   const { theme } = useTheme();
 
@@ -171,26 +172,30 @@ export const Accordion = ({ data, date }: IAccordian) => {
 
   const _renderSubContent = (key: string, value: any) => (
     <View style={StyleSheet.flatten([S.yearContainer])}>
-      <View style={S.yearSubContainer}>
-        <Text style={S.styledKey}>{key}</Text>
+      <View style={StyleSheet.flatten([S.yearSubContainer])}>
+        <Text style={StyleSheet.flatten([S.styledKey])}>{key}</Text>
       </View>
-      <View style={S.yearSubContainer}>
-        <Text style={S.styledValue}>{value}</Text>
+      <View style={StyleSheet.flatten([S.yearSubContainer])}>
+        <Text style={StyleSheet.flatten([S.styledValue])}>{value}</Text>
       </View>
     </View>
   );
 
   const _renderButton = () => (
-    <ElevatedView style={S.buttonContainer} elevation={5}>
+    <ElevatedView style={StyleSheet.flatten([S.buttonContainer])} elevation={5}>
       <TouchableOpacity
-        style={[S.button, { backgroundColor: theme.colors.primary }]}
+        style={StyleSheet.flatten([
+          S.button,
+          { backgroundColor: theme.colors.primary },
+        ])}
         activeOpacity={0.8}
+        onPress={navigateToAttendance}
       >
         <Text
-          style={[
+          style={StyleSheet.flatten([
             S.buttonTitle,
             { color: theme.colors.white, fontFamily: Fonts.semibold },
-          ]}
+          ])}
         >
           {HOME_CONFIG.attendanceButton}
         </Text>
@@ -199,10 +204,10 @@ export const Accordion = ({ data, date }: IAccordian) => {
   );
 
   const _renderBody = () => (
-    <View style={S.bodyContainer}>
-      <Text style={S.bodyTitle}>{data?.subName}</Text>
+    <View style={StyleSheet.flatten([S.bodyContainer])}>
+      <Text style={StyleSheet.flatten([S.bodyTitle])}>{data?.subName}</Text>
 
-      <View style={S.yearMainContainer}>
+      <View style={StyleSheet.flatten([S.yearMainContainer])}>
         {_renderSubContent(HOME_CONFIG.batch, data?.batch)}
         {_renderSubContent(HOME_CONFIG.year, data?.year)}
       </View>
@@ -228,21 +233,21 @@ export const Accordion = ({ data, date }: IAccordian) => {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={toggleAccordion}
-        style={S.header}
+        style={StyleSheet.flatten([S.header])}
       >
         {_renderHeader()}
       </TouchableOpacity>
 
       <Collapsible collapsed={!expanded} duration={280}>
         <View
-          style={[
+          style={StyleSheet.flatten([
             S.contentContainer,
             {
               borderWidth: expanded ? 1 : 0,
               borderColor: theme.colors.secondary,
               backgroundColor: theme.colors.white,
             },
-          ]}
+          ])}
         >
           {_renderBody()}
         </View>

@@ -75,6 +75,10 @@ export const Body = ({ navigateToHome }: IBody) => {
           <OtpInput
             numberOfDigits={4}
             onTextChange={(text) => setOtp(text)}
+            textInputProps={{
+              returnKeyType: "send",
+              onSubmitEditing: () => navigateToHome(),
+            }}
             theme={{
               containerStyle: StyleSheet.flatten([S.otpContainer]),
               pinCodeContainerStyle: StyleSheet.flatten([
@@ -103,7 +107,6 @@ export const Body = ({ navigateToHome }: IBody) => {
             }}
           />
         </SafeAreaView>
-        <View></View>
       </SafeAreaProvider>
     );
   };

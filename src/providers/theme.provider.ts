@@ -19,6 +19,7 @@ const lightColors = {
   secondaryBackground: "#FAFAFC",
   border: "#A8A8A8",
   badgeGreen: "#008000",
+  tertiaryBackground: "#F5F8FE",
 };
 
 const darkColors = {
@@ -33,6 +34,7 @@ const darkColors = {
   green: "#39FF14",
   secondaryBackground: "#FAFAFC",
   border: "#A8A8A8",
+  tertiaryBackground: "#F5F8FE",
 };
 
 type ThemeMode = "light" | "dark";

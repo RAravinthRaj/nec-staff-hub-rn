@@ -21,12 +21,12 @@ import ElevatedView from "react-native-elevated-view";
 import Accordion from "../Accordion";
 
 export interface ISchedule {
-  // navigateToHome: () => void;
+  navigateToAttendance: () => void;
   date: string;
   data: any;
 }
 
-export const Schedules = ({ data, date }: ISchedule) => {
+export const Schedules = ({ data, date, navigateToAttendance }: ISchedule) => {
   const { theme } = useTheme();
 
   const _renderImage = () => {
@@ -86,7 +86,12 @@ export const Schedules = ({ data, date }: ISchedule) => {
     return (
       <View>
         {data.map((item: any, index: any) => (
-          <Accordion key={index} data={item} date={date} />
+          <Accordion
+            key={index}
+            data={item}
+            date={date}
+            navigateToAttendance={navigateToAttendance}
+          />
         ))}
       </View>
     );

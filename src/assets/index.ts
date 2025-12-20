@@ -12,6 +12,10 @@ export const Images = {
   google: require("./images/google.png"),
   otp: require("./images/otp.png"),
   noData: require("./images/noclass.png"),
+  totalStudents: require("./images/totalstudent.png"),
+  present: require("./images/present.png"),
+  absent: require("./images/absent.png"),
+  onDuty: require("./images/onduty.png"),
 };
 
 export const ImagesCache = [
@@ -20,6 +24,10 @@ export const ImagesCache = [
   Images.login,
   Images.google,
   Images.otp,
+  Images.totalStudents,
+  Images.present,
+  Images.absent,
+  Images.onDuty,
 ];
 
 export const FontFamily = {
