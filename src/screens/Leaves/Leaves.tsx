@@ -15,8 +15,10 @@ export const LeaveScreen = ({ navigation }: any) => {
     return navigation.navigate("LeaveRequest");
   };
 
-  const _navigateToLeaveDetails = () => {
-    return navigation.navigate("LeaveDetails");
+  const _navigateToLeaveDetails = (leave: any) => {
+    return navigation.navigate("LeaveDetails", {
+      leave,
+    });
   };
 
   return (

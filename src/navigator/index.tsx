@@ -16,6 +16,7 @@ import {
   OtpScreen,
   AttendanceScreen,
   LeaveScreen,
+  LeaveDetailScreen,
 } from "@/screens";
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,7 @@ export const AppNavigator = () => {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Attendance" component={AttendanceScreen} />
         <Stack.Screen name="Leaves" component={LeaveScreen} />
+        <Stack.Screen name="LeaveDetails" component={LeaveDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

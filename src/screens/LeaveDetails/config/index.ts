@@ -1,0 +1,27 @@
+/* 
+© 2025 Aravinth Raj R. All rights reserved.
+Unauthorized copying of this file, via any medium, is strictly prohibited.
+Proprietary and confidential.  
+Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
+*/
+export const LEAVE_DETAIL_CONFIG = {
+  leaves: "Leave Detail",
+  status: "Status",
+  applicationDate: "Application Date",
+  startDate: "Start Date",
+  endDate: "End Date",
+  category: "Category",
+  type: "Type",
+  numberOfDays: "Number Of Days",
+  reason: "Reason",
+  comments: "Comments (By HR)",
+  documents: "Documents",
+  pending: "Pending",
+  buttonTitle: "Cancel Request",
+  noDocumentsFound: "No Documents Found",
+  color: {
+    approved: "badgeGreen",
+    declined: "red",
+    pending: "orange",
+  },
+};

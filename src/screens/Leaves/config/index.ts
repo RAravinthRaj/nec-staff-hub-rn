@@ -15,11 +15,12 @@ export const LEAVE_CONFIG = {
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "23.09.2025",
+        numberOfDays: 1,
         category: "Casual",
         type: "Full-Day",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
@@ -28,26 +29,29 @@ export const LEAVE_CONFIG = {
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "23.09.2025",
+        numberOfDays: 1,
         category: "Vacation",
         type: "Full-Day",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
     ],
+
     "September 2025": [
       {
         status: "Approved",
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "23.09.2025",
+        numberOfDays: 1,
         category: "Casual",
         type: "Full-Day",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
@@ -56,11 +60,12 @@ export const LEAVE_CONFIG = {
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "23.09.2025",
+        numberOfDays: 1,
         category: "Vacation",
         type: "Full-Day",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
@@ -69,26 +74,29 @@ export const LEAVE_CONFIG = {
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "29.09.2025",
+        numberOfDays: 7,
         category: "Sick",
         type: "3 Days",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
     ],
+
     "August 2025": [
       {
         status: "Approved",
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "23.09.2025",
+        numberOfDays: 1,
         category: "Casual",
         type: "Full-Day",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
@@ -97,11 +105,12 @@ export const LEAVE_CONFIG = {
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "23.09.2025",
+        numberOfDays: 1,
         category: "Vacation",
         type: "Full-Day",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
@@ -110,26 +119,29 @@ export const LEAVE_CONFIG = {
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "29.09.2025",
+        numberOfDays: 7,
         category: "Sick",
         type: "3 Days",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
     ],
+
     "July 2025": [
       {
         status: "Approved",
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "23.09.2025",
+        numberOfDays: 1,
         category: "Casual",
         type: "Full-Day",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
@@ -138,11 +150,12 @@ export const LEAVE_CONFIG = {
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "23.09.2025",
+        numberOfDays: 1,
         category: "Vacation",
         type: "Full-Day",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },
@@ -151,11 +164,12 @@ export const LEAVE_CONFIG = {
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "29.09.2025",
+        numberOfDays: 7,
         category: "Sick",
         type: "3 Days",
         reason:
           "I need to take care of some personal work that requires my attention.",
-        Comments:
+        comments:
           "Your leave has been approved. Please make sure to hand over any pending tasks before you leave.",
         documents: "",
       },

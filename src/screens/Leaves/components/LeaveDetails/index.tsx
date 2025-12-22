@@ -15,7 +15,7 @@ import { Fonts } from "@/assets";
 
 export interface ILeaveDetails {
   leaveDetails: any;
-  navigateToLeaveDetails: () => void;
+  navigateToLeaveDetails: (leave: any) => void;
 }
 
 export const LeaveDetails = ({
@@ -123,7 +123,7 @@ export const LeaveDetails = ({
               const status = leave?.status;
 
               return (
-                <View
+                <TouchableOpacity
                   key={`${mIndex}-${index}`}
                   style={StyleSheet.flatten([
                     S.leaveContainer,
@@ -133,6 +133,10 @@ export const LeaveDetails = ({
                         theme.colors[LEAVE_CONFIG.color[status.toLowerCase()]],
                     },
                   ])}
+                  onPress={() => {
+                    navigateToLeaveDetails(leave);
+                  }}
+                  activeOpacity={1}
                 >
                   <View style={StyleSheet.flatten([S.descriptionContainer])}>
                     <View style={StyleSheet.flatten([S.description])}>
@@ -169,7 +173,7 @@ export const LeaveDetails = ({
                     {_renderStatus(status)}
                     {_renderButton()}
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             })}
           </View>

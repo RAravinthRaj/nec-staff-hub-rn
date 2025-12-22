@@ -10,3 +10,4 @@ export * from "./Otp/Otp";
 export * from "./Home/Home";
 export * from "./Attendance/Attendance";
 export * from "./Leaves/Leaves";
+export * from "./LeaveDetails/LeaveDetails";
