@@ -9,8 +9,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { useThemeMode } from "@/hooks";
 import { StatusBar } from "expo-status-bar";
-import { HomeScreen, LandingScreen, LoginScreen, OtpScreen } from "@/screens";
-import { AttendanceScreen } from "@/screens/Attendance/Attendance";
+import {
+  HomeScreen,
+  LandingScreen,
+  LoginScreen,
+  OtpScreen,
+  AttendanceScreen,
+  LeaveScreen,
+} from "@/screens";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +27,7 @@ export const AppNavigator = () => {
     <NavigationContainer>
       <StatusBar style="auto" />
       <Stack.Navigator
-        initialRouteName="Attendance"
+        initialRouteName="Leaves"
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: theme.colors.background },
@@ -32,6 +38,7 @@ export const AppNavigator = () => {
         <Stack.Screen name="Otp" component={OtpScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Attendance" component={AttendanceScreen} />
+        <Stack.Screen name="Leaves" component={LeaveScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

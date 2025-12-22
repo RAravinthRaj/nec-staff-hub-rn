@@ -10,23 +10,31 @@ import { Fonts } from "@/assets";
 
 export const styles = StyleSheet.create({
   container: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 20,
-    borderWidth: 2,
-    gap: 3,
+    width: "100%",
+    marginBottom: 5,
   },
-  dot: {
+  headerContainer: {
+    width: "100%",
+    paddingHorizontal: 5,
+  },
+  chipContainer: {
     display: "flex",
-    width: 10,
-    height: 10,
-    borderRadius: "50%",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15,
+    marginHorizontal: 10,
+    margin: 15,
+  },
+  chip: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: 3,
+    paddingHorizontal: 15,
+    borderRadius: 15,
   },
   text: {
-    fontSize: 12,
-    fontFamily: Fonts.semibold,
+    fontSize: 13.5,
+    fontFamily: Fonts.regular,
   },
 });

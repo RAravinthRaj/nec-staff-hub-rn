@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { styles as S } from "./styles";
 import { ATTENDANCE_CONFIG } from "../../config";
+import { useTheme } from "@rneui/themed";
 
 export interface ICustomSwitch {
   status: string;
@@ -16,6 +17,7 @@ export interface ICustomSwitch {
 
 export const CustomSwitch = ({ status }: ICustomSwitch) => {
   const [changeStatus, setChangeStatus] = useState(status);
+  const { theme } = useTheme();
 
   const _toggleStatus = () => {
     if (changeStatus === "present") {
@@ -33,7 +35,7 @@ export const CustomSwitch = ({ status }: ICustomSwitch) => {
       style={StyleSheet.flatten([
         S.container,
         {
-          borderColor: ATTENDANCE_CONFIG.color[changeStatus].color,
+          borderColor: theme.colors[ATTENDANCE_CONFIG.color[changeStatus]],
           flexDirection: changeStatus === "present" ? "row-reverse" : "row",
         },
       ])}
@@ -42,7 +44,8 @@ export const CustomSwitch = ({ status }: ICustomSwitch) => {
         style={StyleSheet.flatten([
           S.dot,
           {
-            backgroundColor: ATTENDANCE_CONFIG.color[changeStatus].color,
+            backgroundColor:
+              theme.colors[ATTENDANCE_CONFIG.color[changeStatus]],
             alignItems: changeStatus === "absent" ? "flex-start" : "flex-end",
           },
         ])}
@@ -51,7 +54,7 @@ export const CustomSwitch = ({ status }: ICustomSwitch) => {
       <Text
         style={StyleSheet.flatten([
           S.text,
-          { color: ATTENDANCE_CONFIG.color[changeStatus].color },
+          { color: theme.colors[ATTENDANCE_CONFIG.color[changeStatus]] },
         ])}
       >
         {changeStatus === "onDuty" ? "on-duty" : changeStatus}

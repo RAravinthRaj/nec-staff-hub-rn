@@ -66,14 +66,8 @@ export const ATTENDANCE_CONFIG = {
     { rollNumber: "2312090", name: "Sathish Kumar", status: "absent" },
   ],
   color: {
-    present: {
-      color: "#2E7D32",
-    },
-    absent: {
-      color: "#D32F2F",
-    },
-    onDuty: {
-      color: "#EF6C00",
-    },
+    present: "badgeGreen",
+    absent: "red",
+    onDuty: "orange",
   },
 };

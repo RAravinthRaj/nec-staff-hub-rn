@@ -20,6 +20,10 @@ const lightColors = {
   border: "#A8A8A8",
   badgeGreen: "#008000",
   tertiaryBackground: "#F5F8FE",
+  badgeGreenBackground: "#B3F6D0",
+  orangeBackground: "#FFD4B2",
+  redBackground: "#FFAE9E",
+  chipBorder: "#01B5A7",
 };
 
 const darkColors = {
@@ -35,6 +39,10 @@ const darkColors = {
   secondaryBackground: "#FAFAFC",
   border: "#A8A8A8",
   tertiaryBackground: "#F5F8FE",
+  greenBackground: "#B3F6D0",
+  orangeBackground: "#FFD4B2",
+  redBackground: "#FFAE9E",
+  chipBorder: "#01B5A7",
 };
 
 type ThemeMode = "light" | "dark";
