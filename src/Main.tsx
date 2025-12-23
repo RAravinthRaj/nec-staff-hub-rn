@@ -13,6 +13,7 @@ import { useThemeMode } from "@/hooks";
 import { ThemeProvider } from "@rneui/themed";
 import { cacheFonts, cacheImages } from "@/utils";
 import { AppNavigator } from "@/navigator";
+import Toast from "react-native-toast-message";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -46,6 +47,7 @@ export const Main = () => {
   return (
     <ThemeProvider theme={theme}>
       <AppNavigator />
+      <Toast />
     </ThemeProvider>
   );
 };

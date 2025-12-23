@@ -144,13 +144,8 @@ export const Body = ({ leave }: IBody) => {
     </View>
   );
 
-  return (
-    <ScrollView
-      style={StyleSheet.flatten([
-        S.container,
-        { backgroundColor: theme.colors.white },
-      ])}
-    >
+  const _renderData = () => {
+    return (
       <View>
         <View
           style={StyleSheet.flatten([
@@ -225,9 +220,20 @@ export const Body = ({ leave }: IBody) => {
             </View>
           </View>
         </View>
-
-        {renderButton()}
       </View>
+    );
+  };
+
+  return (
+    <ScrollView
+      style={StyleSheet.flatten([
+        S.container,
+        { backgroundColor: theme.colors.white },
+      ])}
+      showsVerticalScrollIndicator={false}
+    >
+      {_renderData()}
+      {renderButton()}
     </ScrollView>
   );
 };

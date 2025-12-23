@@ -21,6 +21,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^8.5.1",
+    "@react-native-picker/picker": "^2.11.4",
     "@react-navigation/native": "^7.1.17",
     "@react-navigation/native-stack": "^7.3.26",
     "@rneui/base": "^4.0.0-rc.8",
@@ -28,6 +30,8 @@
     "@types/react-native-elevated-view": "^0.0.7",
     "dayjs": "^1.11.19",
     "expo": "~54.0.10",
+    "expo-document-picker": "~14.0.8",
+    "expo-file-system": "~19.0.21",
     "expo-linear-gradient": "^15.0.8",
     "expo-splash-screen": "^31.0.10",
     "expo-status-bar": "~3.0.8",
@@ -41,6 +45,7 @@
     "react-native-paper": "^5.14.5",
     "react-native-safe-area-context": "^5.6.1",
     "react-native-screens": "^4.16.0",
+    "react-native-toast-message": "^2.3.3",
     "react-native-vector-icons": "^10.3.0"
   },
   "devDependencies": {

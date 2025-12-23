@@ -9,9 +9,8 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { styles as S } from "./styles";
 import { useTheme } from "@rneui/themed";
 import { Fonts } from "@/assets";
-import { ATTENDANCE_CONFIG } from "../../config";
+import { LEAVE_REQUEST_CONFIG } from "../../config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import ElevatedView from "react-native-elevated-view";
 
 export interface IHeader {
   goBack: () => void;
@@ -39,24 +38,6 @@ export const Header = ({ goBack }: IHeader) => {
     );
   };
 
-  const _renderButton = () => (
-    <ElevatedView style={S.buttonContainer} elevation={5}>
-      <TouchableOpacity
-        style={[S.button, { backgroundColor: theme.colors.white }]}
-        activeOpacity={0.8}
-      >
-        <Text
-          style={[
-            S.buttonTitle,
-            { color: theme.colors.primary, fontFamily: Fonts.semibold },
-          ]}
-        >
-          {ATTENDANCE_CONFIG.saveButton}
-        </Text>
-      </TouchableOpacity>
-    </ElevatedView>
-  );
-
   const _renderHeaderTitle = () => {
     return (
       <View
@@ -67,7 +48,7 @@ export const Header = ({ goBack }: IHeader) => {
       >
         <View style={StyleSheet.flatten([S.textContainer])}>
           <View style={StyleSheet.flatten([S.titleContainer])}>
-            <TouchableOpacity activeOpacity={1} hitSlop={{ left: 30 }}>
+            <TouchableOpacity activeOpacity={1} hitSlop={20}>
               <FontAwesome6
                 name="arrow-left-long"
                 size={25}
@@ -77,17 +58,17 @@ export const Header = ({ goBack }: IHeader) => {
                 }}
               />
             </TouchableOpacity>
+
             <Text
               style={StyleSheet.flatten([
                 S.title,
                 { color: theme.colors.white, fontFamily: Fonts.semibold },
               ])}
             >
-              {ATTENDANCE_CONFIG.attendance}
+              {LEAVE_REQUEST_CONFIG.leaveRequest}
             </Text>
           </View>
         </View>
-        {_renderButton()}
       </View>
     );
   };

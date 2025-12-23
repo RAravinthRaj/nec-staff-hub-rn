@@ -11,3 +11,4 @@ export * from "./Home/Home";
 export * from "./Attendance/Attendance";
 export * from "./Leaves/Leaves";
 export * from "./LeaveDetails/LeaveDetails";
+export * from "./LeaveRequest/LeaveRequest";
