@@ -16,6 +16,7 @@ export const Images = {
   present: require("./images/present.png"),
   absent: require("./images/absent.png"),
   onDuty: require("./images/onduty.png"),
+  profile: require("./images/profile.avif"),
 };
 
 export const ImagesCache = [
@@ -28,6 +29,7 @@ export const ImagesCache = [
   Images.present,
   Images.absent,
   Images.onDuty,
+  Images.profile,
 ];
 
 export const FontFamily = {

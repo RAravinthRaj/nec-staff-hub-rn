@@ -15,7 +15,7 @@ export const LandingScreen = ({ navigation }: any) => {
 
   return (
     <>
-      <PageContainer>
+      <PageContainer isLightStatusBar={false}>
         <LogoHeader />
         <Body navigateToLogin={_navigateToLogin} />
       </PageContainer>

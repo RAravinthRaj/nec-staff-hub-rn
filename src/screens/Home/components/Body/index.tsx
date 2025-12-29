@@ -88,7 +88,7 @@ export const Body: React.FC<IBody> = ({ setDate }) => {
             { color: theme.colors.grey2, fontFamily: Fonts.regular },
           ])}
         >
-          {dayjs(selectedDate).format("MMMM D, YYYY")}
+          {dayjs(selectedDate).format("MM,DD,YYYY")}
         </Text>
       </View>
 

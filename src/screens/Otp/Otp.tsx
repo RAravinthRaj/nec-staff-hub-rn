@@ -36,7 +36,7 @@ export const OtpScreen = ({ navigation }: any) => {
 
   return (
     <>
-      <PageContainer>
+      <PageContainer isLightStatusBar={false}>
         <LogoHeader />
         <Body navigateToHome={_navigateToHome} />
       </PageContainer>

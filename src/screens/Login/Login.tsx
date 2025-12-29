@@ -36,7 +36,7 @@ export const LoginScreen = ({ navigation }: any) => {
 
   return (
     <>
-      <PageContainer>
+      <PageContainer isLightStatusBar={false}>
         <LogoHeader />
         <Body navigateToOtp={_navigateToOtp} />
       </PageContainer>
