@@ -16,12 +16,14 @@ export const NotificationScreen = ({ navigation }: any) => {
   };
 
   return (
-    <PageContainer isLightStatusBar={true}>
+    <>
       <Header goBack={_goBack} />
-      <Chip />
-      <ScrollView>
-        <Body notifications={NOTIFICATION_CONFIG.notifications} />
-      </ScrollView>
-    </PageContainer>
+      <PageContainer isLightStatusBar={true}>
+        <Chip />
+        <ScrollView>
+          <Body notifications={NOTIFICATION_CONFIG.notifications} />
+        </ScrollView>
+      </PageContainer>
+    </>
   );
 };

@@ -20,6 +20,7 @@ import {
   LeaveRequestScreen,
   ProfileScreen,
   NotificationScreen,
+  LeaveIntimationScreen,
 } from "@/screens";
 
 const Stack = createNativeStackNavigator();
@@ -31,7 +32,7 @@ export const AppNavigator = () => {
     <NavigationContainer>
       <StatusBar style="auto" />
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="LeaveIntimation"
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: theme.colors.background },
@@ -47,6 +48,10 @@ export const AppNavigator = () => {
         <Stack.Screen name="LeaveRequest" component={LeaveRequestScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Notification" component={NotificationScreen} />
+        <Stack.Screen
+          name="LeaveIntimation"
+          component={LeaveIntimationScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

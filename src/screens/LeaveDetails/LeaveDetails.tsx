@@ -9,16 +9,18 @@ import { PageContainer } from "@/components";
 import { Body, Header } from "./components";
 
 export const LeaveDetailScreen = ({ navigation, route }: any) => {
-  const { leave } = route.params;
+  const { leave, fromHod } = route.params;
 
   const _goBack = () => {
     return navigation.goBack();
   };
 
   return (
-    <PageContainer isLightStatusBar={true}>
+    <>
       <Header goBack={_goBack} />
-      <Body leave={leave} />
-    </PageContainer>
+      <PageContainer isLightStatusBar={true}>
+        <Body leave={leave} fromHod={fromHod} />
+      </PageContainer>
+    </>
   );
 };

@@ -12,12 +12,14 @@ import { PROFILE_CONFIG } from "./config";
 
 export const ProfileScreen = ({ navigation }: any) => {
   return (
-    <PageContainer isLightStatusBar={true}>
+    <>
       <Header />
-      <ScrollView>
-        <Body data={PROFILE_CONFIG.data} />
-        <UserDetails userDetails={PROFILE_CONFIG.data} />
-      </ScrollView>
-    </PageContainer>
+      <PageContainer isLightStatusBar={true}>
+        <ScrollView>
+          <Body data={PROFILE_CONFIG.data} />
+          <UserDetails userDetails={PROFILE_CONFIG.data} />
+        </ScrollView>
+      </PageContainer>
+    </>
   );
 };

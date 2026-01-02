@@ -10,7 +10,6 @@ import { ScreenHeight, ScreenWidth } from "@rneui/base";
 export const styles = StyleSheet.create({
   container: {
     width: "100%",
-    marginTop: -28,
     position: "relative",
   },
   designMainContainer: {

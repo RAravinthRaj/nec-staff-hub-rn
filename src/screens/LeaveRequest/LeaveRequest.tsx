@@ -15,9 +15,11 @@ export const LeaveRequestScreen = ({ navigation }: any) => {
   };
 
   return (
-    <PageContainer isLightStatusBar={true}>
+    <>
       <Header goBack={_goBack} />
-      <Body categories={LEAVE_REQUEST_CONFIG.categories} />
-    </PageContainer>
+      <PageContainer isLightStatusBar={true}>
+        <Body categories={LEAVE_REQUEST_CONFIG.categories} />
+      </PageContainer>
+    </>
   );
 };

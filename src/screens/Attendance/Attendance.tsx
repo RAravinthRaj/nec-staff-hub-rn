@@ -23,12 +23,14 @@ export const AttendanceScreen = ({ navigation }: any) => {
   };
 
   return (
-    <PageContainer isLightStatusBar={true}>
+    <>
       <Header goBack={_navigateToBack} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Body statsData={details} />
-        <StudentList studentsData={ATTENDANCE_CONFIG.students} />
-      </ScrollView>
-    </PageContainer>
+      <PageContainer isLightStatusBar={true}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Body statsData={details} />
+          <StudentList studentsData={ATTENDANCE_CONFIG.students} />
+        </ScrollView>
+      </PageContainer>
+    </>
   );
 };

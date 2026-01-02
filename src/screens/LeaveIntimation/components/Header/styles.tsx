@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     opacity: 0.1,
   },
   headerContainer: {
-    height: ScreenHeight * 0.13,
+    height: ScreenHeight * 0.135,
     width: "100%",
     padding: 20,
     display: "flex",
@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
     gap: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     letterSpacing: 0.4,
   },
   buttonContainer: {
@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     alignSelf: "center",
-    width: ScreenWidth * 0.2,
+    width: ScreenWidth * 0.23,
     paddingVertical: 6,
     borderRadius: 5,
   },

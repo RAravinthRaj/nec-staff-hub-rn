@@ -34,10 +34,21 @@ export interface Leave {
 
 export interface IBody {
   leave: Leave;
+  fromHod: boolean;
 }
 
-export const Body = ({ leave }: IBody) => {
+export const Body = ({ leave, fromHod }: IBody) => {
   const { theme } = useTheme();
+
+  const _renderHRStatus = (status: string) => {
+    if (status === "Approved") {
+      return renderKeyValue("Approved By", "HR ADMIN");
+    }
+
+    if (status === "Declined") {
+      return renderKeyValue("Declined By", "HR ADMIN");
+    }
+  };
 
   const renderStatus = () => {
     const status = leave.status;
@@ -78,7 +89,7 @@ export const Body = ({ leave }: IBody) => {
   };
 
   const renderButton = () => {
-    if (leave.status !== LEAVE_DETAIL_CONFIG.pending) return null;
+    if (leave.status !== LEAVE_DETAIL_CONFIG.pending || fromHod) return null;
 
     return (
       <ElevatedView
@@ -168,6 +179,8 @@ export const Body = ({ leave }: IBody) => {
                 value: leave.numberOfDays,
               },
             ])}
+
+            {_renderHRStatus(leave?.status)}
           </View>
 
           <View
@@ -184,6 +197,8 @@ export const Body = ({ leave }: IBody) => {
               { label: LEAVE_DETAIL_CONFIG.endDate, value: leave.endDate },
               { label: LEAVE_DETAIL_CONFIG.type, value: leave.type },
             ])}
+
+            {fromHod && renderKeyValue("Applied By", leave?.facultyName)}
           </View>
         </View>
 

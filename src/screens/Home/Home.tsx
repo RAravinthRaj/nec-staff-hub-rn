@@ -25,16 +25,18 @@ export const HomeScreen = ({ navigation }: any) => {
   };
 
   return (
-    <PageContainer isLightStatusBar={true}>
+    <>
       <Header navigateToNotification={_navigateToNotification} />
-      <ScrollView>
-        <Body setDate={setDate} />
-        <Schedules
-          date={date}
-          data={HOME_CONFIG.data}
-          navigateToAttendance={_navigateToAttendance}
-        />
-      </ScrollView>
-    </PageContainer>
+      <PageContainer isLightStatusBar={true}>
+        <ScrollView>
+          <Body setDate={setDate} />
+          <Schedules
+            date={date}
+            data={HOME_CONFIG.data}
+            navigateToAttendance={_navigateToAttendance}
+          />
+        </ScrollView>
+      </PageContainer>
+    </>
   );
 };

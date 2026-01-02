@@ -9,14 +9,11 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { styles as S } from "./styles";
 import { useTheme } from "@rneui/themed";
 import { Fonts } from "@/assets";
-import { LEAVE_DETAIL_CONFIG } from "../../config";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { LEAVE_INTIMATION_CONFIG } from "../../config";
 
-export interface IHeader {
-  goBack: () => void;
-}
+export interface IHeader {}
 
-export const Header = ({ goBack }: IHeader) => {
+export const Header = ({}: IHeader) => {
   const { theme } = useTheme();
 
   const _renderDesign = () => {
@@ -27,7 +24,7 @@ export const Header = ({ goBack }: IHeader) => {
             S.design,
             { backgroundColor: theme.colors.border },
           ])}
-        ></View>
+        />
         <View
           style={StyleSheet.flatten([
             S.design,
@@ -48,23 +45,13 @@ export const Header = ({ goBack }: IHeader) => {
       >
         <View style={StyleSheet.flatten([S.textContainer])}>
           <View style={StyleSheet.flatten([S.titleContainer])}>
-            <TouchableOpacity
-              activeOpacity={1}
-              hitSlop={40}
-              onPress={() => {
-                goBack();
-              }}
-            >
-              <FontAwesome6 name="arrow-left-long" size={25} color="white" />
-            </TouchableOpacity>
-
             <Text
               style={StyleSheet.flatten([
                 S.title,
                 { color: theme.colors.white, fontFamily: Fonts.semibold },
               ])}
             >
-              {LEAVE_DETAIL_CONFIG.leaves}
+              {LEAVE_INTIMATION_CONFIG.leaves}
             </Text>
           </View>
         </View>

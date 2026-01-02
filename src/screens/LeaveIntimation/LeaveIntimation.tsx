@@ -7,29 +7,25 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 
 import { PageContainer } from "@/components";
 import { Body, Header, LeaveDetails } from "./components";
-import { ScrollView } from "react-native";
-import { LEAVE_CONFIG } from "./config";
+import { ScrollView, View } from "react-native";
+import { LEAVE_INTIMATION_CONFIG } from "./config";
 
-export const LeaveScreen = ({ navigation }: any) => {
-  const _navigateToNewLeave = () => {
-    return navigation.navigate("LeaveRequest");
-  };
-
+export const LeaveIntimationScreen = ({ navigation }: any) => {
   const _navigateToLeaveDetails = (leave: any) => {
     return navigation.navigate("LeaveDetails", {
       leave,
-      fromHod: false,
+      fromHod: true,
     });
   };
 
   return (
     <>
-      <Header navigateToNewLeave={_navigateToNewLeave} />
+      <Header />
       <PageContainer isLightStatusBar={true}>
         <Body />
         <ScrollView showsVerticalScrollIndicator={false}>
           <LeaveDetails
-            leaveDetails={LEAVE_CONFIG.leaveDetails}
+            leaveDetails={LEAVE_INTIMATION_CONFIG.leaveDetails}
             navigateToLeaveDetails={_navigateToLeaveDetails}
           />
         </ScrollView>

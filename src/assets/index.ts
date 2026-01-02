@@ -16,7 +16,7 @@ export const Images = {
   present: require("./images/present.png"),
   absent: require("./images/absent.png"),
   onDuty: require("./images/onduty.png"),
-  profile: require("./images/profile.avif"),
+  profile: require("./images/profile.png"),
 };
 
 export const ImagesCache = [
