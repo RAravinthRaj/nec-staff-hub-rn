@@ -9,18 +9,15 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { styles as S } from "./styles";
 import { useTheme } from "@rneui/themed";
 import { Fonts } from "@/assets";
-import { HOME_CONFIG } from "../../config";
-import Octicons from "@expo/vector-icons/Octicons";
-import { Badge } from "react-native-paper";
-import { useState } from "react";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { NOTIFICATION_CONFIG } from "../../config";
 
 export interface IHeader {
-  navigateToNotification: () => void;
+  goBack: () => void;
 }
 
-export const Header = ({ navigateToNotification }: IHeader) => {
+export const Header = ({ goBack }: IHeader) => {
   const { theme } = useTheme();
-  const [showBadge, setShowBadge] = useState(true);
 
   const _renderDesign = () => {
     return (
@@ -41,7 +38,7 @@ export const Header = ({ navigateToNotification }: IHeader) => {
     );
   };
 
-  const _renderUserDetails = () => {
+  const _renderHeaderTitle = () => {
     return (
       <View
         style={StyleSheet.flatten([
@@ -50,53 +47,28 @@ export const Header = ({ navigateToNotification }: IHeader) => {
         ])}
       >
         <View style={StyleSheet.flatten([S.textContainer])}>
-          <Text
-            style={StyleSheet.flatten([
-              S.greet,
-              { fontFamily: Fonts.regular, color: theme.colors.white },
-            ])}
-          >
-            {HOME_CONFIG.greet}
-          </Text>
-          <View style={StyleSheet.flatten([S.userNameContainer])}>
+          <View style={StyleSheet.flatten([S.titleContainer])}>
+            <TouchableOpacity activeOpacity={1} hitSlop={20}>
+              <FontAwesome6
+                name="arrow-left-long"
+                size={25}
+                color="white"
+                onPress={() => {
+                  goBack();
+                }}
+              />
+            </TouchableOpacity>
+
             <Text
               style={StyleSheet.flatten([
-                S.userName,
+                S.title,
                 { color: theme.colors.white, fontFamily: Fonts.semibold },
               ])}
             >
-              {HOME_CONFIG.userName}
-            </Text>
-            <Text style={StyleSheet.flatten([S.userName])}>
-              {HOME_CONFIG.waveSign}
+              {NOTIFICATION_CONFIG.notification}
             </Text>
           </View>
         </View>
-        {_renderNotification()}
-      </View>
-    );
-  };
-
-  const _renderNotification = () => {
-    return (
-      <View style={StyleSheet.flatten([S.bellIcon])}>
-        <TouchableOpacity
-          style={StyleSheet.flatten([S.badgeContainer])}
-          onPress={navigateToNotification}
-          hitSlop={30}
-          activeOpacity={0.8}
-        >
-          <Octicons name="bell" size={24} color="white" />
-          {showBadge && (
-            <Badge
-              size={10}
-              style={StyleSheet.flatten([
-                S.badge,
-                { borderColor: theme.colors.white },
-              ])}
-            />
-          )}
-        </TouchableOpacity>
       </View>
     );
   };
@@ -104,7 +76,7 @@ export const Header = ({ navigateToNotification }: IHeader) => {
   const _renderHeader = () => {
     return (
       <View>
-        {_renderUserDetails()}
+        {_renderHeaderTitle()}
         <View style={StyleSheet.flatten([S.designMainContainer])}>
           {_renderDesign()}
         </View>

@@ -20,9 +20,13 @@ export const HomeScreen = ({ navigation }: any) => {
     return navigation.navigate("Attendance");
   };
 
+  const _navigateToNotification = () => {
+    return navigation.navigate("Notification");
+  };
+
   return (
     <PageContainer isLightStatusBar={true}>
-      <Header />
+      <Header navigateToNotification={_navigateToNotification} />
       <ScrollView>
         <Body setDate={setDate} />
         <Schedules
