@@ -27,8 +27,9 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   profileImage: {
-    width: ScreenWidth * 0.28,
-    height: ScreenHeight * 0.12,
+    width: ScreenWidth * 0.235,
+    height: ScreenHeight * 0.11,
+    margin: 10,
   },
   textContainer: {
     display: "flex",

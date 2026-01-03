@@ -17,8 +17,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   image: {
-    height: ScreenHeight * 0.06,
-    width: ScreenWidth * 0.128,
+    height: ScreenHeight * 0.062,
+    width: ScreenWidth * 0.133,
     marginRight: 15,
   },
   leaveContainer: {

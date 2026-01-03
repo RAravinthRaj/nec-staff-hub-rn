@@ -5,8 +5,9 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 export const LEAVE_INTIMATION_CONFIG = {
-  leaves: "Leaves",
+  leaves: "Leave Requests",
   newButton: "New",
+  by: "By : ",
   chips: ["All", "Pending", "Approved", "Declined"],
   days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   months: [

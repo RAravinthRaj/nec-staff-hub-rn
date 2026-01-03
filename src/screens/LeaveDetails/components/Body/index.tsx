@@ -41,16 +41,19 @@ export const Body = ({ leave, fromHod }: IBody) => {
   const { theme } = useTheme();
 
   const _renderHRStatus = (status: string) => {
-    if (status === "Approved") {
-      return renderKeyValue("Approved By", "HR ADMIN");
+    let title = "";
+    if (status === LEAVE_DETAIL_CONFIG.approved) {
+      title = status + " " + LEAVE_DETAIL_CONFIG.by;
+      return _renderKeyValue(title, LEAVE_DETAIL_CONFIG.hrAdmin);
     }
 
-    if (status === "Declined") {
-      return renderKeyValue("Declined By", "HR ADMIN");
+    if (status === LEAVE_DETAIL_CONFIG.declined) {
+      title = status + " " + LEAVE_DETAIL_CONFIG.by;
+      return _renderKeyValue(title, LEAVE_DETAIL_CONFIG.hrAdmin);
     }
   };
 
-  const renderStatus = () => {
+  const _renderStatus = () => {
     const status = leave.status;
     const colorKey = LEAVE_DETAIL_CONFIG.color[status.toLowerCase()] ?? "gray";
     const backgroundKey = `${colorKey}Background`;
@@ -88,7 +91,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
     );
   };
 
-  const renderButton = () => {
+  const _renderButton = () => {
     if (leave.status !== LEAVE_DETAIL_CONFIG.pending || fromHod) return null;
 
     return (
@@ -116,7 +119,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
     );
   };
 
-  const renderDocuments = () => {
+  const _renderDocuments = () => {
     if (!leave.documents?.length) {
       return (
         <Text style={StyleSheet.flatten([S.valueText])}>
@@ -128,7 +131,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
     return leave.documents;
   };
 
-  const renderKeyValue = (label: string, value?: string | number) => (
+  const _renderKeyValue = (label: string, value?: string | number) => (
     <View style={StyleSheet.flatten([S.dataContainer])}>
       <Text
         style={StyleSheet.flatten([
@@ -142,7 +145,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
     </View>
   );
 
-  const renderRow = (items: { label: string; value?: string | number }[]) => (
+  const _renderRow = (items: { label: string; value?: string | number }[]) => (
     <View
       style={StyleSheet.flatten([
         S.rowContainer,
@@ -150,7 +153,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
       ])}
     >
       {items.map((item) => (
-        <View key={item.label}>{renderKeyValue(item.label, item.value)}</View>
+        <View key={item.label}>{_renderKeyValue(item.label, item.value)}</View>
       ))}
     </View>
   );
@@ -170,8 +173,8 @@ export const Body = ({ leave, fromHod }: IBody) => {
               { backgroundColor: theme.colors.white },
             ])}
           >
-            {renderStatus()}
-            {renderRow([
+            {_renderStatus()}
+            {_renderRow([
               { label: LEAVE_DETAIL_CONFIG.startDate, value: leave.startDate },
               { label: LEAVE_DETAIL_CONFIG.category, value: leave.category },
               {
@@ -189,7 +192,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
               { backgroundColor: theme.colors.white },
             ])}
           >
-            {renderRow([
+            {_renderRow([
               {
                 label: LEAVE_DETAIL_CONFIG.applicationDate,
                 value: leave.applicationDate,
@@ -198,7 +201,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
               { label: LEAVE_DETAIL_CONFIG.type, value: leave.type },
             ])}
 
-            {fromHod && renderKeyValue("Applied By", leave?.facultyName)}
+            {fromHod && _renderKeyValue("Applied By", leave?.facultyName)}
           </View>
         </View>
 
@@ -214,7 +217,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
               { backgroundColor: theme.colors.white },
             ])}
           >
-            {renderRow([
+            {_renderRow([
               { label: LEAVE_DETAIL_CONFIG.reason, value: leave.reason },
               { label: LEAVE_DETAIL_CONFIG.comments, value: leave.comments },
             ])}
@@ -230,7 +233,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
               </Text>
 
               <View style={StyleSheet.flatten([S.documentContainer])}>
-                {renderDocuments()}
+                {_renderDocuments()}
               </View>
             </View>
           </View>
@@ -248,7 +251,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
       showsVerticalScrollIndicator={false}
     >
       {_renderData()}
-      {renderButton()}
+      {_renderButton()}
     </ScrollView>
   );
 };

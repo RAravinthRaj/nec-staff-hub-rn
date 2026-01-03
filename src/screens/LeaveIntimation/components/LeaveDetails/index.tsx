@@ -86,7 +86,7 @@ export const LeaveDetails = ({
     return formatDate(startDate) + " - " + formatDate(endDate);
   };
 
-  const _renderUserData = () => {
+  const _renderUserData = (facultyName: string, designation: string) => {
     return (
       <View
         style={StyleSheet.flatten([
@@ -115,15 +115,12 @@ export const LeaveDetails = ({
                 { color: theme.colors.primary },
               ])}
             >
-              By :
+              {LEAVE_INTIMATION_CONFIG.by}
             </Text>
           </View>
           <View style={S.dataDescription}>
-            <Text style={S.byText}>Mr. R. Aravinth Raj</Text>
-
-            <Text style={S.descriptionText}>
-              Assistant Professor , Dept of CSE
-            </Text>
+            <Text style={S.byText}>{facultyName}</Text>
+            <Text style={S.descriptionText}>{designation}</Text>
           </View>
         </View>
 
@@ -218,7 +215,7 @@ export const LeaveDetails = ({
                   </View>
 
                   <View style={StyleSheet.flatten([S.userDataLeaveContainer])}>
-                    {_renderUserData()}
+                    {_renderUserData(leave?.facultyName, leave?.designation)}
                   </View>
                 </TouchableOpacity>
               );

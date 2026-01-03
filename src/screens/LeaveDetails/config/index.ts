@@ -16,7 +16,10 @@ export const LEAVE_DETAIL_CONFIG = {
   reason: "Reason",
   comments: "Comments (By HR)",
   documents: "Documents",
+  approved: "Approved",
   pending: "Pending",
+  declined: "Declined",
+  hrAdmin: "HR ADMIN",
   buttonTitle: "Cancel Request",
   noDocumentsFound: "No Documents Found",
   color: {
@@ -24,4 +27,5 @@ export const LEAVE_DETAIL_CONFIG = {
     declined: "red",
     pending: "orange",
   },
+  by: "By ",
 };
