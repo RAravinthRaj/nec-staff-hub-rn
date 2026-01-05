@@ -49,7 +49,7 @@ export const LeaveDetails = ({
     }`;
   };
 
-  const _renderButton = () => {
+  const _renderButton = (leave: any) => {
     return (
       <TouchableOpacity
         style={StyleSheet.flatten([
@@ -59,7 +59,9 @@ export const LeaveDetails = ({
           },
         ])}
         activeOpacity={0.8}
-        onPress={navigateToLeaveDetails}
+        onPress={() => {
+          navigateToLeaveDetails(leave);
+        }}
       >
         <Icon type="feather" name="chevron-right" size={20} color="black" />
       </TouchableOpacity>
@@ -171,7 +173,7 @@ export const LeaveDetails = ({
 
                   <View style={StyleSheet.flatten([S.mainStatusContainer])}>
                     {_renderStatus(status)}
-                    {_renderButton()}
+                    {_renderButton(leave)}
                   </View>
                 </TouchableOpacity>
               );

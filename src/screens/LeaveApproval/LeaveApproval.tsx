@@ -12,9 +12,8 @@ import { ScrollView } from "react-native";
 
 export const LeaveApprovalScreen = ({ navigation }: any) => {
   const _navigateToLeaveDetails = (leave: any) => {
-    return navigation.navigate("LeaveDetails", {
+    return navigation.navigate("LeaveApprovalDetails", {
       leave,
-      fromHod: true,
     });
   };
   const _navigateToNotification = () => {

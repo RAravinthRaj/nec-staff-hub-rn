@@ -53,7 +53,7 @@ export const LeaveDetails = ({
     return formatDate(startDate) + " - " + formatDate(endDate);
   };
 
-  const _renderButton = () => {
+  const _renderButton = (leave: any) => {
     return (
       <TouchableOpacity
         style={StyleSheet.flatten([
@@ -63,7 +63,9 @@ export const LeaveDetails = ({
           },
         ])}
         activeOpacity={0.8}
-        onPress={navigateToLeaveDetails}
+        onPress={() => {
+          navigateToLeaveDetails(leave);
+        }}
       >
         <Icon type="feather" name="chevron-right" size={20} color="black" />
       </TouchableOpacity>
@@ -91,7 +93,7 @@ export const LeaveDetails = ({
     );
   };
 
-  const _renderStatus = (status: any, leave: any) => {
+  const _renderStatus = (status: string, leave: any) => {
     const textColor = LEAVE_APPROVAL_CONFIG.color[status.toLowerCase()];
     const background = textColor + "Background";
 
@@ -140,7 +142,7 @@ export const LeaveDetails = ({
     );
   };
 
-  const _renderUserData = (facultyName: string, designation: string) => {
+  const _renderUserData = (leave: any) => {
     return (
       <View
         style={StyleSheet.flatten([
@@ -173,18 +175,20 @@ export const LeaveDetails = ({
             </Text>
           </View>
           <View style={S.dataDescription}>
-            <Text style={S.byText}>{facultyName}</Text>
-            <Text style={S.descriptionText}>{designation}</Text>
+            <Text style={S.byText}>{leave?.facultyName}</Text>
+            <Text style={S.descriptionText}>{leave?.designation}</Text>
           </View>
         </View>
 
-        {_renderButton()}
+        {_renderButton(leave)}
       </View>
     );
   };
 
   const _renderSingleData = (leave: any, index: number) => {
     const status = leave?.status;
+
+    if (!status) return null;
 
     return (
       <TouchableOpacity
@@ -253,7 +257,7 @@ export const LeaveDetails = ({
         </View>
 
         <View style={StyleSheet.flatten([S.userDataLeaveContainer])}>
-          {_renderUserData(leave?.facultyName, leave?.designation)}
+          {_renderUserData(leave)}
         </View>
       </TouchableOpacity>
     );

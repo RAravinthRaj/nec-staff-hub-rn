@@ -16,3 +16,4 @@ export * from "./Profile/Profile";
 export * from "./Notification/Notification";
 export * from "./LeaveIntimation/LeaveIntimation";
 export * from "./LeaveApproval/LeaveApproval";
+export * from "./LeaveApprovalDetails/LeaveApprovalDetails";

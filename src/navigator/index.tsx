@@ -22,6 +22,7 @@ import {
   NotificationScreen,
   LeaveIntimationScreen,
   LeaveApprovalScreen,
+  LeaveApprovalDetailScreen,
 } from "@/screens";
 
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,10 @@ export const AppNavigator = () => {
           component={LeaveIntimationScreen}
         />
         <Stack.Screen name="LeaveApproval" component={LeaveApprovalScreen} />
+        <Stack.Screen
+          name="LeaveApprovalDetails"
+          component={LeaveApprovalDetailScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

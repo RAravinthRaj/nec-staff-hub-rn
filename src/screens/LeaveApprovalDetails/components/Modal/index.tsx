@@ -10,7 +10,7 @@ import React from "react";
 import { Modal, View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { styles as S } from "./styles";
 import { useTheme } from "@rneui/themed";
-import { LEAVE_APPROVAL_CONFIG } from "../../config";
+import { LEAVE_APPROVAL_DETAIL_CONFIG } from "../../config";
 
 type ActionType = "Approved" | "Declined" | null;
 
@@ -51,10 +51,10 @@ export const CustomModal = ({
           ])}
         >
           <Text style={StyleSheet.flatten([S.modalTitle])}>
-            {LEAVE_APPROVAL_CONFIG.title}
+            {LEAVE_APPROVAL_DETAIL_CONFIG.title}
           </Text>
           <Text style={StyleSheet.flatten([S.modalSubTitle])}>
-            {LEAVE_APPROVAL_CONFIG.subtitle}
+            {LEAVE_APPROVAL_DETAIL_CONFIG.subtitle}
           </Text>
 
           <View style={StyleSheet.flatten([S.modalButtonContainer])}>
@@ -72,7 +72,7 @@ export const CustomModal = ({
                   { color: theme.colors.white },
                 ])}
               >
-                {LEAVE_APPROVAL_CONFIG.cancel}
+                {LEAVE_APPROVAL_DETAIL_CONFIG.cancel}
               </Text>
             </TouchableOpacity>
 
