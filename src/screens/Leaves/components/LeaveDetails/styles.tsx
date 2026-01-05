@@ -6,6 +6,7 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 import { StyleSheet } from "react-native";
 import { Fonts } from "@/assets";
+import { ScreenWidth } from "@rneui/base";
 
 export const styles = StyleSheet.create({
   container: {
@@ -70,6 +71,7 @@ export const styles = StyleSheet.create({
   description: {
     display: "flex",
     flexDirection: "column",
+    width: ScreenWidth * 0.4,
   },
   categoryText: {
     fontSize: 14,

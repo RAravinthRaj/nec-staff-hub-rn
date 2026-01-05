@@ -135,4 +135,50 @@ export const styles = StyleSheet.create({
   mainLeaveContainer: {
     marginBottom: 12,
   },
+  approvalButtonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    margin: 5,
+  },
+  approvalButton: {
+    padding: 10,
+    borderRadius: "50%",
+    elevation: 2,
+  },
+  modal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContainer: {
+    padding: 20,
+    borderRadius: 10,
+    width: "85%",
+  },
+  modalTitle: {
+    fontFamily: Fonts.semibold,
+    fontSize: 20,
+    lineHeight: 35,
+  },
+  modalSubTitle: {
+    fontFamily: Fonts.regular,
+    fontSize: 13,
+  },
+  modalButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 20,
+    gap: 10,
+  },
+  modalButton: {
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+  },
 });

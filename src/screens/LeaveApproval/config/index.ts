@@ -4,12 +4,25 @@ Unauthorized copying of this file, via any medium, is strictly prohibited.
 Proprietary and confidential.  
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
-export const LEAVE_INTIMATION_CONFIG = {
-  leaves: "Leave Requests",
-  newButton: "New",
-  by: "By : ",
+export const LEAVE_APPROVAL_CONFIG = {
+  greet: "Welcome Back,",
+  userName: "Aravinth",
+  waveSign: "👋",
+  leaveRequests: "LEAVE REQUESTS",
   chips: ["All", "Pending", "Approved", "Declined"],
   days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  color: {
+    approved: "badgeGreen",
+    declined: "red",
+    pending: "orange",
+  },
+  approved: "Approved",
+  declined: "Declined",
+  pending: "Pending",
+  cancel: "Cancel",
+  yes: "Yes",
+  title: "Are you sure?",
+  subtitle: "You won't be able to revert this!",
   months: [
     "Jan",
     "Feb",
@@ -24,6 +37,7 @@ export const LEAVE_INTIMATION_CONFIG = {
     "Nov",
     "Dec",
   ],
+  by: "By : ",
   leaveDetails: {
     "October 2025": [
       {
@@ -99,7 +113,7 @@ export const LEAVE_INTIMATION_CONFIG = {
         facultyName: "Mr. R. Aravinth Raj",
         designation: "Assistant Professor, Dept of CSE",
 
-        status: "Declined",
+        status: "Pending",
         applicationDate: "23.09.2025",
         startDate: "23.09.2025",
         endDate: "29.09.2025",
@@ -214,10 +228,5 @@ export const LEAVE_INTIMATION_CONFIG = {
         documents: "",
       },
     ],
-  },
-  color: {
-    approved: "badgeGreen",
-    declined: "red",
-    pending: "orange",
   },
 };

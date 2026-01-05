@@ -9,15 +9,18 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { styles as S } from "./styles";
 import { useTheme } from "@rneui/themed";
 import { Fonts } from "@/assets";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { NOTIFICATION_CONFIG } from "../../config";
+import { LEAVE_APPROVAL_CONFIG } from "../../config";
+import Octicons from "@expo/vector-icons/Octicons";
+import { Badge } from "react-native-paper";
+import { useState } from "react";
 
 export interface IHeader {
-  goBack: () => void;
+  navigateToNotification: () => void;
 }
 
-export const Header = ({ goBack }: IHeader) => {
+export const Header = ({ navigateToNotification }: IHeader) => {
   const { theme } = useTheme();
+  const [showBadge, setShowBadge] = useState(true);
 
   const _renderDesign = () => {
     return (
@@ -38,7 +41,7 @@ export const Header = ({ goBack }: IHeader) => {
     );
   };
 
-  const _renderHeaderTitle = () => {
+  const _renderUserDetails = () => {
     return (
       <View
         style={StyleSheet.flatten([
@@ -47,27 +50,53 @@ export const Header = ({ goBack }: IHeader) => {
         ])}
       >
         <View style={StyleSheet.flatten([S.textContainer])}>
-          <View style={StyleSheet.flatten([S.titleContainer])}>
-            <TouchableOpacity
-              activeOpacity={1}
-              hitSlop={20}
-              onPress={() => {
-                goBack();
-              }}
-            >
-              <FontAwesome6 name="arrow-left-long" size={25} color="white" />
-            </TouchableOpacity>
-
+          <Text
+            style={StyleSheet.flatten([
+              S.greet,
+              { fontFamily: Fonts.regular, color: theme.colors.white },
+            ])}
+          >
+            {LEAVE_APPROVAL_CONFIG.greet}
+          </Text>
+          <View style={StyleSheet.flatten([S.userNameContainer])}>
             <Text
               style={StyleSheet.flatten([
-                S.title,
+                S.userName,
                 { color: theme.colors.white, fontFamily: Fonts.semibold },
               ])}
             >
-              {NOTIFICATION_CONFIG.notification}
+              {LEAVE_APPROVAL_CONFIG.userName}
+            </Text>
+            <Text style={StyleSheet.flatten([S.userName])}>
+              {LEAVE_APPROVAL_CONFIG.waveSign}
             </Text>
           </View>
         </View>
+        {_renderNotification()}
+      </View>
+    );
+  };
+
+  const _renderNotification = () => {
+    return (
+      <View style={StyleSheet.flatten([S.bellIcon])}>
+        <TouchableOpacity
+          style={StyleSheet.flatten([S.badgeContainer])}
+          onPress={navigateToNotification}
+          hitSlop={30}
+          activeOpacity={0.8}
+        >
+          <Octicons name="bell" size={24} color="white" />
+          {showBadge && (
+            <Badge
+              size={10}
+              style={StyleSheet.flatten([
+                S.badge,
+                { borderColor: theme.colors.white },
+              ])}
+            />
+          )}
+        </TouchableOpacity>
       </View>
     );
   };
@@ -75,7 +104,7 @@ export const Header = ({ goBack }: IHeader) => {
   const _renderHeader = () => {
     return (
       <View>
-        {_renderHeaderTitle()}
+        {_renderUserDetails()}
         <View style={StyleSheet.flatten([S.designMainContainer])}>
           {_renderDesign()}
         </View>
