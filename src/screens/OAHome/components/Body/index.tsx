@@ -4,33 +4,33 @@ Unauthorized copying of this file, via any medium, is strictly prohibited.
 Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
-
-import React, { use, useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
-  Image,
   StyleSheet,
-  Modal,
-  FlatList,
-  TextInput,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import { BottomSheet, Icon, useTheme } from "@rneui/themed";
 import { styles as S } from "./styles";
-import { Fonts, Images } from "@/assets";
-import { ATTENDANCE_CONFIG } from "../../config";
+import { DropDown } from "../DropDown";
+import { OA_HOME_CONFIG } from "../../config";
+import { DateInput } from "../DateInput";
 import ElevatedView from "react-native-elevated-view";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Fonts } from "@/assets";
+import { showToast } from "@/utils";
 
-export interface IBody {
-  statsData: any;
-}
+export interface IBody {}
 
-export const Body = ({ statsData }: IBody) => {
+export const Body = () => {
   const { theme } = useTheme();
-  const [searchData, setSearchData] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
+  const [year, setYear] = useState<string>();
+  const [department, setDepartment] = useState<string>();
+  const [fromDate, setFromDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [searchData, setSearchData] = useState<string>();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const markAllPresent = () => {
     // setAttendance((prev) => {
@@ -56,54 +56,60 @@ export const Body = ({ statsData }: IBody) => {
     setIsVisible(false);
   };
 
-  const _renderCard = ({ item }: any) => {
+  const _renderTitle = (title: string) => {
     return (
-      <View
-        style={StyleSheet.flatten([
-          S.card,
-          { backgroundColor: theme.colors[item.color] },
-        ])}
-      >
-        <View style={StyleSheet.flatten([S.imageContainer])}>
-          <Image
-            source={Images[item.image]}
-            style={StyleSheet.flatten([S.image])}
-          />
+      <View style={StyleSheet.flatten([S.headerText])}>
+        <Text style={StyleSheet.flatten([S.titleText])}>{title}</Text>
+
+        <Text
+          style={StyleSheet.flatten([
+            S.typeText,
+            { color: theme.colors.red, margin: 5 },
+          ])}
+        >
+          {OA_HOME_CONFIG.star}
+        </Text>
+      </View>
+    );
+  };
+
+  const _renderDate = () => {
+    return (
+      <View style={StyleSheet.flatten([S.dateContainer])}>
+        <View style={StyleSheet.flatten([S.date, { flex: 0.5 }])}>
+          {_renderTitle(OA_HOME_CONFIG.startDate)}
+          <DateInput value={fromDate} onChange={setFromDate} />
         </View>
-        <View style={StyleSheet.flatten([S.detailContainer])}>
-          <Text
-            style={StyleSheet.flatten([
-              S.detail,
-              { color: theme.colors.white, fontFamily: Fonts.bold },
-            ])}
-          >
-            {statsData[item.image]}
-          </Text>
-          <Text
-            style={StyleSheet.flatten([
-              S.description,
-              { color: theme.colors.white, fontFamily: Fonts.semibold },
-            ])}
-          >
-            {item?.description}
-          </Text>
+        <View style={StyleSheet.flatten([S.date, { flex: 0.5 }])}>
+          {_renderTitle(OA_HOME_CONFIG.endDate)}
+          <DateInput value={endDate} onChange={setEndDate} />
         </View>
       </View>
     );
   };
 
-  const _renderStatistics = () => {
+  const _renderDropDown = () => {
     return (
-      <FlatList
-        data={ATTENDANCE_CONFIG.statsDetails}
-        keyExtractor={(_, index) => index.toString()}
-        numColumns={2}
-        renderItem={_renderCard}
-        columnWrapperStyle={{ gap: 5 }}
-        contentContainerStyle={StyleSheet.flatten([S.headerContainer])}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={false}
-      />
+      <View style={StyleSheet.flatten([S.categoryContainer])}>
+        <View>
+          {_renderTitle(OA_HOME_CONFIG.year)}
+          <DropDown
+            value={year}
+            placeholder="-- Select --"
+            items={OA_HOME_CONFIG.years}
+            onChange={setYear}
+          />
+        </View>
+        <View>
+          {_renderTitle(OA_HOME_CONFIG.department)}
+          <DropDown
+            value={department}
+            placeholder="-- Select --"
+            items={OA_HOME_CONFIG.departments}
+            onChange={setDepartment}
+          />
+        </View>
+      </View>
     );
   };
 
@@ -151,10 +157,10 @@ export const Body = ({ statsData }: IBody) => {
         >
           <View style={StyleSheet.flatten([S.bottomTextContainer])}>
             <Text style={StyleSheet.flatten([S.bottomText])}>
-              {ATTENDANCE_CONFIG.modalTitle}
+              {OA_HOME_CONFIG.modalTitle}
             </Text>
             <Text style={StyleSheet.flatten([S.bottomSubText])}>
-              {ATTENDANCE_CONFIG.modalSubTitle}
+              {OA_HOME_CONFIG.modalSubTitle}
             </Text>
           </View>
 
@@ -173,7 +179,7 @@ export const Body = ({ statsData }: IBody) => {
                   { color: theme.colors.primary },
                 ])}
               >
-                {ATTENDANCE_CONFIG.markAllAbsent}
+                {OA_HOME_CONFIG.markAllAbsent}
               </Text>
             </TouchableOpacity>
 
@@ -191,7 +197,7 @@ export const Body = ({ statsData }: IBody) => {
                   { color: theme.colors.white },
                 ])}
               >
-                {ATTENDANCE_CONFIG.markAllPresent}
+                {OA_HOME_CONFIG.markAllPresent}
               </Text>
             </TouchableOpacity>
           </View>
@@ -228,10 +234,35 @@ export const Body = ({ statsData }: IBody) => {
           />
           {_renderSearchIcon()}
         </ElevatedView>
+
+        <ElevatedView
+          style={StyleSheet.flatten([S.buttonContainer])}
+          elevation={5}
+        >
+          <TouchableOpacity
+            style={StyleSheet.flatten([
+              S.button,
+              {
+                backgroundColor: theme.colors.primary,
+              },
+            ])}
+            activeOpacity={0.8}
+          >
+            <Text
+              style={StyleSheet.flatten([
+                S.buttonTitle,
+                { color: theme.colors.white, fontFamily: Fonts.semibold },
+              ])}
+            >
+              {OA_HOME_CONFIG.buttonTitle}
+            </Text>
+          </TouchableOpacity>
+        </ElevatedView>
+
         <TouchableOpacity
           onPress={() => setIsVisible(true)}
           activeOpacity={0.2}
-          hitSlop={{ left: 20 }}
+          hitSlop={15}
         >
           <Icon name="dots-three-vertical" type="entypo" size={25} />
         </TouchableOpacity>
@@ -240,7 +271,17 @@ export const Body = ({ statsData }: IBody) => {
     );
   };
 
-  const _renderTitle = () => {
+  const _renderTitleText = (title: string) => {
+    return (
+      <Text
+        style={StyleSheet.flatten([S.titleText, { color: theme.colors.white }])}
+      >
+        {title}
+      </Text>
+    );
+  };
+
+  const _renderDetailsTitle = () => {
     return (
       <View
         style={StyleSheet.flatten([
@@ -252,44 +293,27 @@ export const Body = ({ statsData }: IBody) => {
         ])}
       >
         <View style={StyleSheet.flatten([S.titleItem])}>
-          <Text
-            style={StyleSheet.flatten([
-              S.titleText,
-              { color: theme.colors.white },
-            ])}
-          >
-            {ATTENDANCE_CONFIG.roll}
-          </Text>
-          <Text
-            style={StyleSheet.flatten([
-              S.titleText,
-              { color: theme.colors.white },
-            ])}
-          >
-            {ATTENDANCE_CONFIG.number}
-          </Text>
+          {_renderTitleText(OA_HOME_CONFIG.roll)}
+          {_renderTitleText(OA_HOME_CONFIG.number)}
         </View>
 
         <View style={StyleSheet.flatten([S.titleItem])}>
-          <Text
-            style={StyleSheet.flatten([
-              S.titleText,
-              { color: theme.colors.white },
-            ])}
-          >
-            {ATTENDANCE_CONFIG.name}
-          </Text>
+          {_renderTitleText(OA_HOME_CONFIG.name)}
         </View>
 
-        <View style={StyleSheet.flatten([S.titleItem])}>
-          <Text
-            style={StyleSheet.flatten([
-              S.titleText,
-              { color: theme.colors.white },
-            ])}
-          >
-            {ATTENDANCE_CONFIG.status}
-          </Text>
+        <View
+          style={StyleSheet.flatten([
+            S.titleItem,
+            {
+              flexDirection: "row",
+              justifyContent: "space-around",
+              margin: 5,
+            },
+          ])}
+        >
+          {_renderTitleText(OA_HOME_CONFIG.present)}
+          {_renderTitleText(OA_HOME_CONFIG.absent)}
+          {_renderTitleText(OA_HOME_CONFIG.onDuty)}
         </View>
       </View>
     );
@@ -297,14 +321,9 @@ export const Body = ({ statsData }: IBody) => {
 
   const _renderHeader = () => {
     return (
-      <View
-        style={StyleSheet.flatten([
-          S.headerContainer,
-          { backgroundColor: theme.colors.white },
-        ])}
-      >
-        {_renderStatistics()}
-        {_renderSearchBar()}
+      <View style={StyleSheet.flatten([S.headerContainer])}>
+        {_renderDropDown()}
+        {_renderDate()}
       </View>
     );
   };
@@ -317,7 +336,8 @@ export const Body = ({ statsData }: IBody) => {
       ])}
     >
       {_renderHeader()}
-      {_renderTitle()}
+      {_renderSearchBar()}
+      {_renderDetailsTitle()}
     </View>
   );
 };

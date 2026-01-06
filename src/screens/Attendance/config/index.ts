@@ -35,6 +35,8 @@ export const ATTENDANCE_CONFIG = {
   status: "Status",
   markAllPresent: "Mark All Present",
   markAllAbsent: "Mark All Absent",
+  modalTitle: "Attendance Actions",
+  modalSubTitle: "Apply to all students",
   students: [
     { rollNumber: "2312070", name: "Aravinth Raj R", status: "present" },
     { rollNumber: "2312071", name: "Karthik S", status: "absent" },

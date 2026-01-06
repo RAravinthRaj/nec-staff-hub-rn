@@ -17,3 +17,4 @@ export * from "./Notification/Notification";
 export * from "./LeaveIntimation/LeaveIntimation";
 export * from "./LeaveApproval/LeaveApproval";
 export * from "./LeaveApprovalDetails/LeaveApprovalDetails";
+export * from "./OAHome/OAHome";

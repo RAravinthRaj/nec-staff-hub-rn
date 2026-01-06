@@ -23,6 +23,7 @@ import {
   LeaveIntimationScreen,
   LeaveApprovalScreen,
   LeaveApprovalDetailScreen,
+  OAHomeScreen,
 } from "@/screens";
 
 const Stack = createNativeStackNavigator();
@@ -34,7 +35,7 @@ export const AppNavigator = () => {
     <NavigationContainer>
       <StatusBar style="auto" />
       <Stack.Navigator
-        initialRouteName="LeaveApproval"
+        initialRouteName="Attendance"
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: theme.colors.background },
@@ -59,6 +60,7 @@ export const AppNavigator = () => {
           name="LeaveApprovalDetails"
           component={LeaveApprovalDetailScreen}
         />
+        <Stack.Screen name="OAHomeScreen" component={OAHomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
