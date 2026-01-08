@@ -14,6 +14,7 @@ import { ThemeProvider } from "@rneui/themed";
 import { cacheFonts, cacheImages } from "@/utils";
 import { AppNavigator } from "@/navigator";
 import Toast from "react-native-toast-message";
+import { TabNavigator } from "./navigator/TabNavigator";
 
 SplashScreen.preventAutoHideAsync();
 

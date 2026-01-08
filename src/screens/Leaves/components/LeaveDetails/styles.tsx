@@ -6,11 +6,12 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 import { StyleSheet } from "react-native";
 import { Fonts } from "@/assets";
-import { ScreenWidth } from "@rneui/base";
+import { ScreenHeight, ScreenWidth } from "@rneui/base";
 
 export const styles = StyleSheet.create({
   container: {
     width: "100%",
+    marginBottom: ScreenHeight * 0.1,
   },
   headerContainer: {
     width: "100%",

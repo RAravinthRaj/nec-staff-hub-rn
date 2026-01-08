@@ -49,17 +49,6 @@ export const StudentList = ({ studentsData }: IStudentList) => {
         [rollNumber]: isSameSelected ? null : value,
       };
 
-      const updatedStudents = studentsData.map((student: any) =>
-        student.rollNumber === rollNumber
-          ? {
-              ...student,
-              status: isSameSelected ? null : REVERSE_STATUS_MAP[value],
-            }
-          : student
-      );
-
-      console.log("UPDATED STUDENTS:", updatedStudents);
-
       return updatedAttendance;
     });
   };

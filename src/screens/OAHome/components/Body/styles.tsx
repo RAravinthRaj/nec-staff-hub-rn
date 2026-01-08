@@ -76,6 +76,7 @@ export const styles = StyleSheet.create({
     margin: 5,
   },
   searchBarElevatedContainer: {
+    width: ScreenWidth * 0.65,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -86,12 +87,22 @@ export const styles = StyleSheet.create({
     width: ScreenWidth * 0.65,
     paddingVertical: 16,
     paddingHorizontal: 18,
+    paddingRight: 40,
     fontSize: 15,
     borderRadius: 12,
   },
   search: {
     borderRadius: "50%",
     padding: 5,
+  },
+  icons: {
+    position: "absolute",
+    right: 3,
+    padding: 5,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   modalStyle: {
     display: "flex",

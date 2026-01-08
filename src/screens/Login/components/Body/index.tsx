@@ -23,11 +23,11 @@ import { useState } from "react";
 
 export interface IBody {
   navigateToOtp: () => void;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const Body = ({ navigateToOtp }: IBody) => {
+export const Body = ({ navigateToOtp, setEmail }: IBody) => {
   const { theme } = useTheme();
-  const [email, setEmail] = useState("");
 
   const _renderLandingImage = () => {
     return (
@@ -167,6 +167,7 @@ export const Body = ({ navigateToOtp }: IBody) => {
             },
           ])}
           returnKeyType="send"
+          onChangeText={(text) => setEmail(text)}
           onSubmitEditing={navigateToOtp}
         />
 

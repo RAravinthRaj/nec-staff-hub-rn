@@ -1,7 +1,7 @@
-/* 
+/*
 © 2025 Aravinth Raj R. All rights reserved.
 Unauthorized copying of this file, via any medium, is strictly prohibited.
-Proprietary and confidential.  
+Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 import React from "react";
@@ -25,6 +25,7 @@ import {
   LeaveApprovalDetailScreen,
   OAHomeScreen,
 } from "@/screens";
+import { TabNavigator } from "./TabNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,7 +36,7 @@ export const AppNavigator = () => {
     <NavigationContainer>
       <StatusBar style="auto" />
       <Stack.Navigator
-        initialRouteName="Attendance"
+        initialRouteName="Landing"
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: theme.colors.background },
@@ -61,6 +62,7 @@ export const AppNavigator = () => {
           component={LeaveApprovalDetailScreen}
         />
         <Stack.Screen name="OAHomeScreen" component={OAHomeScreen} />
+        <Stack.Screen name="MainTabs" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

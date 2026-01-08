@@ -31,7 +31,9 @@ export const OtpScreen = ({ navigation }: any) => {
   }, []);
 
   const _navigateToHome = () => {
-    return navigation.navigate("Home");
+    return navigation.navigate("MainTabs", {
+      screen: "Home",
+    });
   };
 
   return (

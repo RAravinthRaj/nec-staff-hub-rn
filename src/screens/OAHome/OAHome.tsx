@@ -9,6 +9,7 @@ import { PageContainer } from "@/components";
 import { Body, Header, StudentList } from "./components";
 import { ScrollView } from "react-native";
 import { OA_HOME_CONFIG } from "./config";
+import { TabNavigator } from "@/navigator/TabNavigator";
 
 export const OAHomeScreen = ({ navigation }: any) => {
   const _navigateToNotification = () => {

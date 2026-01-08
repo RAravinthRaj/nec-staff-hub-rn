@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
   container: {
     width: "100%",
     paddingHorizontal: 16,
+    marginBottom: ScreenHeight * 0.08,
   },
   mainTitleContainer: {
     flexDirection: "column",
