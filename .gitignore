@@ -12,8 +12,6 @@ yarn-error.log*
 .expo-shared/
 
 # React Native
-android/
-ios/
 *.keystore
 *.jks
 

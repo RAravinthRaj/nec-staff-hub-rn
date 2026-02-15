@@ -38,12 +38,12 @@ export const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: 3,
-    paddingHorizontal: 15,
+    paddingHorizontal: 17,
+    paddingVertical: 5,
     borderRadius: 15,
   },
   text: {
-    fontSize: 13.5,
+    fontSize: 14,
     fontFamily: Fonts.regular,
   },
 });

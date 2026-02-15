@@ -6,7 +6,13 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { useTheme } from "@rneui/themed";
 import { styles as S } from "./styles";
 import { LEAVE_INTIMATION_CONFIG } from "../../config";
@@ -21,8 +27,10 @@ export const Body = ({}: IBody) => {
 
   const _renderChip = () => {
     return (
-      <View
-        style={StyleSheet.flatten([
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={StyleSheet.flatten([
           S.chipContainer,
           { backgroundColor: theme.colors.white },
         ])}
@@ -66,7 +74,7 @@ export const Body = ({}: IBody) => {
             </TouchableOpacity>
           );
         })}
-      </View>
+      </ScrollView>
     );
   };
 

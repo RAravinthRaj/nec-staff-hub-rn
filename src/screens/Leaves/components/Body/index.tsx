@@ -12,6 +12,7 @@ import { styles as S } from "./styles";
 import { LEAVE_CONFIG } from "../../config";
 import { LinearGradient } from "expo-linear-gradient";
 import { Fonts } from "@/assets";
+import { ScrollView } from "react-native";
 
 export interface IBody {}
 
@@ -21,8 +22,10 @@ export const Body = ({}: IBody) => {
 
   const _renderChip = () => {
     return (
-      <View
-        style={StyleSheet.flatten([
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={StyleSheet.flatten([
           S.chipContainer,
           { backgroundColor: theme.colors.white },
         ])}
@@ -66,7 +69,7 @@ export const Body = ({}: IBody) => {
             </TouchableOpacity>
           );
         })}
-      </View>
+      </ScrollView>
     );
   };
 

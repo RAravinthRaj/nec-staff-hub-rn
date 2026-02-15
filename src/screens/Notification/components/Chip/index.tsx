@@ -28,8 +28,10 @@ export const Chip = ({}: IChip) => {
 
   const _renderChip = () => {
     return (
-      <View
-        style={StyleSheet.flatten([
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={StyleSheet.flatten([
           S.chipContainer,
           { backgroundColor: theme.colors.white },
         ])}
@@ -73,7 +75,7 @@ export const Chip = ({}: IChip) => {
             </TouchableOpacity>
           );
         })}
-      </View>
+      </ScrollView>
     );
   };
 
