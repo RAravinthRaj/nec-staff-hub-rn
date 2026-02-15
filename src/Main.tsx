@@ -8,13 +8,12 @@ import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { StyleSheet } from "react-native";
-import { Fonts, ImagesCache } from "@/assets";
+import { FontFamily, ImagesCache } from "@/assets";
 import { useThemeMode } from "@/hooks";
 import { ThemeProvider } from "@rneui/themed";
 import { cacheFonts, cacheImages } from "@/utils";
 import { AppNavigator } from "@/navigator";
 import Toast from "react-native-toast-message";
-import { TabNavigator } from "./navigator/TabNavigator";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,7 +24,10 @@ export const Main = () => {
   useEffect(() => {
     const _loadResources = async () => {
       try {
-        await Promise.all([cacheFonts(Fonts), ...cacheImages(ImagesCache)]);
+        await Promise.all([
+          cacheFonts(FontFamily),
+          ...cacheImages(ImagesCache),
+        ]);
       } catch (e) {
         console.warn(e);
       } finally {
