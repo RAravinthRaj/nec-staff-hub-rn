@@ -8,12 +8,13 @@ import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { StyleSheet } from "react-native";
-import { FontFamily, ImagesCache } from "@/assets";
+import { FontFamily, ImagesCache, LottiesCache } from "@/assets";
 import { useThemeMode } from "@/hooks";
 import { ThemeProvider } from "@rneui/themed";
 import { cacheFonts, cacheImages } from "@/utils";
 import { AppNavigator } from "@/navigator";
 import Toast from "react-native-toast-message";
+import { toastConfig } from "@/utils/toast";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -50,7 +51,7 @@ export const Main = () => {
   return (
     <ThemeProvider theme={theme}>
       <AppNavigator />
-      <Toast />
+      <Toast config={toastConfig} position="top" topOffset={60} />
     </ThemeProvider>
   );
 };

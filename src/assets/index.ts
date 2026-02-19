@@ -44,4 +44,8 @@ export const Fonts = {
   bold: "Inter-Bold",
 };
 
-export const Lotties = {};
+export const Lotties = {
+  loader: require("./lotties/loader.json"),
+};
+
+export const LottiesCache = [Lotties.loader];

@@ -4,6 +4,7 @@ Unauthorized copying of this file, via any medium, is strictly prohibited.
 Proprietary and confidential.  
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
+import { Lotties } from "@/assets";
 import { createTheme } from "@rneui/themed";
 
 const lightColors = {
@@ -58,5 +59,6 @@ export const buildTheme = (mode: ThemeMode) => {
   return {
     ...theme,
     colors,
+    lotties: Lotties,
   };
 };

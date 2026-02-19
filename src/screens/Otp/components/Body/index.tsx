@@ -1,7 +1,7 @@
-/* 
+/*
 © 2025 Aravinth Raj R. All rights reserved.
 Unauthorized copying of this file, via any medium, is strictly prohibited.
-Proprietary and confidential.  
+Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
@@ -11,8 +11,9 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  StyleSheet,
   Pressable,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Images, Fonts } from "@/assets";
 import { styles as S } from "./styles";
@@ -22,164 +23,141 @@ import ElevatedView from "react-native-elevated-view";
 import { OtpInput } from "react-native-otp-entry";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
+import { showToast } from "@/utils";
 
 export interface IBody {
-  navigateToHome: () => void;
+  email: string;
+  onVerifyOtp: (otp: string) => void;
+  onResendOtp: () => void;
 }
 
-export const Body = ({ navigateToHome }: IBody) => {
+export const Body = ({ email, onVerifyOtp, onResendOtp }: IBody) => {
   const { theme } = useTheme();
   const [otp, setOtp] = useState("");
 
-  const _navigateToHome = () => {
-    if (otp === "0000") {
-      return navigateToHome();
+  const handleVerify = () => {
+    if (otp.length !== 4) {
+      showToast("Invalid Otp", "error");
+      return;
     }
+    onVerifyOtp(otp);
   };
 
-  const _renderLandingImage = () => {
-    return (
-      <View style={StyleSheet.flatten([S.imageContainer])}>
-        <Image source={Images.otp} style={StyleSheet.flatten([S.otpImage])} />
-      </View>
-    );
-  };
+  const _renderImage = () => (
+    <View style={S.imageContainer}>
+      <Image source={Images.otp} style={S.otpImage} />
+    </View>
+  );
 
-  const _renderText = () => {
-    return (
-      <View style={StyleSheet.flatten([S.textContainer])}>
-        <Text
-          style={StyleSheet.flatten([S.header, { fontFamily: Fonts.bold }])}
-        >
-          {OTP_CONFIG.header}
+  const _renderText = () => (
+    <View style={S.textContainer}>
+      <Text style={[S.header, { fontFamily: Fonts.bold }]}>
+        {OTP_CONFIG.header}
+      </Text>
+
+      <View style={S.descriptionContainer}>
+        <Text style={[S.description, { fontFamily: Fonts.regular }]}>
+          {OTP_CONFIG.description}
         </Text>
-
-        <View style={StyleSheet.flatten([S.descriptionContainer])}>
-          <Text
-            style={StyleSheet.flatten([
-              S.description,
-              { fontFamily: Fonts.regular },
-            ])}
-          >
-            {OTP_CONFIG.description}
-          </Text>
-        </View>
       </View>
-    );
-  };
+    </View>
+  );
 
-  const _renderOtp = () => {
-    return (
-      <SafeAreaProvider>
-        <SafeAreaView style={StyleSheet.flatten([S.otpMainContainer])}>
-          <OtpInput
-            numberOfDigits={4}
-            onTextChange={(text) => setOtp(text)}
-            textInputProps={{
-              returnKeyType: "send",
-              onSubmitEditing: () => navigateToHome(),
-            }}
-            theme={{
-              containerStyle: StyleSheet.flatten([S.otpContainer]),
-              pinCodeContainerStyle: StyleSheet.flatten([
-                S.otpInput,
-                {
-                  backgroundColor: theme.colors.secondaryBackground,
-                },
-              ]),
-              pinCodeTextStyle: StyleSheet.flatten([
-                {
-                  color: theme.colors.black,
-                },
-              ]),
-              focusStickStyle: StyleSheet.flatten([
-                {
-                  borderWidth: 1,
-                  borderColor: theme.colors.border,
-                },
-              ]),
-              focusedPinCodeContainerStyle: StyleSheet.flatten([
-                {
-                  borderWidth: 2,
-                  borderColor: theme.colors.border,
-                },
-              ]),
-            }}
-          />
-        </SafeAreaView>
-      </SafeAreaProvider>
-    );
-  };
-
-  const _renderVerifyButton = () => {
-    return (
-      <ElevatedView
-        style={StyleSheet.flatten([S.buttonContainer])}
-        elevation={2}
-      >
-        <TouchableOpacity
-          style={StyleSheet.flatten([
-            S.button,
-            {
-              backgroundColor: theme.colors.primary,
+  const _renderOtpInput = () => (
+    <SafeAreaProvider>
+      <SafeAreaView style={S.otpMainContainer}>
+        <OtpInput
+          numberOfDigits={4}
+          onTextChange={setOtp}
+          textInputProps={{
+            returnKeyType: "send",
+            onSubmitEditing: handleVerify,
+          }}
+          theme={{
+            containerStyle: S.otpContainer,
+            pinCodeContainerStyle: [
+              S.otpInput,
+              { backgroundColor: theme.colors.secondaryBackground },
+            ],
+            pinCodeTextStyle: {
+              color: theme.colors.black,
             },
-          ])}
-          onPress={_navigateToHome}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={StyleSheet.flatten([
-              S.buttonTitle,
-              { color: theme.colors.white, fontFamily: Fonts.semibold },
-            ])}
-          >
-            {OTP_CONFIG.buttonTitle}
-          </Text>
-        </TouchableOpacity>
-      </ElevatedView>
-    );
-  };
+            focusedPinCodeContainerStyle: {
+              borderWidth: 2,
+              borderColor: theme.colors.primary,
+            },
+          }}
+        />
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
 
-  const _renderResendButton = () => {
-    return (
-      <View style={StyleSheet.flatten([S.resendContainer])}>
+  const _renderVerifyButton = () => (
+    <ElevatedView style={S.buttonContainer} elevation={2}>
+      <TouchableOpacity
+        style={[
+          S.button,
+          {
+            backgroundColor:
+              otp.length === 4 ? theme.colors.primary : theme.colors.border,
+          },
+        ]}
+        onPress={handleVerify}
+        disabled={otp.length !== 4}
+        activeOpacity={0.8}
+      >
         <Text
-          style={StyleSheet.flatten([
-            S.resend,
-            { color: theme.colors.black, fontFamily: Fonts.regular },
-          ])}
+          style={[
+            S.buttonTitle,
+            { color: theme.colors.white, fontFamily: Fonts.semibold },
+          ]}
         >
-          {OTP_CONFIG.otpResend}
+          {OTP_CONFIG.buttonTitle}
         </Text>
-        <Pressable>
-          {({ pressed }) => (
-            <Text
-              style={StyleSheet.flatten([
-                S.resend,
-                { color: theme.colors.primary, fontFamily: Fonts.semibold },
-                pressed && {
-                  textDecorationLine: "underline",
-                },
-              ])}
-            >
-              {OTP_CONFIG.resend}
-            </Text>
-          )}
-        </Pressable>
-      </View>
-    );
-  };
+      </TouchableOpacity>
+    </ElevatedView>
+  );
+
+  const _renderResendSection = () => (
+    <View style={S.resendContainer}>
+      <Text
+        style={[
+          S.resend,
+          { color: theme.colors.black, fontFamily: Fonts.regular },
+        ]}
+      >
+        {OTP_CONFIG.otpResend}
+      </Text>
+
+      <Pressable onPress={onResendOtp}>
+        {({ pressed }) => (
+          <Text
+            style={[
+              S.resend,
+              { color: theme.colors.primary, fontFamily: Fonts.semibold },
+              pressed && { textDecorationLine: "underline" },
+            ]}
+          >
+            {OTP_CONFIG.resend}
+          </Text>
+        )}
+      </Pressable>
+    </View>
+  );
 
   return (
-    <ScrollView
-      style={StyleSheet.flatten([S.container])}
-      showsVerticalScrollIndicator={false}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
     >
-      {_renderLandingImage()}
-      {_renderText()}
-      {_renderOtp()}
-      {_renderVerifyButton()}
-      {_renderResendButton()}
-    </ScrollView>
+      <ScrollView style={S.container} showsVerticalScrollIndicator={false}>
+        {_renderImage()}
+        {_renderText()}
+        {_renderOtpInput()}
+        {_renderVerifyButton()}
+        {_renderResendSection()}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };

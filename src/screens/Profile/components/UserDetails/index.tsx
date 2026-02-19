@@ -15,9 +15,10 @@ import dayjs from "dayjs";
 
 export interface IUserDetails {
   userDetails: any;
+  handleLogOut: () => void;
 }
 
-export const UserDetails = ({ userDetails }: IUserDetails) => {
+export const UserDetails = ({ userDetails, handleLogOut }: IUserDetails) => {
   const { theme } = useTheme();
   const [isEnabled, setIsEnabled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -36,7 +37,14 @@ export const UserDetails = ({ userDetails }: IUserDetails) => {
   };
 
   const toggleLogOut = () => {
-    setIsVisible(true);
+    setIsVisible(!isVisible);
+  };
+
+  const _logOut = () => {
+    setIsVisible(false);
+    handleLogOut();
+
+    return;
   };
 
   const actionMap: Record<string, () => void> = {
@@ -94,7 +102,7 @@ export const UserDetails = ({ userDetails }: IUserDetails) => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => setIsVisible(false)}
+              onPress={_logOut}
               style={StyleSheet.flatten([
                 S.button,
                 { backgroundColor: theme.colors.primary },
@@ -144,7 +152,7 @@ export const UserDetails = ({ userDetails }: IUserDetails) => {
     isGeneral: boolean,
     index: number,
     data: any,
-    isLast: boolean
+    isLast: boolean,
   ) => {
     if (!isGeneral) {
       const identifier = data?.name;
@@ -247,7 +255,7 @@ export const UserDetails = ({ userDetails }: IUserDetails) => {
               isGeneral,
               index,
               d,
-              index === data.length - 1
+              index === data.length - 1,
             );
           })}
         </View>
@@ -317,7 +325,7 @@ export const UserDetails = ({ userDetails }: IUserDetails) => {
         {_renderData(
           PROFILE_CONFIG.accountDetails,
           PROFILE_CONFIG.accountDetailsData,
-          false
+          false,
         )}
         {_renderNotifications()}
         {_renderData(PROFILE_CONFIG.general, PROFILE_CONFIG.generalData, true)}

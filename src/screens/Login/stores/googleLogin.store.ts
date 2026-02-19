@@ -9,33 +9,40 @@ import { create } from "zustand";
 import * as SecureStore from "expo-secure-store";
 import { googleLoginAPI, GoogleLoginParams } from "../services";
 
+type GoogleLoginResponse = {
+  message: string;
+  token: string;
+  role: string;
+};
+
 type GoogleLoginState = {
   googleLoginLoading: boolean;
-  googleLoginResponse: string | null;
   googleLoginError: string | null;
 
-  fetchGoogleLogin: (params: GoogleLoginParams) => Promise<void>;
+  fetchGoogleLogin: (email: string) => Promise<GoogleLoginResponse>;
   resetGoogleLogin: () => void;
 };
 
 export const useGoogleLoginStore = create<GoogleLoginState>((set) => ({
   googleLoginLoading: false,
-  googleLoginResponse: null,
   googleLoginError: null,
 
-  fetchGoogleLogin: async (params: GoogleLoginParams) => {
+  fetchGoogleLogin: async (email: string) => {
     try {
       set({ googleLoginLoading: true, googleLoginError: null });
 
-      const res = await googleLoginAPI(params);
+      const res = await googleLoginAPI({ email });
 
-      // ✅ Save securely
       await SecureStore.setItemAsync("token", res.token);
       await SecureStore.setItemAsync("role", res.role);
 
-      set({ googleLoginResponse: res.message });
+      return res;
     } catch (err: any) {
-      set({ googleLoginError: err?.message });
+      const message =
+        err?.response?.data?.message || err?.message || "Google login failed";
+
+      set({ googleLoginError: message });
+      throw new Error(message);
     } finally {
       set({ googleLoginLoading: false });
     }
@@ -44,7 +51,6 @@ export const useGoogleLoginStore = create<GoogleLoginState>((set) => ({
   resetGoogleLogin: () => {
     set({
       googleLoginLoading: false,
-      googleLoginResponse: null,
       googleLoginError: null,
     });
   },

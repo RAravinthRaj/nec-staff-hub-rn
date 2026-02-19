@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "8.4.4",
+    "@react-native-google-signin/google-signin": "^16.1.1",
     "@react-native-picker/picker": "2.11.1",
     "@react-navigation/bottom-tabs": "^7.9.0",
     "@react-navigation/native": "^7.1.17",
@@ -40,6 +41,8 @@
     "expo-secure-store": "^15.0.8",
     "expo-splash-screen": "~31.0.13",
     "expo-status-bar": "~3.0.9",
+    "lottie-ios": "^4.6.0",
+    "lottie-react-native": "^7.3.6",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-calendars": "^1.1313.0",
@@ -55,6 +58,8 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@react-native-community/cli": "^20.1.1",
+    "@react-native/metro-config": "^0.84.0",
     "@types/react": "~19.1.0",
     "babel-plugin-module-resolver": "^5.0.2",
     "typescript": "~5.9.2"

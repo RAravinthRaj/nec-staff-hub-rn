@@ -5,58 +5,18 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-// import { PageContainer, LogoHeader, Footer } from "@/components";
-// import { useEffect, useState } from "react";
-// import { Keyboard, Platform } from "react-native";
-// import { Body } from "./components";
-// import * as SecureStore from "expo-secure-store";
-// import { getRoleFromEmail } from "@/utils";
-
-// export const LoginScreen = ({ navigation }: any) => {
-//   const [keyboardOpen, setKeyboardOpen] = useState(false);
-//   const [email, setEmail] = useState("");
-
-//   useEffect(() => {
-//     const showSub = Keyboard.addListener(
-//       Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
-//       () => setKeyboardOpen(true)
-//     );
-
-//     const hideSub = Keyboard.addListener(
-//       Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-//       () => setKeyboardOpen(false)
-//     );
-
-//     return () => {
-//       showSub.remove();
-//       hideSub.remove();
-//     };
-//   }, []);
-
-//   const _navigateToOtp = async () => {
-//     const role = getRoleFromEmail(email);
-//     await SecureStore.setItemAsync("role", role);
-
-//     navigation.navigate("Otp");
-//   };
-
-//   return (
-//     <>
-//       <PageContainer isLightStatusBar={false}>
-//         <LogoHeader />
-//         <Body navigateToOtp={_navigateToOtp} setEmail={setEmail} />
-//       </PageContainer>
-
-//       {!keyboardOpen && <Footer />}
-//     </>
-//   );
-// };
-
 import { PageContainer, LogoHeader, Footer } from "@/components";
 import { useEffect, useState } from "react";
 import { Keyboard, Platform, Alert } from "react-native";
 import { Body } from "./components";
 import { useSendOtpStore, useGoogleLoginStore } from "./stores";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+import { config } from "@/config";
+import { showToast } from "@/utils/toast";
+import { Loader } from "@/components/Loader";
 
 export const LoginScreen = ({ navigation }: any) => {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -71,9 +31,8 @@ export const LoginScreen = ({ navigation }: any) => {
   } = useSendOtpStore();
 
   const {
-    googleLoginLoading,
-    googleLoginResponse,
     googleLoginError,
+    googleLoginLoading,
     fetchGoogleLogin,
     resetGoogleLogin,
   } = useGoogleLoginStore();
@@ -96,8 +55,15 @@ export const LoginScreen = ({ navigation }: any) => {
   }, []);
 
   useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: config.googleWebClientId,
+      offlineAccess: true,
+    });
+  }, []);
+
+  useEffect(() => {
     if (sendOtpResponse) {
-      Alert.alert("Success", sendOtpResponse);
+      showToast(sendOtpResponse, "success");
       resetSendOtp();
       navigation.navigate("Otp", { email });
     }
@@ -105,36 +71,68 @@ export const LoginScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     if (sendOtpError) {
-      Alert.alert("Error", sendOtpError);
+      showToast(sendOtpError, "error");
       resetSendOtp();
     }
   }, [sendOtpError]);
 
   useEffect(() => {
-    if (googleLoginResponse) {
-      resetGoogleLogin();
-      navigation.replace("Home");
-    }
-  }, [googleLoginResponse]);
-
-  useEffect(() => {
     if (googleLoginError) {
-      Alert.alert("Error", googleLoginError);
+      showToast(googleLoginError, "error");
       resetGoogleLogin();
     }
   }, [googleLoginError]);
 
   const _handleSendOtp = async () => {
     if (!email) {
-      Alert.alert("Error", "Email is required");
+      showToast("Email is required", "error");
       return;
     }
 
     await fetchSendOtp({ email });
   };
 
-  const _handleGoogleLogin = async (idToken: string) => {
-    await fetchGoogleLogin({ idToken });
+  const _handleGoogleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+
+      await GoogleSignin.signOut();
+
+      const response = await GoogleSignin.signIn();
+      const email = response?.data?.user?.email;
+
+      if (!email) {
+        showToast("Unable to get Google email.", "error");
+        return;
+      }
+
+      const res = await fetchGoogleLogin(email);
+
+      showToast(res.message, "success");
+      resetGoogleLogin();
+    } catch (error: any) {
+      switch (error.code) {
+        case statusCodes.SIGN_IN_CANCELLED:
+          return;
+
+        case statusCodes.IN_PROGRESS:
+          showToast("Google Sign-In is already in progress.", "info");
+          return;
+
+        case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+          showToast(
+            "Google Play Services is not available or outdated.",
+            "error",
+          );
+          return;
+
+        default:
+          showToast(error.message || "Something went wrong.", "error");
+          return;
+      }
+    }
   };
 
   return (
@@ -145,8 +143,9 @@ export const LoginScreen = ({ navigation }: any) => {
           navigateToOtp={_handleSendOtp}
           handleGoogleLogin={_handleGoogleLogin}
           setEmail={setEmail}
-          loading={sendOtpLoading || googleLoginLoading}
         />
+
+        {(sendOtpLoading || googleLoginLoading) && <Loader useModalLoader />}
       </PageContainer>
 
       {!keyboardOpen && <Footer />}

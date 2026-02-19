@@ -8,10 +8,11 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as SecureStore from "expo-secure-store";
-import { ActivityIndicator, View } from "react-native";
+import { View } from "react-native";
 import { TAB_CONFIG } from "@/config/tab.config";
 import { UserRole } from "@/utils";
 import { CustomTabBar } from "../CustomTabBar";
+import { Loader } from "@/components";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,8 +40,15 @@ export const TabNavigator = () => {
 
   if (!role) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#ffffff",
+        }}
+      >
+        <Loader />
       </View>
     );
   }
