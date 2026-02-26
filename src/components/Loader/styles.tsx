@@ -13,9 +13,9 @@ const { width } = Dimensions.get("window");
 export const styles = StyleSheet.create({
   fullContainer: {
     flex: 1,
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
   },
 
   centerContainer: {
@@ -31,14 +31,14 @@ export const styles = StyleSheet.create({
   },
 
   fullLottie: {
-    width: 120,
-    height: 120,
+    width: 60,
+    height: 60,
   },
 
   modalContainer: {
     width: width * 0.7,
-    paddingVertical: 24,
-    paddingHorizontal: 22,
+    paddingVertical: 18,
+    paddingHorizontal: 15,
     borderRadius: 16,
     backgroundColor: "#FFFFFF",
     alignItems: "center",
@@ -52,16 +52,16 @@ export const styles = StyleSheet.create({
   },
 
   modalLottie: {
-    width: 110,
-    height: 110,
+    width: 60,
+    height: 60,
   },
 
   loadingText: {
     marginTop: 14,
-    fontSize: 17,
+    fontSize: 16,
     fontFamily: Fonts.regular,
     textAlign: "center",
     letterSpacing: 0.5,
-    lineHeight: 28,
+    lineHeight: 25,
   },
 });

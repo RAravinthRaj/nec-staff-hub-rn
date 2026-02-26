@@ -61,13 +61,4 @@ export const PROFILE_CONFIG = {
       action: "logout",
     },
   ],
-  data: {
-    name: "Aravinth Raj . R",
-    designation: "Assistant Professor, Dept of CSE",
-    gender: "Male",
-    email: "aravinthraj@nec.edu.in",
-    phone: "9876543210",
-    rollNumber: "2312070",
-    birthday: "2005-09-23",
-  },
 };
