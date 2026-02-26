@@ -41,7 +41,7 @@ export const Body: React.FC<IBody> = ({ setDate }) => {
   const getWeekDates = useCallback((date: string) => {
     const start = dayjs(date).isoWeekday(1);
     return Array.from({ length: 6 }).map((_, i) =>
-      start.add(i, "day").format("YYYY-MM-DD")
+      start.add(i, "day").format("YYYY-MM-DD"),
     );
   }, []);
 
@@ -64,7 +64,7 @@ export const Body: React.FC<IBody> = ({ setDate }) => {
 
     const subscription = BackHandler.addEventListener(
       "hardwareBackPress",
-      backAction
+      backAction,
     );
 
     return () => subscription.remove();
@@ -177,19 +177,24 @@ export const Body: React.FC<IBody> = ({ setDate }) => {
           <Calendar
             current={selectedDate}
             onDayPress={(day) => {
+              const isSunday = dayjs(day.dateString).day() === 0;
+              if (isSunday) return;
+
               setSelectedDate(day.dateString);
               setWeekDates(getWeekDates(day.dateString));
               setShowCalendar(false);
             }}
+            disableAllTouchEventsForDisabledDays={true}
+            disabledDaysIndexes={[0]}
             theme={{
               selectedDayBackgroundColor: theme.colors.primary,
               selectedDayTextColor: theme.colors.white,
 
               todayTextColor: theme.colors.white,
               todayBackgroundColor: theme.colors.primary,
-              dayTextColor: theme.colors.black,
-              textDisabledColor: "#A0A0A0",
 
+              dayTextColor: theme.colors.black,
+              textDisabledColor: "#C0C0C0",
               monthTextColor: theme.colors.black,
               textSectionTitleColor: theme.colors.primary,
 

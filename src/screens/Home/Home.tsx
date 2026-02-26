@@ -5,16 +5,38 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import { PageContainer } from "@/components";
+import { Loader, PageContainer } from "@/components";
 import { Body, Header, Schedules } from "./components";
 import dayjs from "dayjs";
-import { useState } from "react";
-import { HOME_CONFIG } from "./config";
+import { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
+import { useScheduleStore } from "./stores";
+import { showToast } from "@/utils";
 
 export const HomeScreen = ({ navigation }: any) => {
   const today = dayjs().format("YYYY-MM-DD");
   const [date, setDate] = useState(today);
+
+  const {
+    schedules,
+    fetchSchedules,
+    scheduleError,
+    scheduleLoading,
+    resetSchedules,
+  } = useScheduleStore();
+
+  useEffect(() => {
+    const formattedDay = dayjs(date).format("ddd").toUpperCase();
+
+    resetSchedules();
+    fetchSchedules(formattedDay);
+  }, [date]);
+
+  useEffect(() => {
+    if (scheduleError && scheduleError.length > 0) {
+      showToast(scheduleError, "error");
+    }
+  }, [scheduleError]);
 
   const _navigateToAttendance = () => {
     return navigation.navigate("Attendance");
@@ -24,18 +46,33 @@ export const HomeScreen = ({ navigation }: any) => {
     return navigation.navigate("Notification");
   };
 
-  return (
-    <>
-      <Header navigateToNotification={_navigateToNotification} />
-      <PageContainer isLightStatusBar={true}>
+  const _renderSchedules = () => {
+    if (scheduleLoading) {
+      return <Loader />;
+    }
+
+    if (schedules) {
+      return (
         <ScrollView>
-          <Body setDate={setDate} />
           <Schedules
             date={date}
-            data={HOME_CONFIG.data}
+            data={schedules}
             navigateToAttendance={_navigateToAttendance}
           />
         </ScrollView>
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <>
+      <Header navigateToNotification={_navigateToNotification} />
+      <Body setDate={setDate} />
+
+      <PageContainer isLightStatusBar={true}>
+        {_renderSchedules()}
       </PageContainer>
     </>
   );

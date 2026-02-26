@@ -85,30 +85,31 @@ export const Schedules = ({ data, date, navigateToAttendance }: ISchedule) => {
   const _renderPeriod = () => {
     return (
       <View>
-        {data.map((item: any, index: any) => (
-          <Accordion
-            key={index}
-            data={item}
-            date={date}
-            navigateToAttendance={navigateToAttendance}
-          />
-        ))}
+        {Array.isArray(data) &&
+          data.map((item: any) => (
+            <Accordion
+              key={item.id}
+              data={item}
+              date={date}
+              navigateToAttendance={navigateToAttendance}
+            />
+          ))}
       </View>
     );
   };
 
   const _renderHeader = () => {
-    if (data) {
+    if (!Array.isArray(data) || data.length === 0) {
       return (
         <View style={StyleSheet.flatten([S.headerContainer])}>
-          {_renderPeriod()}
+          {_renderNoClassFound()}
         </View>
       );
     }
 
     return (
       <View style={StyleSheet.flatten([S.headerContainer])}>
-        {_renderNoClassFound()}
+        {_renderPeriod()}
       </View>
     );
   };

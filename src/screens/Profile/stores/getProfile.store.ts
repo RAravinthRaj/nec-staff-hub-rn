@@ -8,15 +8,15 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 import { create } from "zustand";
 import ProfileService from "../services";
 
-type Department = {
+export interface Department {
   id: string;
   name: string;
   abbreviation: string;
   created_at?: string | null;
   updated_at?: string | null;
-};
+}
 
-type Profile = {
+export interface Profile {
   id: string;
   user_id: string;
   email: string;
@@ -28,16 +28,16 @@ type Profile = {
   created_at?: string;
   updated_at?: string;
   department?: Department | null;
-};
+}
 
-type ProfileState = {
+export interface ProfileState {
   profile: Profile | null;
   profileLoading: boolean;
   profileError: string | null;
 
   fetchProfile: () => Promise<void>;
   resetProfile: () => void;
-};
+}
 
 export const useProfileStore = create<ProfileState>((set) => ({
   profile: null,

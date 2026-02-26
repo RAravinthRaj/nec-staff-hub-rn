@@ -60,6 +60,7 @@ export const styles = StyleSheet.create({
   subName: {
     fontSize: 17,
     fontFamily: Fonts.bold,
+    width: ScreenWidth * 0.55,
   },
   timeContainer: {
     display: "flex",

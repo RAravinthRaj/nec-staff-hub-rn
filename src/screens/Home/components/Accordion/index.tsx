@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Collapsible from "react-native-collapsible";
 import { useTheme } from "@rneui/themed";
@@ -14,6 +14,8 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { Fonts } from "@/assets";
 import { HOME_CONFIG } from "../../config";
 import { styles as S } from "./styles";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 
 export interface IAccordian {
   data: any;
@@ -21,6 +23,7 @@ export interface IAccordian {
   navigateToAttendance: () => void;
 }
 
+dayjs.extend(isBetween);
 export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
   const [expanded, setExpanded] = useState(false);
   const { theme } = useTheme();
@@ -28,51 +31,38 @@ export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
   const startTime = data?.startTime;
   const endTime = data?.endTime;
 
-  useEffect(() => {
-    getBatchStatus();
-  }, [data]);
-
   const toggleAccordion = () => {
     setExpanded((prev) => !prev);
   };
 
-  const convertTo24Hour = (time12h?: string): string | null => {
-    if (!time12h) return null;
+  const convertTime = (time24?: string): string => {
+    if (!time24) return "";
 
-    const formatted = time12h.trim().toUpperCase();
-    const [time, modifier] = formatted.split(" ");
-    if (!time || !modifier) return null;
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
 
-    let [hour, minute] = time.split(":");
-    let h = parseInt(hour, 10);
+    const period = hour >= 12 ? "P.M" : "A.M";
 
-    if (modifier === "PM" && h !== 12) h += 12;
-    if (modifier === "AM" && h === 12) h = 0;
+    hour = hour % 12;
+    if (hour === 0) hour = 12;
 
-    return `${String(h).padStart(2, "0")}:${minute}`;
+    return `${hour.toString().padStart(2, "0")}:${minute} ${period}`;
   };
 
   const getBatchStatus = () => {
-    const today = new Date();
-    const todayStr = today.toISOString().split("T")[0];
-    const batch = new Date(date);
+    if (!startTime || !endTime || !date) return "Upcoming";
 
-    if (batch < new Date(todayStr)) return "Completed";
-    if (batch > new Date(todayStr)) return "Upcoming";
+    const now = dayjs();
+    const selected = dayjs(date);
 
-    if (date === todayStr) {
-      const start24 = convertTo24Hour(startTime);
-      const end24 = convertTo24Hour(endTime);
-      if (!start24 || !end24) return "Upcoming";
+    if (selected.isBefore(now, "day")) return "Completed";
+    if (selected.isAfter(now, "day")) return "Upcoming";
 
-      const now = today.getTime();
-      const start = new Date(`${date}T${start24}`).getTime();
-      const end = new Date(`${date}T${end24}`).getTime();
+    const start = dayjs(`${date} ${startTime}`);
+    const end = dayjs(`${date} ${endTime}`);
 
-      if (now > end) return "Completed";
-      if (now >= start && now <= end) return "Ongoing";
-      return "Upcoming";
-    }
+    if (now.isAfter(end)) return "Completed";
+    if (now.isBetween(start, end, null, "[]")) return "Ongoing";
 
     return "Upcoming";
   };
@@ -84,15 +74,15 @@ export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
       status === "Completed"
         ? theme.colors.red
         : status === "Ongoing"
-        ? theme.colors.white
-        : theme.colors.primary;
+          ? theme.colors.white
+          : theme.colors.primary;
 
     const borderColor =
       status === "Completed"
         ? theme.colors.red
         : status === "Ongoing"
-        ? theme.colors.badgeGreen
-        : theme.colors.white;
+          ? theme.colors.badgeGreen
+          : theme.colors.white;
 
     const textColor =
       status === "Ongoing" ? theme.colors.badgeGreen : theme.colors.white;
@@ -131,19 +121,20 @@ export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
             },
           ])}
         >
-          {data?.subName.charAt(10)}
+          {data?.courseName?.charAt(0) ?? ""}
         </Text>
       </View>
 
       <View style={StyleSheet.flatten([S.textContainer])}>
         <Text
           numberOfLines={1}
-          style={StyleSheet.flatten([
+          ellipsizeMode="tail"
+          style={[
             S.subName,
             { color: expanded ? theme.colors.white : theme.colors.black },
-          ])}
+          ]}
         >
-          {data.subName.substring(0, 25) + "..."}
+          {data?.courseCode ?? ""} - {data?.courseName ?? ""}
         </Text>
 
         <View style={StyleSheet.flatten([S.timeContainer])}>
@@ -153,7 +144,7 @@ export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
               { color: expanded ? theme.colors.white : theme.colors.primary },
             ])}
           >
-            {data.startTime} - {data.endTime}
+            {convertTime(data?.startTime)} - {convertTime(data?.endTime)}
           </Text>
 
           {_renderBadge()}
