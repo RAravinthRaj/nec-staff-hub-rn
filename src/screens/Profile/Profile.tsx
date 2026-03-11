@@ -12,7 +12,7 @@ import * as SecureStore from "expo-secure-store";
 import { PageContainer, Loader } from "@/components";
 import { Body, Header, UserDetails } from "./components";
 import { useProfileStore } from "./stores";
-import { getItemInLocalStorage, showToast } from "@/utils";
+import { showToast } from "@/utils";
 
 export const ProfileScreen = () => {
   const { profile, profileLoading, profileError, fetchProfile, resetProfile } =

@@ -10,7 +10,10 @@ import * as SecureStore from "expo-secure-store";
 export const getGraphqlError = (err: any): string => {
   let msg = "";
 
-  if (err instanceof ApolloError) {
+  const canUseApolloError =
+    typeof ApolloError === "function" || typeof ApolloError === "object";
+
+  if (canUseApolloError && err instanceof ApolloError) {
     if (err.graphQLErrors?.length > 0) {
       msg = err.graphQLErrors[0].message;
     } else if (err.networkError) {

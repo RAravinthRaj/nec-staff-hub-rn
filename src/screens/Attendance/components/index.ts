@@ -6,5 +6,6 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 export * from "./Body";
 export * from "./Header";
+export * from "./Modal";
 export * from "./StudentsList";
 export * from "./Switch";

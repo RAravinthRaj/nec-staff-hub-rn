@@ -5,83 +5,25 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import {
-  Text,
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { styles as S } from "./styles";
-import { useTheme } from "@rneui/themed";
-import { Fonts, Images } from "@/assets";
 import { HOME_CONFIG } from "../../config";
-import ElevatedView from "react-native-elevated-view";
 import Accordion from "../Accordion";
+import { NoDataFound } from "@/components";
 
 export interface ISchedule {
-  navigateToAttendance: () => void;
+  navigateToAttendance: (courseBatchId: number, periodId: number) => void;
+  retryFetchStudents: () => void;
   date: string;
   data: any;
 }
 
-export const Schedules = ({ data, date, navigateToAttendance }: ISchedule) => {
-  const { theme } = useTheme();
-
-  const _renderImage = () => {
-    return (
-      <View style={StyleSheet.flatten([S.imageContainer])}>
-        <Image
-          source={Images.noData}
-          style={StyleSheet.flatten([S.noDataImage])}
-        />
-      </View>
-    );
-  };
-
-  const _renderButton = () => {
-    return (
-      <ElevatedView
-        style={StyleSheet.flatten([S.buttonContainer])}
-        elevation={5}
-      >
-        <TouchableOpacity
-          style={StyleSheet.flatten([
-            S.button,
-            {
-              backgroundColor: theme.colors.primary,
-            },
-          ])}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={StyleSheet.flatten([
-              S.buttonTitle,
-              { color: theme.colors.white, fontFamily: Fonts.semibold },
-            ])}
-          >
-            {HOME_CONFIG.buttonTitle}
-          </Text>
-        </TouchableOpacity>
-      </ElevatedView>
-    );
-  };
-
-  const _renderNoClassFound = () => {
-    return (
-      <View style={StyleSheet.flatten([S.noDataContainer])}>
-        {_renderImage()}
-        <Text
-          style={StyleSheet.flatten([S.noClass, { fontFamily: Fonts.bold }])}
-        >
-          {HOME_CONFIG.noClass}
-        </Text>
-        {_renderButton()}
-      </View>
-    );
-  };
-
+export const Schedules = ({
+  data,
+  date,
+  navigateToAttendance,
+  retryFetchStudents,
+}: ISchedule) => {
   const _renderPeriod = () => {
     return (
       <View>
@@ -102,7 +44,11 @@ export const Schedules = ({ data, date, navigateToAttendance }: ISchedule) => {
     if (!Array.isArray(data) || data.length === 0) {
       return (
         <View style={StyleSheet.flatten([S.headerContainer])}>
-          {_renderNoClassFound()}
+          <NoDataFound
+            title={HOME_CONFIG.noClass}
+            buttonTitle={HOME_CONFIG.retry}
+            onPress={retryFetchStudents}
+          />
         </View>
       );
     }

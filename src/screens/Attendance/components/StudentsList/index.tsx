@@ -1,22 +1,35 @@
-/* 
+/*
 © 2025 Aravinth Raj R. All rights reserved.
 Unauthorized copying of this file, via any medium, is strictly prohibited.
-Proprietary and confidential.  
+Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import { Text, StyleSheet, View, ScrollView } from "react-native";
 import { styles as S } from "./styles";
 import { useTheme } from "@rneui/themed";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CustomSwitch } from "../Switch";
 
 export interface IStudentList {
-  studentsData: any;
+  studentsData: any[];
+  onStatusChange?: (studentId: number, status: string) => void;
 }
 
-export const StudentList = ({ studentsData }: IStudentList) => {
+export const StudentList = ({ studentsData, onStatusChange }: IStudentList) => {
   const { theme } = useTheme();
+
+  const [students, setStudents] = useState<any[]>([]);
+
+  useEffect(() => {
+    setStudents(studentsData || []);
+  }, [studentsData]);
+
+  const _handleStatusChange = (studentId: number, status: string) => {
+    if (onStatusChange) {
+      onStatusChange(studentId, status);
+    }
+  };
 
   const _renderData = () => {
     return (
@@ -29,24 +42,24 @@ export const StudentList = ({ studentsData }: IStudentList) => {
           },
         ])}
       >
-        {studentsData.map((student: any, index: number) => {
-          const isLast = index === studentsData.length - 1;
+        {students.map((student: any, index: number) => {
+          const isLast = index === students.length - 1;
 
           return (
             <View
+              key={student.studentId}
               style={StyleSheet.flatten([
                 S.titleContainer,
                 isLast && S.lastStyle,
                 {
                   backgroundColor:
-                    index % 2 != 0
+                    index % 2 !== 0
                       ? theme.colors.white
                       : theme.colors.tertiaryBackground,
                   borderColor: theme.colors.border,
-                  pointerEvents: student?.status === "onDuty" ? "none" : "auto",
+                  pointerEvents: student?.status === "od" ? "none" : "auto",
                 },
               ])}
-              key={index}
             >
               <View style={StyleSheet.flatten([S.titleItem])}>
                 <Text
@@ -54,7 +67,7 @@ export const StudentList = ({ studentsData }: IStudentList) => {
                     S.titleText,
                     {
                       color: theme.colors.black,
-                      opacity: student?.status === "onDuty" ? 0.4 : 1,
+                      opacity: student?.status === "od" ? 0.4 : 1,
                     },
                   ])}
                 >
@@ -68,7 +81,7 @@ export const StudentList = ({ studentsData }: IStudentList) => {
                     S.titleText,
                     {
                       color: theme.colors.black,
-                      opacity: student?.status === "onDuty" ? 0.4 : 1,
+                      opacity: student?.status === "od" ? 0.4 : 1,
                     },
                   ])}
                 >
@@ -77,7 +90,12 @@ export const StudentList = ({ studentsData }: IStudentList) => {
               </View>
 
               <View style={StyleSheet.flatten([S.titleItem])}>
-                <CustomSwitch status={student.status} />
+                <CustomSwitch
+                  status={student.status}
+                  onChange={(status: string) =>
+                    _handleStatusChange(student.studentId, status)
+                  }
+                />
               </View>
             </View>
           );
@@ -87,14 +105,13 @@ export const StudentList = ({ studentsData }: IStudentList) => {
   };
 
   return (
-    <ScrollView
+    <View
       style={StyleSheet.flatten([
         S.container,
         { backgroundColor: theme.colors.white },
       ])}
-      contentContainerStyle={{ alignSelf: "center" }}
     >
       {_renderData()}
-    </ScrollView>
+    </View>
   );
 };

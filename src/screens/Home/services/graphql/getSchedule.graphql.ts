@@ -15,7 +15,6 @@ import { GET_SCHEDULES } from "./queries";
 export const getSchedules = async (day: string) => {
   try {
     const token = await getItemInLocalStorage("token");
-
     if (!token) {
       throw new Error("Unauthorized");
     }
@@ -49,7 +48,8 @@ const formatSchedules = (timetables: any[]) => {
   return timetables.map((item) => ({
     id: item.id,
 
-    course_batch_id: item.course_batch_id ?? null,
+    courseBatchId: item.course_batch_id ?? null,
+    periodId: item.period?.id ?? null,
     subName: `${item.courseBatch?.course?.course_code ?? ""} - ${
       item.courseBatch?.course?.course_name ?? ""
     }`,

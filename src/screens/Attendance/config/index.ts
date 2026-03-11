@@ -1,3 +1,5 @@
+import { NoDataFound } from "@/components";
+
 /* 
 © 2025 Aravinth Raj R. All rights reserved.
 Unauthorized copying of this file, via any medium, is strictly prohibited.
@@ -37,36 +39,12 @@ export const ATTENDANCE_CONFIG = {
   markAllAbsent: "Mark All Absent",
   modalTitle: "Attendance Actions",
   modalSubTitle: "Apply to all students",
-  students: [
-    { rollNumber: "2312070", name: "Aravinth Raj R", status: "present" },
-    { rollNumber: "2312071", name: "Karthik S", status: "absent" },
-    {
-      rollNumber: "2312072",
-      name: "Aravinth Rajasekaran Balasubramanian",
-      status: "onDuty",
-    },
-    { rollNumber: "2312073", name: "Santhosh M", status: "present" },
-    { rollNumber: "2312074", name: "Vignesh R", status: "absent" },
-    { rollNumber: "2312075", name: "Ajay Prakash", status: "present" },
-    { rollNumber: "2312076", name: "Lokesh B", status: "onDuty" },
-    { rollNumber: "2312077", name: "Manoj Kumar", status: "present" },
-    { rollNumber: "2312078", name: "Hariharan S", status: "absent" },
-    { rollNumber: "2312079", name: "Suresh V", status: "present" },
-
-    { rollNumber: "2312080", name: "Praveen Kumar", status: "onDuty" },
-    { rollNumber: "2312081", name: "Dinesh R", status: "present" },
-    { rollNumber: "2312082", name: "Gokul Krishna", status: "absent" },
-    { rollNumber: "2312083", name: "Balaji M", status: "present" },
-    { rollNumber: "2312084", name: "Ramesh S", status: "onDuty" },
-
-    { rollNumber: "2312085", name: "Surya Narayanan", status: "present" },
-    { rollNumber: "2312086", name: "Arjun P", status: "absent" },
-    { rollNumber: "2312087", name: "Kavin R", status: "present" },
-    { rollNumber: "2312088", name: "Mohamed Irfan", status: "onDuty" },
-    { rollNumber: "2312089", name: "Rahul Dev", status: "present" },
-
-    { rollNumber: "2312090", name: "Sathish Kumar", status: "absent" },
-  ],
+  NoDataFound: "No Data Found",
+  retry: "Retry",
+  saveTitle: "Save Attendance",
+  saveSubtitle: "Are you sure you want to save the attendance?",
+  cancel: "Cancel",
+  confirm: "Yes, Save",
   color: {
     present: "badgeGreen",
     absent: "red",

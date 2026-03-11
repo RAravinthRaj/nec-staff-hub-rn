@@ -15,9 +15,10 @@ import ElevatedView from "react-native-elevated-view";
 
 export interface IHeader {
   goBack: () => void;
+  onSave?: () => void;
 }
 
-export const Header = ({ goBack }: IHeader) => {
+export const Header = ({ goBack, onSave }: IHeader) => {
   const { theme } = useTheme();
 
   const _renderDesign = () => {
@@ -44,6 +45,7 @@ export const Header = ({ goBack }: IHeader) => {
       <TouchableOpacity
         style={[S.button, { backgroundColor: theme.colors.white }]}
         activeOpacity={0.8}
+        onPress={onSave}
       >
         <Text
           style={[

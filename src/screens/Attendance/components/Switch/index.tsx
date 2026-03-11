@@ -1,31 +1,39 @@
-/* 
+/*
 © 2025 Aravinth Raj R. All rights reserved.
 Unauthorized copying of this file, via any medium, is strictly prohibited.
-Proprietary and confidential.  
+Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { styles as S } from "./styles";
 import { ATTENDANCE_CONFIG } from "../../config";
 import { useTheme } from "@rneui/themed";
 
 export interface ICustomSwitch {
-  status: string;
+  status: "present" | "absent" | "od";
+  onChange?: (status: "present" | "absent") => void;
 }
 
-export const CustomSwitch = ({ status }: ICustomSwitch) => {
+export const CustomSwitch = ({ status, onChange }: ICustomSwitch) => {
   const [changeStatus, setChangeStatus] = useState(status);
   const { theme } = useTheme();
 
-  const _toggleStatus = () => {
-    if (changeStatus === "present") {
-      setChangeStatus("absent");
-      return;
-    }
+  useEffect(() => {
+    setChangeStatus(status);
+  }, [status]);
 
-    setChangeStatus("present");
+  const _toggleStatus = () => {
+    if (changeStatus === "od") return;
+
+    const newStatus = changeStatus === "present" ? "absent" : "present";
+
+    setChangeStatus(newStatus);
+
+    if (onChange) {
+      onChange(newStatus);
+    }
   };
 
   return (
@@ -46,7 +54,6 @@ export const CustomSwitch = ({ status }: ICustomSwitch) => {
           {
             backgroundColor:
               theme.colors[ATTENDANCE_CONFIG.color[changeStatus]],
-            alignItems: changeStatus === "absent" ? "flex-start" : "flex-end",
           },
         ])}
       />
@@ -54,10 +61,12 @@ export const CustomSwitch = ({ status }: ICustomSwitch) => {
       <Text
         style={StyleSheet.flatten([
           S.text,
-          { color: theme.colors[ATTENDANCE_CONFIG.color[changeStatus]] },
+          {
+            color: theme.colors[ATTENDANCE_CONFIG.color[changeStatus]],
+          },
         ])}
       >
-        {changeStatus === "onDuty" ? "on-duty" : changeStatus}
+        {changeStatus === "od" ? "on-duty" : changeStatus}
       </Text>
     </TouchableOpacity>
   );

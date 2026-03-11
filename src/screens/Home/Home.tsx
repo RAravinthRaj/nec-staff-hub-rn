@@ -38,12 +38,24 @@ export const HomeScreen = ({ navigation }: any) => {
     }
   }, [scheduleError]);
 
-  const _navigateToAttendance = () => {
-    return navigation.navigate("Attendance");
+  const _navigateToAttendance = (courseBatchId: number, periodId: number) => {
+    const selectedDate = dayjs(date).format("DD.MM.YYYY");
+    return navigation.navigate("Attendance", {
+      course_batch_id: courseBatchId,
+      period_id: periodId,
+      date: selectedDate,
+    });
   };
 
   const _navigateToNotification = () => {
     return navigation.navigate("Notification");
+  };
+
+  const _retryFetchSchedules = () => {
+    const formattedDay = dayjs(date).format("ddd").toUpperCase();
+
+    resetSchedules();
+    fetchSchedules(formattedDay);
   };
 
   const _renderSchedules = () => {
@@ -58,6 +70,7 @@ export const HomeScreen = ({ navigation }: any) => {
             date={date}
             data={schedules}
             navigateToAttendance={_navigateToAttendance}
+            retryFetchStudents={_retryFetchSchedules}
           />
         </ScrollView>
       );

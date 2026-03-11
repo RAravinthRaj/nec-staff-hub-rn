@@ -5,13 +5,12 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { use, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
   Image,
   StyleSheet,
-  Modal,
   FlatList,
   TextInput,
   TouchableOpacity,
@@ -21,40 +20,38 @@ import { styles as S } from "./styles";
 import { Fonts, Images } from "@/assets";
 import { ATTENDANCE_CONFIG } from "../../config";
 import ElevatedView from "react-native-elevated-view";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 export interface IBody {
   statsData: any;
+  markAllPresent: () => void;
+  markAllAbsent: () => void;
+  searchStudents: (query: string) => void;
 }
 
-export const Body = ({ statsData }: IBody) => {
+export const Body = ({
+  statsData,
+  markAllAbsent,
+  markAllPresent,
+  searchStudents,
+}: IBody) => {
   const { theme } = useTheme();
   const [searchData, setSearchData] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
-  const markAllPresent = () => {
-    // setAttendance((prev) => {
-    //   const updated: Record<string, string> = {};
-    //   Object.keys(prev).forEach((key) => {
-    //     updated[key] = "P";
-    //   });
-    //   return updated;
-    // });
+  const _changeAttendanceStatus = (status: string) => {
+    if (status === "present") {
+      markAllPresent();
+      setIsVisible(false);
+      return;
+    }
 
+    markAllAbsent();
     setIsVisible(false);
   };
 
-  const markAllAbsent = () => {
-    // setAttendance((prev) => {
-    //   const updated: Record<string, string> = {};
-    //   Object.keys(prev).forEach((key) => {
-    //     updated[key] = "A";
-    //   });
-    //   return updated;
-    // });
-
-    setIsVisible(false);
-  };
+  useEffect(() => {
+    searchStudents(searchData);
+  }, [searchData]);
 
   const _renderCard = ({ item }: any) => {
     return (
@@ -161,7 +158,9 @@ export const Body = ({ statsData }: IBody) => {
           <View style={StyleSheet.flatten([S.bottomButtonContainer])}>
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={markAllAbsent}
+              onPress={() => {
+                _changeAttendanceStatus("absent");
+              }}
               style={StyleSheet.flatten([
                 S.button,
                 { borderColor: theme.colors.primary, borderWidth: 2 },
@@ -179,7 +178,9 @@ export const Body = ({ statsData }: IBody) => {
 
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={markAllPresent}
+              onPress={() => {
+                _changeAttendanceStatus("present");
+              }}
               style={StyleSheet.flatten([
                 S.button,
                 { backgroundColor: theme.colors.primary },
@@ -220,8 +221,11 @@ export const Body = ({ statsData }: IBody) => {
               },
             ])}
             returnKeyType="send"
+            placeholderTextColor={theme.colors.border}
             placeholder="Search Name, Roll No..."
-            onChangeText={(text) => setSearchData(text)}
+            onChangeText={(text) => {
+              setSearchData(text);
+            }}
             value={searchData}
             autoFocus={false}
             onSubmitEditing={() => console.log("Submitted")}
@@ -229,7 +233,9 @@ export const Body = ({ statsData }: IBody) => {
           {_renderSearchIcon()}
         </ElevatedView>
         <TouchableOpacity
-          onPress={() => setIsVisible(true)}
+          onPress={() => {
+            setIsVisible(true);
+          }}
           activeOpacity={0.2}
           hitSlop={{ left: 20 }}
         >

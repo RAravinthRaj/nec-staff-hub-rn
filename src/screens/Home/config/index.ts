@@ -1,3 +1,5 @@
+import { retry } from "rxjs";
+
 /* 
 © 2025 Aravinth Raj R. All rights reserved.
 Unauthorized copying of this file, via any medium, is strictly prohibited.
@@ -16,4 +18,5 @@ export const HOME_CONFIG = {
   year: "Year : ",
   faculty: "Faculty : ",
   semester: "Semester : ",
+  retry: "Retry",
 };

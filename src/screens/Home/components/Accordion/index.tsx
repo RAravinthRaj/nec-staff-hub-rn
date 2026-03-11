@@ -20,7 +20,7 @@ import isBetween from "dayjs/plugin/isBetween";
 export interface IAccordian {
   data: any;
   date: string;
-  navigateToAttendance: () => void;
+  navigateToAttendance: (courseBatchId: number, periodId: number) => void;
 }
 
 dayjs.extend(isBetween);
@@ -172,7 +172,7 @@ export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
     </View>
   );
 
-  const _renderButton = () => (
+  const _renderButton = (courseBatchId: number, periodId: number) => (
     <ElevatedView style={StyleSheet.flatten([S.buttonContainer])} elevation={5}>
       <TouchableOpacity
         style={StyleSheet.flatten([
@@ -180,7 +180,9 @@ export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
           { backgroundColor: theme.colors.primary },
         ])}
         activeOpacity={0.8}
-        onPress={navigateToAttendance}
+        onPress={() => {
+          navigateToAttendance(Number(courseBatchId), Number(periodId));
+        }}
       >
         <Text
           style={StyleSheet.flatten([
@@ -205,7 +207,7 @@ export const Accordion = ({ data, date, navigateToAttendance }: IAccordian) => {
 
       {_renderSubContent(HOME_CONFIG.faculty, data?.faculty)}
       {_renderSubContent(HOME_CONFIG.semester, data?.semester)}
-      {_renderButton()}
+      {_renderButton(data?.courseBatchId, data?.periodId)}
     </View>
   );
 
