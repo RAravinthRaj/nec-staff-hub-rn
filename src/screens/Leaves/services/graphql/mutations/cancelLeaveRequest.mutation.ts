@@ -5,5 +5,13 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-export * from "./leaveRequests.store";
-export * from "./cancelLeaveRequest.store";
+import { gql } from "@apollo/client";
+
+export const CANCEL_LEAVE_REQUEST = gql`
+  mutation CancelLeaveRequest($leaveId: Int!) {
+    cancelLeaveRequest(leave_id: $leaveId) {
+      success
+      leave_id
+    }
+  }
+`;

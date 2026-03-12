@@ -8,6 +8,8 @@ export const LEAVE_CONFIG = {
   leaves: "Leaves",
   newButton: "New",
   chips: ["All", "Pending", "Approved", "Declined"],
+  noDataTitle: "No Data Found",
+  retry: "Retry",
   leaveDetails: {
     "October 2025": [
       {

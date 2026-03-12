@@ -5,5 +5,5 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-export * from "./leaveRequests.store";
-export * from "./cancelLeaveRequest.store";
+export * from "./leaveRequests.graphql";
+export * from "./cancelLeaveRequest.graphql";

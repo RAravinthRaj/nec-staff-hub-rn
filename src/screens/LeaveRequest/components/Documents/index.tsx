@@ -18,14 +18,18 @@ import { Fonts } from "@/assets";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { showToast } from "@/utils";
 
-type DocumentItem = {
+export type DocumentItem = {
   uri: string;
   name: string;
   mimeType?: string;
   size?: number;
 };
 
-export const DocumentsInput = () => {
+export interface DocumentsInputProps {
+  onChange?: (documents: DocumentItem[]) => void;
+}
+
+export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
   const MAX_FILE_SIZE_MB = 10;
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
@@ -80,20 +84,25 @@ export const DocumentsInput = () => {
 
         if (validDocs.length > 0) {
           showToast(`${validDocs.length} document(s) added`, "success");
-          return [...prev, ...validDocs];
+          const updated = [...prev, ...validDocs];
+          if (onChange) onChange(updated);
+          return updated;
         }
 
         if (duplicateCount > 0) {
           showToast("File already added", "error");
+          if (onChange) onChange(prev);
           return prev;
         }
 
         if (sizeRejectedCount > 0) {
           showToast(`File exceeds ${MAX_FILE_SIZE_MB}MB limit`, "error");
+          if (onChange) onChange(prev);
           return prev;
         }
 
         showToast("No valid documents added", "info");
+        if (onChange) onChange(prev);
         return prev;
       });
     } catch (error) {
@@ -129,7 +138,9 @@ export const DocumentsInput = () => {
 
   const removeDocument = (uri: string) => {
     setDocuments((prev) => {
-      return prev.filter((doc) => doc.uri !== uri);
+      const updated = prev.filter((doc) => doc.uri !== uri);
+      if (onChange) onChange(updated);
+      return updated;
     });
   };
 

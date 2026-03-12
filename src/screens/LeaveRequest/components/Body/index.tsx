@@ -24,19 +24,31 @@ import { DateInput } from "../DateInput";
 import ElevatedView from "react-native-elevated-view";
 import { Fonts } from "@/assets";
 import { LEAVE_REQUEST_CONFIG } from "../../config";
-import { DocumentsInput } from "../Documents";
+import { DocumentsInput, DocumentItem } from "../Documents";
+import { showToast } from "@/utils";
 
 export interface IBody {
   categories: any;
+  submitLoading?: boolean;
+  onSubmit: (payload: {
+    leaveType: "FULL_DAY" | "HALF_DAY";
+    categoryId: number;
+    startDate: string;
+    endDate: string;
+    reason: string;
+    documents?: string[];
+  }) => void;
 }
 
-export const Body = ({ categories }: IBody) => {
+export const Body = ({ categories, onSubmit, submitLoading }: IBody) => {
   const { theme } = useTheme();
   const [type, setType] = useState("");
   const [session, setSession] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<any>("");
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
+  const [reason, setReason] = useState("");
+  const [documents, setDocuments] = useState<DocumentItem[]>([]);
 
   const _renderTitle = (title: string) => {
     return (
@@ -225,6 +237,8 @@ export const Body = ({ categories }: IBody) => {
             multiline
             textAlignVertical="top"
             placeholder="Please Specify the Reason"
+            value={reason}
+            onChangeText={setReason}
             style={[
               S.textarea,
               {
@@ -239,6 +253,94 @@ export const Body = ({ categories }: IBody) => {
     );
   };
 
+  const _formatDate = (value?: Date) => {
+    if (!value) return "";
+    const day = String(value.getDate()).padStart(2, "0");
+    const month = String(value.getMonth() + 1).padStart(2, "0");
+    const year = value.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
+
+  const _normalizeLeaveType = () => {
+    if (type === LEAVE_REQUEST_CONFIG.fullDay) return "FULL_DAY" as const;
+    if (type === LEAVE_REQUEST_CONFIG.halfDay) return "HALF_DAY" as const;
+    return null;
+  };
+
+  const _handleSubmit = () => {
+    const leaveType = _normalizeLeaveType();
+    if (!leaveType) {
+      showToast("Please select leave type.", "error");
+      return;
+    }
+
+    const categoryId =
+      typeof category === "number" ? category : Number(category);
+    if (!categoryId) {
+      showToast("Please select leave category.", "error");
+      return;
+    }
+
+    if (!fromDate) {
+      showToast("Please select start date.", "error");
+      return;
+    }
+
+    if (leaveType === "FULL_DAY" && !endDate) {
+      showToast("Please select end date.", "error");
+      return;
+    }
+
+    if (!reason?.trim()) {
+      showToast("Please enter reason.", "error");
+      return;
+    }
+
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+
+    const startDateValue = new Date(
+      fromDate.getFullYear(),
+      fromDate.getMonth(),
+      fromDate.getDate(),
+    );
+
+    if (startDateValue.getTime() <= todayStart.getTime()) {
+      showToast("Please Provide Proper Date", "error");
+      return;
+    }
+
+    if (leaveType === "FULL_DAY" && endDate) {
+      const endDateValue = new Date(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate(),
+      );
+
+      if (endDateValue.getTime() <= todayStart.getTime()) {
+        showToast("Please Provide Proper Date", "error");
+        return;
+      }
+    }
+
+    const startDate = _formatDate(fromDate);
+    const endDateValue =
+      leaveType === "HALF_DAY" ? startDate : _formatDate(endDate);
+
+    onSubmit({
+      leaveType,
+      categoryId,
+      startDate,
+      endDate: endDateValue,
+      reason: reason.trim(),
+      documents: documents.map((d) => d.uri),
+    });
+  };
+
   const _renderButton = () => {
     return (
       <ElevatedView
@@ -251,6 +353,8 @@ export const Body = ({ categories }: IBody) => {
             { backgroundColor: theme.colors.primary },
           ])}
           activeOpacity={0.8}
+          onPress={_handleSubmit}
+          disabled={submitLoading}
         >
           <Text
             style={StyleSheet.flatten([
@@ -281,7 +385,7 @@ export const Body = ({ categories }: IBody) => {
           LEAVE_REQUEST_CONFIG.afternoon
         )}
         {_renderReason(LEAVE_REQUEST_CONFIG.reason)}
-        <DocumentsInput />
+        <DocumentsInput onChange={setDocuments} />
         {_renderButton()}
       </View>
     );

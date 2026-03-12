@@ -23,6 +23,10 @@ export const LEAVE_REQUEST_CONFIG = {
   morning: "Morning",
   afternoon: "Afternoon",
   addDocument: "Click the “Add” to attach documents",
+  confirmTitle: "Submit Leave Request",
+  confirmSubtitle: "Are you sure you want to submit this leave request?",
+  confirmYes: "Yes, Submit",
+  cancel: "Cancel",
   categories: [
     { label: "Sick", value: "Sick" },
     { label: "Casual", value: "Casual" },

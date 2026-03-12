@@ -5,12 +5,35 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import { PageContainer } from "@/components";
+import { Loader, NoDataFound, PageContainer } from "@/components";
 import { Body, Header, LeaveDetails } from "./components";
 import { ScrollView } from "react-native";
+import { useEffect, useState } from "react";
+import { showToast } from "@/utils";
+import { useLeaveRequestsStore } from "./stores";
 import { LEAVE_CONFIG } from "./config";
 
 export const LeaveScreen = ({ navigation }: any) => {
+  const [status, setStatus] = useState("All");
+
+  const {
+    leaveDetails,
+    leaveRequestsLoading,
+    leaveRequestsError,
+    fetchLeaveRequests,
+  } = useLeaveRequestsStore();
+
+  useEffect(() => {
+    const statusValue = status === "All" ? undefined : status.toUpperCase();
+    fetchLeaveRequests(statusValue);
+  }, [status, fetchLeaveRequests]);
+
+  useEffect(() => {
+    if (leaveRequestsError && leaveRequestsError.length > 0) {
+      showToast(leaveRequestsError, "error");
+    }
+  }, [leaveRequestsError]);
+
   const _navigateToNewLeave = () => {
     return navigation.navigate("LeaveRequest");
   };
@@ -22,17 +45,48 @@ export const LeaveScreen = ({ navigation }: any) => {
     });
   };
 
+  const _renderLeaves = () => {
+    if (leaveRequestsLoading) {
+      return <Loader />;
+    }
+
+    if (!leaveDetails || Object.keys(leaveDetails).length === 0) {
+      return (
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <NoDataFound
+            title={LEAVE_CONFIG.noDataTitle}
+            buttonTitle={LEAVE_CONFIG.retry}
+            onPress={() => {
+              const statusValue = status === "All" ? undefined : status.toUpperCase();
+              fetchLeaveRequests(statusValue);
+            }}
+          />
+        </ScrollView>
+      );
+    }
+
+    return (
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <LeaveDetails
+          leaveDetails={leaveDetails}
+          navigateToLeaveDetails={_navigateToLeaveDetails}
+        />
+      </ScrollView>
+    );
+  };
+
   return (
     <>
       <Header navigateToNewLeave={_navigateToNewLeave} />
       <PageContainer isLightStatusBar={true}>
-        <Body />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <LeaveDetails
-            leaveDetails={LEAVE_CONFIG.leaveDetails}
-            navigateToLeaveDetails={_navigateToLeaveDetails}
-          />
-        </ScrollView>
+        <Body status={status} onStatusChange={setStatus} />
+        {_renderLeaves()}
       </PageContainer>
     </>
   );

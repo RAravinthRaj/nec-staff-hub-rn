@@ -20,6 +20,7 @@ import ElevatedView from "react-native-elevated-view";
 import { Fonts } from "@/assets";
 
 export interface Leave {
+  id?: number;
   status: "Pending" | "Approved" | "Rejected";
   startDate: string;
   endDate: string;
@@ -35,10 +36,34 @@ export interface Leave {
 export interface IBody {
   leave: Leave;
   fromHod: boolean;
+  onCancel?: () => void;
 }
 
-export const Body = ({ leave, fromHod }: IBody) => {
+export const Body = ({ leave, fromHod, onCancel }: IBody) => {
   const { theme } = useTheme();
+
+  const _calculateDays = (start: string, end: string) => {
+    const [sd, sm, sy] = start.split(".").map(Number);
+    const [ed, em, ey] = end.split(".").map(Number);
+
+    if (!sd || !sm || !sy || !ed || !em || !ey) return undefined;
+
+    const startDate = new Date(sy, sm - 1, sd);
+    const endDate = new Date(ey, em - 1, ed);
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const diff = Math.floor((endDate.getTime() - startDate.getTime()) / msPerDay) + 1;
+
+    return diff > 0 ? diff : undefined;
+  };
+
+  const _isHalfDay = () => {
+    const type = (leave.type || "").toLowerCase();
+    return type.includes("half");
+  };
+
+  const numberOfDays = _isHalfDay()
+    ? undefined
+    : _calculateDays(leave.startDate, leave.endDate);
 
   const _renderHRStatus = (status: string) => {
     let title = "";
@@ -105,6 +130,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
             { backgroundColor: theme.colors.red },
           ])}
           activeOpacity={0.8}
+          onPress={onCancel}
         >
           <Text
             style={StyleSheet.flatten([
@@ -179,7 +205,7 @@ export const Body = ({ leave, fromHod }: IBody) => {
               { label: LEAVE_DETAIL_CONFIG.category, value: leave.category },
               {
                 label: LEAVE_DETAIL_CONFIG.numberOfDays,
-                value: leave.numberOfDays,
+                value: numberOfDays,
               },
             ])}
 
@@ -219,7 +245,15 @@ export const Body = ({ leave, fromHod }: IBody) => {
           >
             {_renderRow([
               { label: LEAVE_DETAIL_CONFIG.reason, value: leave.reason },
-              { label: LEAVE_DETAIL_CONFIG.comments, value: leave.comments },
+              ...(leave.status === LEAVE_DETAIL_CONFIG.approved ||
+              leave.status === LEAVE_DETAIL_CONFIG.declined
+                ? [
+                    {
+                      label: LEAVE_DETAIL_CONFIG.comments,
+                      value: leave.comments,
+                    },
+                  ]
+                : []),
             ])}
 
             <View style={StyleSheet.flatten([S.dataContainer])}>

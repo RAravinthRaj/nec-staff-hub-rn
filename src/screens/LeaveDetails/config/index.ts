@@ -22,6 +22,10 @@ export const LEAVE_DETAIL_CONFIG = {
   hrAdmin: "HR ADMIN",
   buttonTitle: "Cancel Request",
   noDocumentsFound: "No Documents Found",
+  cancelTitle: "Cancel Leave",
+  cancelSubtitle: "Are you sure you want to cancel this leave request?",
+  cancelYes: "Yes, Cancel",
+  cancelNo: "No",
   color: {
     approved: "badgeGreen",
     declined: "red",

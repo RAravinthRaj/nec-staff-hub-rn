@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useState } from "react";
+import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { styles as S } from "./styles";
@@ -14,11 +14,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Fonts } from "@/assets";
 import { ScrollView } from "react-native";
 
-export interface IBody {}
+export interface IBody {
+  status: string;
+  onStatusChange: (status: string) => void;
+}
 
-export const Body = ({}: IBody) => {
+export const Body = ({ status, onStatusChange }: IBody) => {
   const { theme } = useTheme();
-  const [category, setCategory] = useState("All");
 
   const _renderChip = () => {
     return (
@@ -31,13 +33,13 @@ export const Body = ({}: IBody) => {
         ])}
       >
         {LEAVE_CONFIG.chips.map((chip, index) => {
-          const isActive = category === chip;
+          const isActive = status === chip;
 
           return (
             <TouchableOpacity
               key={chip}
               activeOpacity={0.8}
-              onPress={() => setCategory(chip)}
+              onPress={() => onStatusChange(chip)}
             >
               {isActive ? (
                 <LinearGradient
