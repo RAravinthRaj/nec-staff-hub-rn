@@ -5,7 +5,6 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import { showToast } from "@/utils";
 import React from "react";
 import { Modal, View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { styles as S } from "./styles";
@@ -16,23 +15,22 @@ type ActionType = "Approved" | "Declined" | null;
 
 export interface ICustomModal {
   visible: boolean;
-  leave: any;
   action: ActionType;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onConfirm: () => void;
 }
 
 export const CustomModal = ({
   visible,
   setVisible,
-  leave,
   action,
+  onConfirm,
 }: ICustomModal) => {
   const { theme } = useTheme();
 
   const handleConfirm = () => {
-    if (!leave || !action) return;
-
-    showToast(`Leave ${action} successfully`, "success");
+    if (!action) return;
+    onConfirm();
     setVisible(false);
   };
 

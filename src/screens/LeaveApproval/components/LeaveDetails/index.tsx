@@ -13,10 +13,14 @@ import { LEAVE_APPROVAL_CONFIG } from "../../config";
 import ElevatedView from "react-native-elevated-view";
 import { Fonts, Images } from "@/assets";
 import { CustomModal } from "../Modal";
+import { CommentModal } from "../CommentModal";
+import { useLeaveApprovalStore } from "../../stores";
+import { showToast } from "@/utils";
 
 export interface ILeaveDetails {
   leaveDetails: any;
   navigateToLeaveDetails: (leave: any) => void;
+  onRefresh: () => void;
 }
 
 type ActionType = "Approved" | "Declined" | null;
@@ -24,11 +28,15 @@ type ActionType = "Approved" | "Declined" | null;
 export const LeaveDetails = ({
   leaveDetails,
   navigateToLeaveDetails,
+  onRefresh,
 }: ILeaveDetails) => {
   const { theme } = useTheme();
   const [visible, setVisible] = useState(false);
+  const [commentVisible, setCommentVisible] = useState(false);
+  const [comment, setComment] = useState("");
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
   const [actionType, setActionType] = useState<ActionType>(null);
+  const { reviewLeaveRequest } = useLeaveApprovalStore();
 
   const formatDate = (dateStr: string): string => {
     const [day, month, year] = dateStr.split(".").map(Number);
@@ -43,6 +51,11 @@ export const LeaveDetails = ({
     setSelectedLeave(leave);
     setActionType(action);
     setVisible(true);
+  };
+
+  const openCommentModal = () => {
+    setVisible(false);
+    setCommentVisible(true);
   };
 
   const _renderDate = (startDate: any, endDate: any) => {
@@ -143,6 +156,23 @@ export const LeaveDetails = ({
   };
 
   const _renderUserData = (leave: any) => {
+    const dept =
+      leave?.departmentAbbreviation && leave?.departmentAbbreviation.length > 0
+        ? `Dept of ${leave?.departmentAbbreviation}`
+        : leave?.departmentName;
+
+    const genderLower = (leave?.gender || "").toLowerCase();
+    const prefix =
+      genderLower === "male"
+        ? "Mr. "
+        : genderLower === "female"
+          ? "Ms. "
+          : "";
+
+    const details = [leave?.designation, dept]
+      .filter((v) => v && v.length > 0)
+      .join(", ");
+
     return (
       <View
         style={StyleSheet.flatten([
@@ -175,8 +205,12 @@ export const LeaveDetails = ({
             </Text>
           </View>
           <View style={S.dataDescription}>
-            <Text style={S.byText}>{leave?.facultyName}</Text>
-            <Text style={S.descriptionText}>{leave?.designation}</Text>
+            <Text style={S.byText}>
+              {`${prefix}${leave?.facultyName || ""}`.trim()}
+            </Text>
+            <Text style={S.descriptionText}>
+              {details || leave?.designation}
+            </Text>
           </View>
         </View>
 
@@ -301,8 +335,51 @@ export const LeaveDetails = ({
         <CustomModal
           visible={visible}
           setVisible={setVisible}
-          leave={selectedLeave}
           action={actionType}
+          onConfirm={openCommentModal}
+        />
+      )}
+      {commentVisible && (
+        <CommentModal
+          visible={commentVisible}
+          setVisible={setCommentVisible}
+          value={comment}
+          setValue={setComment}
+          onSubmit={async () => {
+            const trimmed = comment.trim();
+            if (!trimmed) {
+              showToast("Please enter comments.", "error");
+              return;
+            }
+
+            if (!selectedLeave || !actionType) {
+              showToast("Invalid leave request.", "error");
+              return;
+            }
+
+            const status =
+              actionType === LEAVE_APPROVAL_CONFIG.approved
+                ? "APPROVED"
+                : "DECLINED";
+
+            try {
+              await reviewLeaveRequest(selectedLeave.id, status, trimmed);
+              showToast(
+                `Leave ${actionType.toLowerCase()} successfully.`,
+                "success",
+              );
+              setComment("");
+              setSelectedLeave(null);
+              setActionType(null);
+              setCommentVisible(false);
+              onRefresh();
+            } catch (err: any) {
+              showToast(
+                err?.message || "Failed to review leave request.",
+                "error",
+              );
+            }
+          }}
         />
       )}
     </View>

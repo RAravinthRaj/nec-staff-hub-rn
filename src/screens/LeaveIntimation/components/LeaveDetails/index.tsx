@@ -86,7 +86,30 @@ export const LeaveDetails = ({
     return formatDate(startDate) + " - " + formatDate(endDate);
   };
 
-  const _renderUserData = (facultyName: string, designation: string) => {
+  const _renderUserData = (
+    facultyName: string,
+    designation: string,
+    departmentName?: string,
+    departmentAbbreviation?: string,
+    gender?: string,
+  ) => {
+    const dept =
+      departmentAbbreviation && departmentAbbreviation.length > 0
+        ? `Dept of ${departmentAbbreviation}`
+        : departmentName;
+
+    const genderLower = (gender || "").toLowerCase();
+    const prefix =
+      genderLower === "male"
+        ? "Mr. "
+        : genderLower === "female"
+          ? "Ms. "
+          : "";
+
+    const details = [designation, dept]
+      .filter((v) => v && v.length > 0)
+      .join(", ");
+
     return (
       <View
         style={StyleSheet.flatten([
@@ -119,8 +142,10 @@ export const LeaveDetails = ({
             </Text>
           </View>
           <View style={S.dataDescription}>
-            <Text style={S.byText}>{facultyName}</Text>
-            <Text style={S.descriptionText}>{designation}</Text>
+            <Text style={S.byText}>
+              {`${prefix}${facultyName || ""}`.trim()}
+            </Text>
+            <Text style={S.descriptionText}>{details || designation}</Text>
           </View>
         </View>
 
@@ -215,7 +240,13 @@ export const LeaveDetails = ({
                   </View>
 
                   <View style={StyleSheet.flatten([S.userDataLeaveContainer])}>
-                    {_renderUserData(leave?.facultyName, leave?.designation)}
+                    {_renderUserData(
+                      leave?.facultyName,
+                      leave?.designation,
+                      leave?.departmentName,
+                      leave?.departmentAbbreviation,
+                      leave?.gender,
+                    )}
                   </View>
                 </TouchableOpacity>
               );

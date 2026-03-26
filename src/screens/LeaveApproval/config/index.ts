@@ -9,6 +9,8 @@ export const LEAVE_APPROVAL_CONFIG = {
   userName: "Aravinth",
   waveSign: "👋",
   leaveRequests: "LEAVE REQUESTS",
+  noDataTitle: "No leave requests found.",
+  retry: "Retry",
   chips: ["All", "Pending", "Approved", "Declined"],
   days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   color: {
@@ -23,6 +25,10 @@ export const LEAVE_APPROVAL_CONFIG = {
   yes: "Yes",
   title: "Are you sure?",
   subtitle: "You won't be able to revert this!",
+  commentTitle: "Add Comments",
+  commentSubtitle: "Please provide comments for this decision.",
+  commentPlaceholder: "Enter comments...",
+  commentSubmit: "Submit",
   months: [
     "Jan",
     "Feb",

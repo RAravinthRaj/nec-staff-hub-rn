@@ -25,7 +25,7 @@ export const LEAVE_DETAIL_CONFIG = {
   cancelTitle: "Cancel Leave",
   cancelSubtitle: "Are you sure you want to cancel this leave request?",
   cancelYes: "Yes, Cancel",
-  cancelNo: "No",
+  cancelNo: "Cancel",
   color: {
     approved: "badgeGreen",
     declined: "red",

@@ -19,23 +19,35 @@ import { LEAVE_APPROVAL_DETAIL_CONFIG } from "../../config";
 import ElevatedView from "react-native-elevated-view";
 import { Fonts } from "@/assets";
 import { CustomModal } from "../Modal";
+import { CommentModal } from "../../../LeaveApproval/components/CommentModal";
+import { useLeaveApprovalStore } from "../../../LeaveApproval/stores";
+import { showToast } from "@/utils";
 
 export interface IBody {
   leave: any;
+  onReviewed: () => void;
 }
 
 type ActionType = "Approved" | "Declined" | null;
 
-export const Body = ({ leave }: IBody) => {
+export const Body = ({ leave, onReviewed }: IBody) => {
   const { theme } = useTheme();
   const [visible, setVisible] = useState(false);
+  const [commentVisible, setCommentVisible] = useState(false);
+  const [comment, setComment] = useState("");
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
   const [actionType, setActionType] = useState<ActionType>(null);
+  const { reviewLeaveRequest } = useLeaveApprovalStore();
 
   const openConfirmation = (leave: any, action: ActionType) => {
     setSelectedLeave(leave);
     setActionType(action);
     setVisible(true);
+  };
+
+  const openCommentModal = () => {
+    setVisible(false);
+    setCommentVisible(true);
   };
 
   const _renderHRStatus = (status: string) => {
@@ -56,8 +68,6 @@ export const Body = ({ leave }: IBody) => {
     const colorKey =
       LEAVE_APPROVAL_DETAIL_CONFIG.color[status.toLowerCase()] ?? "gray";
     const backgroundKey = `${colorKey}Background`;
-
-    console.log(status);
 
     if (!status) {
       return null;
@@ -234,10 +244,15 @@ export const Body = ({ leave }: IBody) => {
                 label: LEAVE_APPROVAL_DETAIL_CONFIG.reason,
                 value: leave.reason,
               },
-              {
-                label: LEAVE_APPROVAL_DETAIL_CONFIG.comments,
-                value: leave.comments,
-              },
+              ...(leave.status === LEAVE_APPROVAL_DETAIL_CONFIG.approved ||
+              leave.status === LEAVE_APPROVAL_DETAIL_CONFIG.declined
+                ? [
+                    {
+                      label: LEAVE_APPROVAL_DETAIL_CONFIG.comments,
+                      value: leave.comments,
+                    },
+                  ]
+                : []),
             ])}
 
             <View style={StyleSheet.flatten([S.dataContainer])}>
@@ -265,7 +280,7 @@ export const Body = ({ leave }: IBody) => {
       <View style={StyleSheet.flatten([S.approvalContainer])}>
         {_renderButton(
           LEAVE_APPROVAL_DETAIL_CONFIG.approved,
-          theme.colors.badgeGreen
+          theme.colors.badgeGreen,
         )}
         {_renderButton(LEAVE_APPROVAL_DETAIL_CONFIG.declined, theme.colors.red)}
       </View>
@@ -287,7 +302,50 @@ export const Body = ({ leave }: IBody) => {
           visible={visible}
           setVisible={setVisible}
           action={actionType}
-          leave={leave}
+          onConfirm={openCommentModal}
+        />
+      )}
+      {commentVisible && (
+        <CommentModal
+          visible={commentVisible}
+          setVisible={setCommentVisible}
+          value={comment}
+          setValue={setComment}
+          onSubmit={async () => {
+            const trimmed = comment.trim();
+            if (!trimmed) {
+              showToast("Please enter comments.", "error");
+              return;
+            }
+
+            if (!selectedLeave || !actionType) {
+              showToast("Invalid leave request.", "error");
+              return;
+            }
+
+            const status =
+              actionType === LEAVE_APPROVAL_DETAIL_CONFIG.approved
+                ? "APPROVED"
+                : "DECLINED";
+
+            try {
+              await reviewLeaveRequest(selectedLeave.id, status, trimmed);
+              showToast(
+                `Leave ${actionType.toLowerCase()} successfully.`,
+                "success",
+              );
+              setComment("");
+              setSelectedLeave(null);
+              setActionType(null);
+              setCommentVisible(false);
+              onReviewed();
+            } catch (err: any) {
+              showToast(
+                err?.message || "Failed to review leave request.",
+                "error",
+              );
+            }
+          }}
         />
       )}
     </ScrollView>

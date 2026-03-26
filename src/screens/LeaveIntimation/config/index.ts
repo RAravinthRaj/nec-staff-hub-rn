@@ -9,6 +9,8 @@ export const LEAVE_INTIMATION_CONFIG = {
   newButton: "New",
   by: "By : ",
   chips: ["All", "Pending", "Approved", "Declined"],
+  noDataTitle: "No Data Found",
+  retry: "Retry",
   days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   months: [
     "Jan",

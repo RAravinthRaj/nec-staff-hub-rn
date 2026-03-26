@@ -6,33 +6,27 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import React from "react";
-import { Modal, View, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { Modal, View, TouchableOpacity, StyleSheet, Text, TextInput } from "react-native";
 import { styles as S } from "./styles";
 import { useTheme } from "@rneui/themed";
 import { LEAVE_APPROVAL_CONFIG } from "../../config";
 
-type ActionType = "Approved" | "Declined" | null;
-
-export interface ICustomModal {
+export interface ICommentModal {
   visible: boolean;
-  action: ActionType;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  onConfirm: () => void;
+  value: string;
+  setValue: (value: string) => void;
+  onSubmit: () => void;
 }
 
-export const CustomModal = ({
+export const CommentModal = ({
   visible,
   setVisible,
-  action,
-  onConfirm,
-}: ICustomModal) => {
+  value,
+  setValue,
+  onSubmit,
+}: ICommentModal) => {
   const { theme } = useTheme();
-
-  const handleConfirm = () => {
-    if (!action) return;
-    onConfirm();
-    setVisible(false);
-  };
 
   return (
     <Modal
@@ -49,11 +43,23 @@ export const CustomModal = ({
           ])}
         >
           <Text style={StyleSheet.flatten([S.modalTitle])}>
-            {LEAVE_APPROVAL_CONFIG.title}
+            {LEAVE_APPROVAL_CONFIG.commentTitle}
           </Text>
           <Text style={StyleSheet.flatten([S.modalSubTitle])}>
-            {LEAVE_APPROVAL_CONFIG.subtitle}
+            {LEAVE_APPROVAL_CONFIG.commentSubtitle}
           </Text>
+
+          <TextInput
+            style={StyleSheet.flatten([
+              S.input,
+              { borderColor: theme.colors.border, color: theme.colors.black },
+            ])}
+            placeholder={LEAVE_APPROVAL_CONFIG.commentPlaceholder}
+            placeholderTextColor={theme.colors.border}
+            value={value}
+            onChangeText={setValue}
+            multiline
+          />
 
           <View style={StyleSheet.flatten([S.modalButtonContainer])}>
             <TouchableOpacity
@@ -79,7 +85,7 @@ export const CustomModal = ({
                 S.modalButton,
                 { backgroundColor: theme.colors.badgeGreen },
               ])}
-              onPress={handleConfirm}
+              onPress={onSubmit}
               activeOpacity={0.8}
             >
               <Text
@@ -88,7 +94,7 @@ export const CustomModal = ({
                   { color: theme.colors.white },
                 ])}
               >
-                {`Yes, ${action?.slice(0, -1)}`}
+                {LEAVE_APPROVAL_CONFIG.commentSubmit}
               </Text>
             </TouchableOpacity>
           </View>

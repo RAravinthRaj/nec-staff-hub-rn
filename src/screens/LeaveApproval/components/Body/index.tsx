@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import {
   Text,
   View,
@@ -19,11 +19,13 @@ import { Fonts } from "@/assets";
 import { LEAVE_APPROVAL_CONFIG } from "../../config";
 import { LinearGradient } from "expo-linear-gradient";
 
-export interface IBody {}
+export interface IBody {
+  status: string;
+  onStatusChange: (value: string) => void;
+}
 
-export const Body: React.FC<IBody> = () => {
+export const Body: React.FC<IBody> = ({ status, onStatusChange }) => {
   const { theme } = useTheme();
-  const [category, setCategory] = useState("All");
 
   const _renderScheduleHeader = () => {
     return (
@@ -48,13 +50,13 @@ export const Body: React.FC<IBody> = () => {
         ])}
       >
         {LEAVE_APPROVAL_CONFIG.chips.map((chip, index) => {
-          const isActive = category === chip;
+          const isActive = status === chip;
 
           return (
             <TouchableOpacity
               key={chip}
               activeOpacity={0.8}
-              onPress={() => setCategory(chip)}
+              onPress={() => onStatusChange(chip)}
             >
               {isActive ? (
                 <LinearGradient
