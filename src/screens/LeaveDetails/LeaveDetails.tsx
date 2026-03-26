@@ -9,7 +9,10 @@ import { Loader, PageContainer } from "@/components";
 import { Body, Header } from "./components";
 import { CustomModal } from "./components/Modal";
 import { showToast } from "@/utils";
-import { useCancelLeaveRequestStore, useLeaveRequestsStore } from "../Leaves/stores";
+import {
+  useCancelLeaveRequestStore,
+  useLeaveRequestsStore,
+} from "../Leaves/stores";
 import { useState } from "react";
 
 export const LeaveDetailScreen = ({ navigation, route }: any) => {

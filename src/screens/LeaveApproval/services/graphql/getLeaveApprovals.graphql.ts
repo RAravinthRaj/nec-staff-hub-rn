@@ -33,7 +33,8 @@ export const getLeaveApprovals = async (status?: string) => {
     };
   } catch (err: any) {
     const msg =
-      getGraphqlError(err) || "An error occurred while fetching leave approvals.";
+      getGraphqlError(err) ||
+      "An error occurred while fetching leave approvals.";
     throw new Error(msg);
   }
 };
@@ -77,6 +78,21 @@ const formatLeaveApprovals = (items: any[]) => {
     return value;
   };
 
+  const calculateDays = (start: string, end: string) => {
+    const [sd, sm, sy] = start.split(".").map(Number);
+    const [ed, em, ey] = end.split(".").map(Number);
+
+    if (!sd || !sm || !sy || !ed || !em || !ey) return "";
+
+    const startDate = new Date(sy, sm - 1, sd);
+    const endDate = new Date(ey, em - 1, ed);
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const diff =
+      Math.floor((endDate.getTime() - startDate.getTime()) / msPerDay) + 1;
+
+    return diff > 0 ? diff : "";
+  };
+
   const grouped: Record<string, any[]> = {};
 
   for (const item of items) {
@@ -100,8 +116,9 @@ const formatLeaveApprovals = (items: any[]) => {
       applicationDate: formatDate(item?.created_at),
       startDate,
       endDate,
-      numberOfDays: null,
-      category: item?.category_name || `Category ${item?.category_id ?? ""}`.trim(),
+      numberOfDays: calculateDays(startDate, endDate),
+      category:
+        item?.category_name || `Category ${item?.category_id ?? ""}`.trim(),
       type: formatType(item?.leave_type),
       reason: item?.reason ?? "",
       comments: item?.comments ?? "",
