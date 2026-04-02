@@ -21,14 +21,14 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const systemColorScheme = useColorScheme();
+  // const systemColorScheme = useColorScheme();
   const [mode, setMode] = useState<ThemeMode>("light");
 
-  useEffect(() => {
-    if (systemColorScheme) {
-      setMode(systemColorScheme);
-    }
-  }, [systemColorScheme]);
+  // useEffect(() => {
+  //   if (systemColorScheme) {
+  //     setMode(systemColorScheme);
+  //   }
+  // }, [systemColorScheme]);
 
   const toggleTheme = () => {
     setMode((prev) => (prev === "light" ? "dark" : "light"));

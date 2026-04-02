@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "nec-staff-hub",
+    "name": "Nec Staff Hub",
     "slug": "nec-staff-hub",
+    "scheme": "necstaffhub",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -13,7 +13,9 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aravinthrajr.necstaffhub",
+      "icon": "./assets/icon.icon"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,10 +23,12 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.aravinthrajr.necstaffhub"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": ["@react-native-community/datetimepicker"]
   }
 }
