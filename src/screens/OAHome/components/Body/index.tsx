@@ -9,6 +9,8 @@ import React, { useState } from "react";
 import {
   Text,
   View,
+  Image,
+  FlatList,
   StyleSheet,
   TouchableOpacity,
   TextInput,
@@ -19,7 +21,7 @@ import { styles as S } from "./styles";
 import { DropDown } from "../DropDown";
 import { DateInput } from "../DateInput";
 import { OA_HOME_CONFIG } from "../../config";
-import { Fonts } from "@/assets";
+import { Fonts, Images } from "@/assets";
 
 interface DropdownItem {
   label: string;
@@ -45,6 +47,29 @@ interface PaginationData {
   totalCount: number;
   totalPages: number;
 }
+
+const OA_STATISTICS_CARDS = [
+  {
+    image: "totalStudents",
+    color: "secondary",
+    description: OA_HOME_CONFIG.students,
+  },
+  {
+    image: "present",
+    color: "badgeGreen",
+    description: OA_HOME_CONFIG.statusOptions[1].label,
+  },
+  {
+    image: "absent",
+    color: "red",
+    description: OA_HOME_CONFIG.statusOptions[2].label,
+  },
+  {
+    image: "onDuty",
+    color: "orange",
+    description: OA_HOME_CONFIG.statusOptions[3].label,
+  },
+] as const;
 
 export interface IBody {
   department: string;
@@ -132,64 +157,58 @@ export const Body = ({
     </View>
   );
 
-  const renderStatCard = (
-    label: string,
-    value: number,
-    color: string,
-    backgroundColor: string,
-  ) => (
+  const statsData = {
+    totalStudents: summary.totalStudents,
+    present: summary.present,
+    absent: summary.absent,
+    onDuty: summary.onDuty,
+  };
+
+  const renderStatCard = ({ item }: { item: (typeof OA_STATISTICS_CARDS)[number] }) => (
     <View
       style={StyleSheet.flatten([
-        S.statCard,
-        { backgroundColor: colors[backgroundColor] },
+        S.card,
+        { backgroundColor: colors[item.color] },
       ])}
     >
-      <Text
-        style={StyleSheet.flatten([
-          S.statValue,
-          { color: colors[color], fontFamily: Fonts.bold },
-        ])}
-      >
-        {value}
-      </Text>
-      <Text
-        style={StyleSheet.flatten([
-          S.statLabel,
-          { color: theme.colors.black, fontFamily: Fonts.semibold },
-        ])}
-      >
-        {label}
-      </Text>
+      <View style={StyleSheet.flatten([S.imageContainer])}>
+        <Image
+          source={Images[item.image]}
+          style={StyleSheet.flatten([S.image])}
+        />
+      </View>
+      <View style={StyleSheet.flatten([S.detailContainer])}>
+        <Text
+          style={StyleSheet.flatten([
+            S.detail,
+            { color: theme.colors.white, fontFamily: Fonts.bold },
+          ])}
+        >
+          {statsData[item.image]}
+        </Text>
+        <Text
+          style={StyleSheet.flatten([
+            S.description,
+            { color: theme.colors.white, fontFamily: Fonts.semibold },
+          ])}
+        >
+          {item.description}
+        </Text>
+      </View>
     </View>
   );
 
   const renderStatistics = () => (
-    <View style={StyleSheet.flatten([S.statsContainer])}>
-      {renderStatCard(
-        OA_HOME_CONFIG.students,
-        summary.totalStudents,
-        "primary",
-        "secondaryBackground",
-      )}
-      {renderStatCard(
-        OA_HOME_CONFIG.statusOptions[1].label,
-        summary.present,
-        "badgeGreen",
-        "badgeGreenBackground",
-      )}
-      {renderStatCard(
-        OA_HOME_CONFIG.statusOptions[2].label,
-        summary.absent,
-        "red",
-        "redBackground",
-      )}
-      {renderStatCard(
-        OA_HOME_CONFIG.statusOptions[3].label,
-        summary.onDuty,
-        "orange",
-        "orangeBackground",
-      )}
-    </View>
+    <FlatList
+      data={OA_STATISTICS_CARDS}
+      keyExtractor={(_, index) => index.toString()}
+      numColumns={2}
+      renderItem={renderStatCard}
+      columnWrapperStyle={{ gap: 5 }}
+      contentContainerStyle={StyleSheet.flatten([S.statsHeaderContainer])}
+      showsVerticalScrollIndicator={false}
+      scrollEnabled={false}
+    />
   );
 
   const renderBulkActionSheet = () => (

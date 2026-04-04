@@ -7,11 +7,13 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 
 import { Loader, PageContainer } from "@/components";
 import { Body, Header, Schedules } from "./components";
+import { useFocusEffect } from "@react-navigation/native";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import { useScheduleStore } from "./stores";
 import { showToast } from "@/utils";
+import { useNotificationStore } from "../Notification/stores";
 
 export const HomeScreen = ({ navigation }: any) => {
   const today = dayjs().format("YYYY-MM-DD");
@@ -24,13 +26,21 @@ export const HomeScreen = ({ navigation }: any) => {
     scheduleLoading,
     resetSchedules,
   } = useScheduleStore();
+  const { unreadCount, fetchNotifications } = useNotificationStore();
 
-  useEffect(() => {
+  const _fetchSchedules = useCallback(() => {
     const formattedDay = dayjs(date).format("ddd").toUpperCase();
 
     resetSchedules();
     fetchSchedules(formattedDay);
-  }, [date]);
+  }, [date, fetchSchedules, resetSchedules]);
+
+  useFocusEffect(
+    useCallback(() => {
+      _fetchSchedules();
+      fetchNotifications("all");
+    }, [_fetchSchedules, fetchNotifications]),
+  );
 
   useEffect(() => {
     if (scheduleError && scheduleError.length > 0) {
@@ -52,10 +62,7 @@ export const HomeScreen = ({ navigation }: any) => {
   };
 
   const _retryFetchSchedules = () => {
-    const formattedDay = dayjs(date).format("ddd").toUpperCase();
-
-    resetSchedules();
-    fetchSchedules(formattedDay);
+    _fetchSchedules();
   };
 
   const _renderSchedules = () => {
@@ -81,7 +88,10 @@ export const HomeScreen = ({ navigation }: any) => {
 
   return (
     <>
-      <Header navigateToNotification={_navigateToNotification} />
+      <Header
+        navigateToNotification={_navigateToNotification}
+        showBadge={unreadCount > 0}
+      />
       <Body setDate={setDate} />
 
       <PageContainer isLightStatusBar={true}>

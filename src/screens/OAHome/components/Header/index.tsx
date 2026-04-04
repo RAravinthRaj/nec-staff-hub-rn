@@ -12,16 +12,15 @@ import { Fonts } from "@/assets";
 import { OA_HOME_CONFIG } from "../../config";
 import Octicons from "@expo/vector-icons/Octicons";
 import { Badge } from "react-native-paper";
-import { useState } from "react";
 
 export interface IHeader {
   navigateToNotification: () => void;
+  showBadge: boolean;
 }
 
-export const Header = ({ navigateToNotification }: IHeader) => {
+export const Header = ({ navigateToNotification, showBadge }: IHeader) => {
   const { theme } = useTheme();
   const colors: any = theme.colors;
-  const [showBadge, setShowBadge] = useState(true);
 
   const renderNotification = () => (
     <View style={StyleSheet.flatten([S.bellIcon])}>

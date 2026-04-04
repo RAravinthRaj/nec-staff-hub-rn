@@ -5,8 +5,9 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
+  Modal,
   Text,
   View,
   StyleSheet,
@@ -16,17 +17,18 @@ import {
 import { Icon, useTheme } from "@rneui/themed";
 import { styles as S } from "./styles";
 import { Fonts } from "@/assets";
+import { NotificationItem } from "../../stores";
 
 export interface IBody {
-  notifications: any;
+  notifications: NotificationItem[];
+  onRead: (notificationId: number) => Promise<void>;
+  emptyTitle: string;
 }
 
-export const Body = ({ notifications }: IBody) => {
+export const Body = ({ notifications, onRead, emptyTitle }: IBody) => {
   const { theme } = useTheme();
-
-  const _toggleType = (notification: any) => {
-    notification.type = notification.type === "unread" ? "read" : "unread";
-  };
+  const [selectedNotification, setSelectedNotification] =
+    useState<NotificationItem | null>(null);
 
   const _renderTime = (time: string) => {
     const createdAt = new Date(time);
@@ -49,7 +51,23 @@ export const Body = ({ notifications }: IBody) => {
     return `${diffMin}m`;
   };
 
-  const _renderSingleData = (notification: any, index: number) => {
+  const sortedNotifications = useMemo(
+    () =>
+      [...notifications].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      ),
+    [notifications],
+  );
+
+  const openNotification = async (notification: NotificationItem) => {
+    setSelectedNotification(notification);
+    if (!notification.isRead) {
+      await onRead(notification.id);
+    }
+  };
+
+  const _renderSingleData = (notification: NotificationItem, index: number) => {
     const isLast = index === notifications.length - 1;
 
     return (
@@ -60,7 +78,7 @@ export const Body = ({ notifications }: IBody) => {
           {
             borderBottomWidth: !isLast ? 0.5 : 0,
             backgroundColor:
-              notification?.type === "unread"
+              !notification.isRead
                 ? theme.colors.tertiaryBackground
                 : theme.colors.white,
             borderColor: theme.colors.border,
@@ -71,7 +89,7 @@ export const Body = ({ notifications }: IBody) => {
           },
         ])}
         onPress={() => {
-          _toggleType(notification);
+          openNotification(notification);
         }}
       >
         <View style={S.notificationDetailContainer}>
@@ -81,7 +99,7 @@ export const Body = ({ notifications }: IBody) => {
               name="message"
               size={30}
               color={
-                notification?.type === "unread"
+                !notification.isRead
                   ? theme.colors.black
                   : theme.colors.border
               }
@@ -93,7 +111,7 @@ export const Body = ({ notifications }: IBody) => {
                 S.titleText,
                 {
                   fontFamily:
-                    notification?.type === "unread"
+                    !notification.isRead
                       ? Fonts.bold
                       : Fonts.regular,
                 },
@@ -101,21 +119,33 @@ export const Body = ({ notifications }: IBody) => {
             >
               {notification.title}
             </Text>
-            <Text style={S.text}>{notification.subtitle}</Text>
+            <Text style={S.text} numberOfLines={2}>
+              {notification.message}
+            </Text>
           </View>
         </View>
 
-        <Text style={S.dateText}>{_renderTime(notification?.createdAt)}</Text>
+        <Text style={S.dateText}>{_renderTime(notification.createdAt)}</Text>
       </TouchableOpacity>
     );
   };
 
   const _renderData = () => {
+    if (sortedNotifications.length === 0) {
+      return (
+        <View style={S.emptyContainer}>
+          <Text style={S.emptyText}>{emptyTitle}</Text>
+        </View>
+      );
+    }
+
     return (
       <View>
-        {notifications.map((notification: any, index: number) => {
+        {sortedNotifications.map((notification, index) => {
           return (
-            <View key={index}>{_renderSingleData(notification, index)}</View>
+            <View key={notification.id}>
+              {_renderSingleData(notification, index)}
+            </View>
           );
         })}
       </View>
@@ -136,13 +166,52 @@ export const Body = ({ notifications }: IBody) => {
   };
 
   return (
-    <ScrollView
-      style={StyleSheet.flatten([
-        S.container,
-        { backgroundColor: theme.colors.white },
-      ])}
-    >
-      {_renderHeader()}
-    </ScrollView>
+    <>
+      <ScrollView
+        style={StyleSheet.flatten([
+          S.container,
+          { backgroundColor: theme.colors.white },
+        ])}
+      >
+        {_renderHeader()}
+      </ScrollView>
+
+      <Modal
+        visible={Boolean(selectedNotification)}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setSelectedNotification(null)}
+      >
+        <View style={S.modalOverlay}>
+          <View
+            style={StyleSheet.flatten([
+              S.modalContainer,
+              { backgroundColor: theme.colors.white },
+            ])}
+          >
+            <Text style={S.modalTitle}>{selectedNotification?.title}</Text>
+            <Text style={S.modalText}>{selectedNotification?.message}</Text>
+
+            <TouchableOpacity
+              style={StyleSheet.flatten([
+                S.modalButton,
+                { backgroundColor: theme.colors.primary },
+              ])}
+              onPress={() => setSelectedNotification(null)}
+              activeOpacity={0.8}
+            >
+              <Text
+                style={StyleSheet.flatten([
+                  S.modalButtonText,
+                  { color: theme.colors.white },
+                ])}
+              >
+                Close
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };

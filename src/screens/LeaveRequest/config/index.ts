@@ -23,6 +23,8 @@ export const LEAVE_REQUEST_CONFIG = {
   morning: "Morning",
   afternoon: "Afternoon",
   addDocument: "Click the “Add” to attach documents",
+  documentSupportText:
+    "Supported: PDF, JPEG, JPG, PNG. Maximum file size: 20 MB each.",
   confirmTitle: "Submit Leave Request",
   confirmSubtitle: "Are you sure you want to submit this leave request?",
   confirmYes: "Yes, Submit",

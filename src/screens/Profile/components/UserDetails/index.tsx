@@ -12,17 +12,32 @@ import { styles as S } from "./styles";
 import { PROFILE_CONFIG } from "../../config";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import dayjs from "dayjs";
+import { setPushNotificationsEnabled } from "@/utils";
 
 export interface IUserDetails {
   userDetails: any;
   handleLogOut: () => void;
+  notificationsEnabled: boolean;
 }
 
-export const UserDetails = ({ userDetails, handleLogOut }: IUserDetails) => {
+export const UserDetails = ({
+  userDetails,
+  handleLogOut,
+  notificationsEnabled,
+}: IUserDetails) => {
   const { theme } = useTheme();
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(notificationsEnabled);
   const [isVisible, setIsVisible] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  React.useEffect(() => {
+    setIsEnabled(notificationsEnabled);
+  }, [notificationsEnabled]);
+
+  const toggleSwitch = async () => {
+    const nextValue = !isEnabled;
+    setIsEnabled(nextValue);
+    await setPushNotificationsEnabled(nextValue);
+  };
 
   const _viewAbout = () => {
     console.log("About");

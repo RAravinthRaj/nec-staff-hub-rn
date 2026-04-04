@@ -1,6 +1,38 @@
-/* 
-© 2025 Aravinth Raj R. All rights reserved.
-Unauthorized copying of this file, via any medium, is strictly prohibited.
-Proprietary and confidential.  
-Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
-*/
+import {
+  getNotifications,
+  markNotificationRead,
+  registerPushToken,
+  unregisterPushToken,
+} from "./graphql";
+
+class NotificationService {
+  private static instance: NotificationService;
+
+  private constructor() {}
+
+  static getInstance(): NotificationService {
+    if (!NotificationService.instance) {
+      NotificationService.instance = new NotificationService();
+    }
+
+    return NotificationService.instance;
+  }
+
+  async getNotificationsAPI(filter?: string) {
+    return getNotifications(filter);
+  }
+
+  async markNotificationReadAPI(notificationId: number) {
+    return markNotificationRead(notificationId);
+  }
+
+  async registerPushTokenAPI(token: string, platform: string) {
+    return registerPushToken(token, platform);
+  }
+
+  async unregisterPushTokenAPI(token: string) {
+    return unregisterPushToken(token);
+  }
+}
+
+export default NotificationService.getInstance();

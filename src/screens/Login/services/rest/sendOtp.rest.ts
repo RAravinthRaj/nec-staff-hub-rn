@@ -14,6 +14,7 @@ export interface SendOtpParams {
 
 export interface SendOtpResponse {
   message: string;
+  rawOtp?: string;
 }
 
 export const sendOtpAPI = async (

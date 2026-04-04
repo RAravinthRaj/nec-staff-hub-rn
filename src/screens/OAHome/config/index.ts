@@ -68,4 +68,6 @@ export const OA_HOME_CONFIG = {
   saveAttendanceSuccess:
     "Saved attendance for {students} student(s) across {dates} day(s).",
   saveAttendanceError: "Failed to save OA attendance.",
+  saveAttendanceServerSqlError:
+    "OA attendance could not be saved because the server returned an invalid SQL query. Please fix the backend saveOAAttendance query.",
 };

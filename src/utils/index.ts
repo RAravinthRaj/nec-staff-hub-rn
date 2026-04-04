@@ -9,3 +9,4 @@ export * from "./documents";
 export * from "./toast";
 export * from "./role";
 export * from "./item";
+export * from "./pushNotifications";

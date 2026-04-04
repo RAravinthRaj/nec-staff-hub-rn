@@ -5,7 +5,8 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   ScrollView,
   StyleSheet,
@@ -13,6 +14,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
+  FlatList,
 } from "react-native";
 import ElevatedView from "react-native-elevated-view";
 import { Icon, useTheme } from "@rneui/themed";
@@ -21,7 +24,7 @@ import { Header, DropDown, DateInput, StudentList } from "../OAHome/components";
 import { OA_HOME_CONFIG } from "../OAHome/config";
 import OAHomeService from "../OAHome/services";
 import { showToast } from "@/utils";
-import { Fonts } from "@/assets";
+import { Fonts, Images } from "@/assets";
 
 type AttendanceMode = "DAY" | "RANGE";
 type StudentStatus = "present" | "absent" | "onDuty" | "mixed";
@@ -100,25 +103,41 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semibold,
   },
   statsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: 10,
+    width: "100%",
+    paddingHorizontal: 5,
     marginTop: 18,
   },
+  imageContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  image: {
+    height: 28,
+    width: 28,
+  },
   statCard: {
-    width: "47.5%",
-    borderRadius: 14,
-    paddingVertical: 14,
-    paddingHorizontal: 14,
+    flex: 1,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    padding: 10,
+    borderRadius: 10,
+    margin: 5,
+  },
+  detailContainer: {
+    display: "flex",
+    flexDirection: "column",
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 25,
+    letterSpacing: 0.4,
     fontFamily: Fonts.bold,
   },
   statLabel: {
-    fontSize: 14,
-    marginTop: 6,
+    fontSize: 13,
     fontFamily: Fonts.semibold,
   },
   paginationRow: {
@@ -181,6 +200,29 @@ const REPORT_MODES = OA_HOME_CONFIG.modes.filter(
   (item) => item.value === "DAY" || item.value === "RANGE",
 );
 
+const OA_STATISTICS_CARDS = [
+  {
+    image: "totalStudents",
+    color: "secondary",
+    description: OA_HOME_CONFIG.students,
+  },
+  {
+    image: "present",
+    color: "badgeGreen",
+    description: OA_HOME_CONFIG.statusOptions[1].label,
+  },
+  {
+    image: "absent",
+    color: "red",
+    description: OA_HOME_CONFIG.statusOptions[2].label,
+  },
+  {
+    image: "onDuty",
+    color: "orange",
+    description: OA_HOME_CONFIG.statusOptions[3].label,
+  },
+] as const;
+
 export const OAFilterScreen = ({ navigation }: any) => {
   const { theme } = useTheme();
   const colors: any = theme.colors;
@@ -200,6 +242,7 @@ export const OAFilterScreen = ({ navigation }: any) => {
   const [studentsLoading, setStudentsLoading] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
   const [hasLoadedStudents, setHasLoadedStudents] = useState(false);
+  const [initialStudentsLoadSettled, setInitialStudentsLoadSettled] = useState(false);
   const [summary, setSummary] = useState({
     totalStudents: 0,
     present: 0,
@@ -229,34 +272,53 @@ export const OAFilterScreen = ({ navigation }: any) => {
     [department, year, startDate, endDate, mode, statusFilter, search, page],
   );
 
-  useEffect(() => {
-    const loadMeta = async () => {
-      try {
-        setMetaLoading(true);
-        const res = await OAHomeService.getMetaAPI();
-        const payload = res?.payload;
-        const nextDepartments = payload?.departments ?? [];
-        const nextYears = payload?.years ?? [];
+  const loadMeta = useCallback(async () => {
+    try {
+      setMetaLoading(true);
+      setStudents([]);
+      setSummary({
+        totalStudents: 0,
+        present: 0,
+        absent: 0,
+        onDuty: 0,
+        mixed: 0,
+      });
+      setPagination({
+        page: 1,
+        pageSize: 10,
+        totalCount: 0,
+        totalPages: 0,
+      });
+      setHasLoadedStudents(false);
+      setInitialStudentsLoadSettled(false);
 
-        setDepartments(nextDepartments);
-        setYears(nextYears);
+      const res = await OAHomeService.getMetaAPI();
+      const payload = res?.payload;
+      const nextDepartments = payload?.departments ?? [];
+      const nextYears = payload?.years ?? [];
 
-        if (nextDepartments[0]?.value) {
-          setDepartment(nextDepartments[0].value);
-        }
+      setDepartments(nextDepartments);
+      setYears(nextYears);
 
-        if (nextYears[0]?.value) {
-          setYear(nextYears[0].value);
-        }
-      } catch (err: any) {
-        showToast(err?.message || OA_HOME_CONFIG.metaLoadError, "error");
-      } finally {
-        setMetaLoading(false);
+      if (nextDepartments[0]?.value) {
+        setDepartment(nextDepartments[0].value);
       }
-    };
 
-    loadMeta();
+      if (nextYears[0]?.value) {
+        setYear(nextYears[0].value);
+      }
+    } catch (err: any) {
+      showToast(err?.message || OA_HOME_CONFIG.metaLoadError, "error");
+    } finally {
+      setMetaLoading(false);
+    }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadMeta();
+    }, [loadMeta]),
+  );
 
   const navigateToNotification = () => navigation.navigate("Notification");
 
@@ -305,6 +367,7 @@ export const OAFilterScreen = ({ navigation }: any) => {
     } catch (err: any) {
       showToast(err?.message || OA_HOME_CONFIG.fetchStudentsError, "error");
     } finally {
+      setInitialStudentsLoadSettled(true);
       setStudentsLoading(false);
     }
   };
@@ -368,45 +431,44 @@ export const OAFilterScreen = ({ navigation }: any) => {
     </View>
   );
 
-  const renderStatCard = (
-    label: string,
-    value: number,
-    color: string,
-    backgroundColor: string,
-  ) => (
-    <View style={[styles.statCard, { backgroundColor: colors[backgroundColor] }]}>
-      <Text style={[styles.statValue, { color: colors[color] }]}>{value}</Text>
-      <Text style={[styles.statLabel, { color: theme.colors.black }]}>{label}</Text>
+  const statsData = {
+    totalStudents: summary.totalStudents,
+    present: summary.present,
+    absent: summary.absent,
+    onDuty: summary.onDuty,
+  };
+
+  const renderStatCard = ({
+    item,
+  }: {
+    item: (typeof OA_STATISTICS_CARDS)[number];
+  }) => (
+    <View style={[styles.statCard, { backgroundColor: colors[item.color] }]}>
+      <View style={styles.imageContainer}>
+        <Image source={Images[item.image]} style={styles.image} />
+      </View>
+      <View style={styles.detailContainer}>
+        <Text style={[styles.statValue, { color: theme.colors.white }]}>
+          {statsData[item.image]}
+        </Text>
+        <Text style={[styles.statLabel, { color: theme.colors.white }]}>
+          {item.description}
+        </Text>
+      </View>
     </View>
   );
 
   const renderStats = () => (
-    <View style={styles.statsContainer}>
-      {renderStatCard(
-        OA_HOME_CONFIG.students,
-        summary.totalStudents,
-        "primary",
-        "secondaryBackground",
-      )}
-      {renderStatCard(
-        OA_HOME_CONFIG.statusOptions[1].label,
-        summary.present,
-        "badgeGreen",
-        "badgeGreenBackground",
-      )}
-      {renderStatCard(
-        OA_HOME_CONFIG.statusOptions[2].label,
-        summary.absent,
-        "red",
-        "redBackground",
-      )}
-      {renderStatCard(
-        OA_HOME_CONFIG.statusOptions[3].label,
-        summary.onDuty,
-        "orange",
-        "orangeBackground",
-      )}
-    </View>
+    <FlatList
+      data={OA_STATISTICS_CARDS}
+      keyExtractor={(_, index) => index.toString()}
+      numColumns={2}
+      renderItem={renderStatCard}
+      columnWrapperStyle={{ gap: 5 }}
+      contentContainerStyle={styles.statsContainer}
+      showsVerticalScrollIndicator={false}
+      scrollEnabled={false}
+    />
   );
 
   const renderPagination = () => (
@@ -574,7 +636,7 @@ export const OAFilterScreen = ({ navigation }: any) => {
       return <Loader />;
     }
 
-    if (studentsLoading && !hasLoadedStudents) {
+    if (!initialStudentsLoadSettled && department && year) {
       return <Loader />;
     }
 

@@ -54,7 +54,12 @@ export const OtpScreen = ({ navigation, route }: any) => {
 
   useEffect(() => {
     if (sendOtpResponse) {
-      showToast(sendOtpResponse, "success");
+      showToast(
+        sendOtpResponse.rawOtp
+          ? `OTP sent successfully. OTP: ${sendOtpResponse.rawOtp}`
+          : sendOtpResponse.message,
+        "success",
+      );
       resetSendOtp();
     }
   }, [sendOtpResponse]);

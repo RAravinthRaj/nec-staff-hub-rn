@@ -6,11 +6,11 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import { create } from "zustand";
-import { sendOtpAPI, SendOtpParams } from "../services";
+import { sendOtpAPI, SendOtpParams, SendOtpResponse } from "../services";
 
 type SendOtpState = {
   sendOtpLoading: boolean;
-  sendOtpResponse: string | null;
+  sendOtpResponse: SendOtpResponse | null;
   sendOtpError: string | null;
 
   fetchSendOtp: (params: SendOtpParams) => Promise<void>;
@@ -28,7 +28,12 @@ export const useSendOtpStore = create<SendOtpState>((set) => ({
 
       const res = await sendOtpAPI(params);
 
-      set({ sendOtpResponse: res?.message || "OTP sent successfully" });
+      set({
+        sendOtpResponse: {
+          message: res?.message || "OTP sent successfully",
+          rawOtp: res?.rawOtp,
+        },
+      });
     } catch (err: any) {
       set({ sendOtpError: err?.message });
     } finally {

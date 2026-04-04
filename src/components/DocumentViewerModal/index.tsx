@@ -12,25 +12,14 @@ import { WebView } from "react-native-webview";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as FileSystem from "expo-file-system/legacy";
 import * as Sharing from "expo-sharing";
+import Pdf from "react-native-pdf";
 import { styles as S } from "./styles";
 import { getDocumentExtension, getDocumentMimeType } from "@/utils/documents";
 import { showToast } from "@/utils";
 
 const IMAGE_EXTENSIONS = ["png", "jpg", "jpeg"];
-const DIRECT_PREVIEW_EXTENSIONS = ["pdf"];
 
 const isImageFile = (value?: string) => IMAGE_EXTENSIONS.includes(getDocumentExtension(value));
-
-const isDirectPreviewFile = (value?: string) =>
-  DIRECT_PREVIEW_EXTENSIONS.includes(getDocumentExtension(value));
-
-const getDocumentPreviewUrl = (url: string, fileName: string) => {
-  if (isDirectPreviewFile(fileName) || isDirectPreviewFile(url)) {
-    return url;
-  }
-
-  return `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(url)}`;
-};
 
 export const getDocumentFileName = (documentUrl: string, index: number) =>
   decodeURIComponent(documentUrl?.split("/").pop()?.split("?")[0] || "").replace(
@@ -59,14 +48,9 @@ export const DocumentViewerModal = ({
 
   const resolvedFileName = fileName || "Document";
   const canPreviewAsImage = isImageFile(resolvedFileName) || isImageFile(documentUrl || "");
-
-  const previewUrl = useMemo(() => {
-    if (!documentUrl) {
-      return "";
-    }
-
-    return getDocumentPreviewUrl(documentUrl, resolvedFileName);
-  }, [documentUrl, resolvedFileName]);
+  const canPreviewAsPdf =
+    getDocumentExtension(resolvedFileName) === "pdf" ||
+    getDocumentExtension(documentUrl || "") === "pdf";
 
   useEffect(() => {
     if (!visible) {
@@ -190,11 +174,34 @@ export const DocumentViewerModal = ({
                     renderFallback()
                   )}
                 </>
+              ) : canPreviewAsPdf ? (
+                hasPreviewError ? (
+                  renderFallback()
+                ) : (
+                  <Pdf
+                    source={{ uri: documentUrl, cache: true }}
+                    style={S.previewPdf}
+                    trustAllCerts={false}
+                    onLoadProgress={() => {
+                      setLoading(true);
+                      setHasPreviewError(false);
+                    }}
+                    onLoadComplete={() => setLoading(false)}
+                    onError={() => {
+                      setLoading(false);
+                      setHasPreviewError(true);
+                    }}
+                  />
+                )
               ) : hasPreviewError ? (
                 renderFallback()
               ) : (
                 <WebView
-                  source={{ uri: previewUrl }}
+                  source={{
+                    uri: `https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(
+                      documentUrl,
+                    )}`,
+                  }}
                   originWhitelist={["*"]}
                   javaScriptEnabled
                   startInLoadingState

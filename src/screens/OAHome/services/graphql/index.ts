@@ -7,6 +7,7 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 
 import { apolloClient } from "../../../../clients";
 import { getGraphqlError, getItemInLocalStorage } from "../../../../utils";
+import { OA_HOME_CONFIG } from "../../config";
 import { EXPORT_OA_ATTENDANCE_REPORT, SAVE_OA_ATTENDANCE } from "./mutations";
 import {
   OA_ATTENDANCE_META,
@@ -172,7 +173,17 @@ export const saveOAAttendance = async (
       payload: data?.saveOAAttendance ?? null,
     };
   } catch (err: any) {
-    const msg = getGraphqlError(err) || "An error occurred while saving OA attendance.";
+    const rawMessage =
+      getGraphqlError(err) || "An error occurred while saving OA attendance.";
+
+    const hasKnownSqlSyntaxFailure =
+      rawMessage.includes("You have an error in your SQL syntax") &&
+      rawMessage.includes("ON DUPLICATE KEY UPDATE");
+
+    const msg = hasKnownSqlSyntaxFailure
+      ? OA_HOME_CONFIG.saveAttendanceServerSqlError
+      : rawMessage;
+
     throw new Error(msg);
   }
 };

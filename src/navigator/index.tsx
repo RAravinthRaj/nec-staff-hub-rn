@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
 import { useThemeMode } from "@/hooks";
+import { Platform } from "react-native";
 
 import {
   LandingScreen,
@@ -31,16 +32,29 @@ import {
 import { TabNavigator } from "./TabNavigator";
 import { Loader } from "@/components";
 import { View } from "react-native";
+import {
+  clearStoredExpoPushToken,
+  getPushNotificationsEnabled,
+  getStoredExpoPushToken,
+  registerForPushNotificationsAsync,
+  setStoredExpoPushToken,
+  showToast,
+} from "@/utils";
+import { useNotificationStore } from "@/screens/Notification/stores";
 
 const Stack = createNativeStackNavigator();
 
 export const AppNavigator = () => {
   const { theme } = useThemeMode();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [pushNotificationsEnabled, setPushNotificationsEnabledState] =
+    useState(false);
+  const { registerPushToken, unregisterPushToken } = useNotificationStore();
 
   const checkAuth = async () => {
     const token = await SecureStore.getItemAsync("token");
     setIsLoggedIn(!!token);
+    setPushNotificationsEnabledState(await getPushNotificationsEnabled());
   };
 
   useEffect(() => {
@@ -51,6 +65,46 @@ export const AppNavigator = () => {
     const interval = setInterval(checkAuth, 300);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
+
+    const syncPushPreference = async () => {
+      try {
+        if (pushNotificationsEnabled) {
+          const expoPushToken = await registerForPushNotificationsAsync();
+
+          if (!expoPushToken) {
+            return;
+          }
+
+          await registerPushToken(expoPushToken, Platform.OS);
+          await setStoredExpoPushToken(expoPushToken);
+          return;
+        }
+
+        const storedToken = await getStoredExpoPushToken();
+
+        if (!storedToken) {
+          return;
+        }
+
+        await unregisterPushToken(storedToken);
+        await clearStoredExpoPushToken();
+      } catch (_) {
+        showToast("Push notification preference could not be updated.", "info");
+      }
+    };
+
+    syncPushPreference();
+  }, [
+    isLoggedIn,
+    pushNotificationsEnabled,
+    registerPushToken,
+    unregisterPushToken,
+  ]);
 
   if (isLoggedIn === null) {
     return (

@@ -8,7 +8,6 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system/legacy";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useTheme } from "@rneui/themed";
 import { styles as S } from "./styles";
@@ -18,6 +17,7 @@ import { Fonts } from "@/assets";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { showToast } from "@/utils";
 import { isAllowedDocumentType } from "@/utils/documents";
+import { DocumentViewerModal } from "@/components";
 
 export type DocumentItem = {
   uri: string;
@@ -31,10 +31,13 @@ export interface DocumentsInputProps {
 }
 
 export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
-  const MAX_FILE_SIZE_MB = 10;
+  const MAX_FILE_SIZE_MB = 20;
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
+  const [selectedDocument, setSelectedDocument] = useState<DocumentItem | null>(
+    null,
+  );
   const { theme } = useTheme();
   const colors: any = theme.colors;
 
@@ -111,7 +114,7 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
         }
 
         if (typeRejectedCount > 0) {
-          showToast("Only PDF, PNG, and JPEG files are allowed", "error");
+          showToast("Only PDF, PNG, JPG, and JPEG files are allowed", "error");
           if (onChange) onChange(prev);
           return prev;
         }
@@ -126,29 +129,13 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
     }
   };
 
-  const openDocument = async (uri: string, name: string) => {
-    try {
-      if (!uri || !name) {
-        showToast("Invalid file", "error");
-        return;
-      }
-
-      const uniqueName = `${Date.now()}_${name}`;
-      const destination = FileSystem.cacheDirectory + uniqueName;
-
-      showToast("Downloading file...", "info");
-
-      if (uri.startsWith("file://")) {
-        await FileSystem.copyAsync({ from: uri, to: destination });
-      } else {
-        await FileSystem.downloadAsync(uri, destination);
-      }
-
-      showToast("File saved successfully", "success");
-    } catch (error) {
-      console.log("Download error:", error);
-      showToast("Unable to download file", "error");
+  const openDocument = (document: DocumentItem) => {
+    if (!document.uri || !document.name) {
+      showToast("Invalid file", "error");
+      return;
     }
+
+    setSelectedDocument(document);
   };
 
   const removeDocument = (uri: string) => {
@@ -193,7 +180,7 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
           >
             <TouchableOpacity
               style={StyleSheet.flatten([S.documentLeft])}
-              onPress={() => openDocument(doc.uri, doc.name)}
+              onPress={() => openDocument(doc)}
             >
               <FontAwesome5
                 name="file-pdf"
@@ -244,6 +231,21 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
       </View>
 
       {_renderDocuments()}
+      <Text
+        style={StyleSheet.flatten([
+          S.valueName,
+          { color: theme.colors.black, opacity: 0.6, marginTop: 8 },
+        ])}
+      >
+        {LEAVE_REQUEST_CONFIG.documentSupportText}
+      </Text>
+
+      <DocumentViewerModal
+        visible={Boolean(selectedDocument)}
+        documentUrl={selectedDocument?.uri}
+        fileName={selectedDocument?.name}
+        onClose={() => setSelectedDocument(null)}
+      />
     </View>
   );
 };

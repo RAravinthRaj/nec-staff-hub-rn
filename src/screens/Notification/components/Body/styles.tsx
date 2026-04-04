@@ -63,4 +63,43 @@ export const styles = StyleSheet.create({
     lineHeight: 18,
     fontFamily: Fonts.regular,
   },
+  emptyContainer: {
+    paddingVertical: 32,
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 15,
+    fontFamily: Fonts.regular,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.45)",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  modalContainer: {
+    borderRadius: 16,
+    padding: 20,
+    gap: 14,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: Fonts.bold,
+  },
+  modalText: {
+    fontSize: 14,
+    lineHeight: 22,
+    fontFamily: Fonts.regular,
+  },
+  modalButton: {
+    marginTop: 8,
+    alignSelf: "flex-end",
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
+  modalButtonText: {
+    fontSize: 14,
+    fontFamily: Fonts.semibold,
+  },
 });

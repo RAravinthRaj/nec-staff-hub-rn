@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 import { StyleSheet } from "react-native";
-import { ScreenWidth } from "@rneui/base";
+import { ScreenHeight, ScreenWidth } from "@rneui/base";
 import { Fonts } from "@/assets";
 
 export const styles = StyleSheet.create({
@@ -78,6 +78,42 @@ export const styles = StyleSheet.create({
     paddingRight: 40,
     fontSize: 15,
     borderRadius: 12,
+  },
+  statsHeaderContainer: {
+    width: "100%",
+    paddingHorizontal: 5,
+    marginTop: 5,
+  },
+  imageContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  image: {
+    height: ScreenHeight * 0.04,
+    width: ScreenWidth * 0.08,
+  },
+  card: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    padding: 10,
+    borderRadius: 10,
+    margin: 5,
+  },
+  detailContainer: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  detail: {
+    fontSize: 25,
+    letterSpacing: 0.4,
+  },
+  description: {
+    fontSize: 13,
   },
   statsContainer: {
     width: "100%",

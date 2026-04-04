@@ -5,29 +5,42 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { PageContainer, Loader } from "@/components";
 import { Body, Header, UserDetails } from "./components";
 import { useProfileStore } from "./stores";
-import { showToast } from "@/utils";
+import { getPushNotificationsEnabled, showToast } from "@/utils";
 
 export const ProfileScreen = () => {
   const { profile, profileLoading, profileError, fetchProfile, resetProfile } =
     useProfileStore();
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+  const loadPreferences = useCallback(async () => {
+    setNotificationsEnabled(await getPushNotificationsEnabled());
+  }, []);
+
+  const _getProfile = useCallback(() => {
+    resetProfile();
+    fetchProfile();
+  }, [fetchProfile, resetProfile]);
 
   useEffect(() => {
-    _getProfile();
     return () => {
       resetProfile();
     };
-  }, []);
+  }, [resetProfile]);
 
-  const _getProfile = () => {
-    fetchProfile();
-  };
+  useFocusEffect(
+    useCallback(() => {
+      loadPreferences();
+      _getProfile();
+    }, [_getProfile, loadPreferences]),
+  );
 
   useEffect(() => {
     if (profileError && profileError.length > 0) {
@@ -52,7 +65,11 @@ export const ProfileScreen = () => {
       return (
         <ScrollView>
           <Body data={profile} />
-          <UserDetails userDetails={profile} handleLogOut={_handleLogout} />
+          <UserDetails
+            userDetails={profile}
+            handleLogOut={_handleLogout}
+            notificationsEnabled={notificationsEnabled}
+          />
         </ScrollView>
       );
     }

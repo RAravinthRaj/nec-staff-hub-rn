@@ -6,12 +6,14 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import { Loader, NoDataFound, PageContainer } from "@/components";
+import { useFocusEffect } from "@react-navigation/native";
 import { ScrollView } from "react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Body, Header, StudentList } from "./components";
 import { OA_HOME_CONFIG } from "./config";
 import OAHomeService from "./services";
 import { showToast } from "@/utils";
+import { useNotificationStore } from "../Notification/stores";
 
 type AttendanceMode = "DAY" | "RANGE" | "PERIOD";
 type StudentStatus = "present" | "absent" | "onDuty" | "mixed";
@@ -64,6 +66,7 @@ const INITIAL_PAGINATION = {
 };
 
 export const OAHomeScreen = ({ navigation }: any) => {
+  const { unreadCount, fetchNotifications } = useNotificationStore();
   const [departments, setDepartments] = useState<DropdownItem[]>([]);
   const [years, setYears] = useState<DropdownItem[]>([]);
   const [periods, setPeriods] = useState<PeriodItem[]>([]);
@@ -83,6 +86,7 @@ export const OAHomeScreen = ({ navigation }: any) => {
   const [studentsLoading, setStudentsLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [hasLoadedStudents, setHasLoadedStudents] = useState(false);
+  const [initialStudentsLoadSettled, setInitialStudentsLoadSettled] = useState(false);
 
   const [summary, setSummary] = useState(INITIAL_SUMMARY);
   const [pagination, setPagination] = useState(INITIAL_PAGINATION);
@@ -108,41 +112,50 @@ export const OAHomeScreen = ({ navigation }: any) => {
     [department, year, startDate, endDate, mode, periodId, statusFilter, search, page],
   );
 
-  useEffect(() => {
-    const loadMeta = async () => {
-      try {
-        setMetaLoading(true);
-        const res = await OAHomeService.getMetaAPI();
-        const payload = res?.payload;
+  const loadMeta = useCallback(async () => {
+    try {
+      setMetaLoading(true);
+      setStudents([]);
+      setSummary(INITIAL_SUMMARY);
+      setPagination(INITIAL_PAGINATION);
+      setHasLoadedStudents(false);
+      setInitialStudentsLoadSettled(false);
 
-        const nextDepartments = payload?.departments ?? [];
-        const nextYears = payload?.years ?? [];
-        const nextPeriods = payload?.periods ?? [];
+      const res = await OAHomeService.getMetaAPI();
+      const payload = res?.payload;
 
-        setDepartments(nextDepartments);
-        setYears(nextYears);
-        setPeriods(nextPeriods);
+      const nextDepartments = payload?.departments ?? [];
+      const nextYears = payload?.years ?? [];
+      const nextPeriods = payload?.periods ?? [];
 
-        if (nextDepartments[0]?.value) {
-          setDepartment(nextDepartments[0].value);
-        }
+      setDepartments(nextDepartments);
+      setYears(nextYears);
+      setPeriods(nextPeriods);
 
-        if (nextYears[0]?.value) {
-          setYear(nextYears[0].value);
-        }
-
-        if (nextPeriods[0]?.id) {
-          setPeriodId(Number(nextPeriods[0].id));
-        }
-      } catch (err: any) {
-        showToast(err?.message || OA_HOME_CONFIG.metaLoadError, "error");
-      } finally {
-        setMetaLoading(false);
+      if (nextDepartments[0]?.value) {
+        setDepartment(nextDepartments[0].value);
       }
-    };
 
-    loadMeta();
+      if (nextYears[0]?.value) {
+        setYear(nextYears[0].value);
+      }
+
+      if (nextPeriods[0]?.id) {
+        setPeriodId(Number(nextPeriods[0].id));
+      }
+    } catch (err: any) {
+      showToast(err?.message || OA_HOME_CONFIG.metaLoadError, "error");
+    } finally {
+      setMetaLoading(false);
+    }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadMeta();
+      fetchNotifications("all");
+    }, [fetchNotifications, loadMeta]),
+  );
 
   const fetchStudents = async (nextPage = page) => {
     if (!department || !year) {
@@ -195,6 +208,7 @@ export const OAHomeScreen = ({ navigation }: any) => {
     } catch (err: any) {
       showToast(err?.message || OA_HOME_CONFIG.fetchStudentsError, "error");
     } finally {
+      setInitialStudentsLoadSettled(true);
       setStudentsLoading(false);
     }
   };
@@ -329,7 +343,7 @@ export const OAHomeScreen = ({ navigation }: any) => {
       return <Loader />;
     }
 
-    if (studentsLoading && !hasLoadedStudents) {
+    if (!initialStudentsLoadSettled && department && year) {
       return <Loader />;
     }
 
@@ -376,7 +390,10 @@ export const OAHomeScreen = ({ navigation }: any) => {
 
   return (
     <>
-      <Header navigateToNotification={_navigateToNotification} />
+      <Header
+        navigateToNotification={_navigateToNotification}
+        showBadge={unreadCount > 0}
+      />
       <PageContainer isLightStatusBar={true}>{renderContent()}</PageContainer>
     </>
   );

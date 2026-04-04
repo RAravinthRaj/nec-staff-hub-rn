@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useState } from "react";
+import React from "react";
 import {
   Text,
   View,
@@ -20,11 +20,13 @@ import { NOTIFICATION_CONFIG } from "../../config";
 import { LinearGradient } from "expo-linear-gradient";
 import { Fonts } from "@/assets";
 
-export interface IChip {}
+export interface IChip {
+  category: string;
+  onChange: (category: string) => void;
+}
 
-export const Chip = ({}: IChip) => {
+export const Chip = ({ category, onChange }: IChip) => {
   const { theme } = useTheme();
-  const [category, setCategory] = useState("All");
 
   const _renderChip = () => {
     return (
@@ -43,7 +45,7 @@ export const Chip = ({}: IChip) => {
             <TouchableOpacity
               key={chip}
               activeOpacity={0.8}
-              onPress={() => setCategory(chip)}
+              onPress={() => onChange(chip)}
             >
               {isActive ? (
                 <LinearGradient

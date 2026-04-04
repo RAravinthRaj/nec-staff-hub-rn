@@ -55,7 +55,11 @@ export const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+        unmountOnBlur: true,
+        lazy: false,
+      }}
       tabBar={(props) => <CustomTabBar {...props} />}
     >
       {TAB_CONFIG[role].map((tab) => (

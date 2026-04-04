@@ -6,11 +6,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
-    paddingHorizontal: 18,
-    paddingVertical: 28,
+    paddingHorizontal: 24,
+    paddingVertical: 44,
   },
   container: {
-    flex: 1,
+    width: "100%",
+    maxHeight: "78%",
     borderRadius: 18,
     overflow: "hidden",
   },
@@ -48,10 +49,15 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   previewContainer: {
-    flex: 1,
-    minHeight: 360,
+    minHeight: 280,
+    maxHeight: 420,
   },
   previewImage: {
+    width: "100%",
+    height: "100%",
+  },
+  previewPdf: {
+    flex: 1,
     width: "100%",
     height: "100%",
   },

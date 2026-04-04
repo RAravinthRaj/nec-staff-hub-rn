@@ -17,6 +17,8 @@ import * as FileSystem from "expo-file-system/legacy";
 import { getDocumentMimeType, isAllowedDocumentType } from "@/utils/documents";
 
 export const LeaveRequestScreen = ({ navigation }: any) => {
+  const MAX_DOCUMENT_SIZE_BYTES = 20 * 1024 * 1024;
+
   const { requestLeave, requestLoading, requestError, resetRequestLeave } =
     useLeaveRequestStore();
   const {
@@ -73,7 +75,11 @@ export const LeaveRequestScreen = ({ navigation }: any) => {
       const uploadedDocuments = await Promise.all(
         (payload.documents ?? []).map(async (document) => {
           if (!isAllowedDocumentType(document.name, document.mimeType)) {
-            throw new Error("Only PDF, PNG, and JPEG files are allowed.");
+            throw new Error("Only PDF, PNG, JPG, and JPEG files are allowed.");
+          }
+
+          if ((document.size ?? 0) > MAX_DOCUMENT_SIZE_BYTES) {
+            throw new Error("Document size must not exceed 20 MB.");
           }
 
           const base64 = await FileSystem.readAsStringAsync(document.uri, {
