@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import {
   View,
   Text,
@@ -31,11 +31,13 @@ export interface CustomDropdownProps {
 }
 
 export const DropDown = ({
+  value,
   placeholder = "Select",
   items,
   onChange,
 }: CustomDropdownProps) => {
   const { theme } = useTheme();
+  const colors: any = theme.colors;
 
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState<{
@@ -45,8 +47,14 @@ export const DropDown = ({
     height: number;
   } | null>(null);
 
-  const anchorRef = useRef<TouchableOpacity>(null);
+  const anchorRef = useRef<any>(null);
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
+
+  const resolvedLabel = useMemo(() => {
+    if (!value) return selectedLabel;
+    const matched = items.find((item) => item.value === value);
+    return matched?.label ?? selectedLabel;
+  }, [items, selectedLabel, value]);
 
   const openDropdown = () => {
     anchorRef.current?.measureInWindow(
@@ -62,13 +70,13 @@ export const DropDown = ({
       <TouchableOpacity
         style={StyleSheet.flatten([
           S.container,
-          { borderColor: theme.colors.border },
+          { borderColor: colors.border },
         ])}
         ref={anchorRef}
         activeOpacity={0.7}
         onPress={openDropdown}
       >
-        <Text style={S.anchorText}>{selectedLabel}</Text>
+        <Text style={S.anchorText}>{resolvedLabel}</Text>
         <View>
           <Entypo name={visible ? "chevron-up" : "chevron-down"} size={24} />
         </View>
@@ -88,7 +96,7 @@ export const DropDown = ({
                   top: position.y + position.height + 4,
                   left: position.x,
                   width: position.width,
-                  backgroundColor: theme.colors.white,
+                  backgroundColor: colors.white,
                 },
               ]}
             >

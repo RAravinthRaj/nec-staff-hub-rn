@@ -78,9 +78,10 @@ export const CustomTabBar = ({
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const icon = (options as any).icon;
+        const isFocused = state.index === index;
+        const iconConfig = isFocused ? icon.focused : icon.unfocused;
 
-        const color =
-          state.index === index ? theme.colors.white : theme.colors.black;
+        const color = isFocused ? theme.colors.white : theme.colors.black;
 
         return (
           <TouchableOpacity
@@ -90,8 +91,8 @@ export const CustomTabBar = ({
             activeOpacity={0.85}
           >
             <Icon
-              name={icon.focused.name}
-              type={icon.focused.type}
+              name={iconConfig.name}
+              type={iconConfig.type}
               size={22}
               color={color}
             />

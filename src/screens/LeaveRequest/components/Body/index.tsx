@@ -36,7 +36,7 @@ export interface IBody {
     startDate: string;
     endDate: string;
     reason: string;
-    documents?: string[];
+    documents?: DocumentItem[];
   }) => void;
 }
 
@@ -337,7 +337,7 @@ export const Body = ({ categories, onSubmit, submitLoading }: IBody) => {
       startDate,
       endDate: endDateValue,
       reason: reason.trim(),
-      documents: documents.map((d) => d.uri),
+      documents,
     });
   };
 

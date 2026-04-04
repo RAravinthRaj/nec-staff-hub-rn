@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 import { StyleSheet } from "react-native";
-import { ScreenHeight, ScreenWidth } from "@rneui/base";
+import { ScreenHeight } from "@rneui/base";
 import { Fonts } from "@/assets";
 
 export const styles = StyleSheet.create({
@@ -33,25 +33,39 @@ export const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 16,
-    textAlign: "center",
+    textAlign: "left",
     flexShrink: 1,
     flexWrap: "wrap",
     fontFamily: Fonts.regular,
     lineHeight: 22,
+  },
+  summaryText: {
+    marginTop: 4,
+    fontSize: 12,
+    fontFamily: Fonts.regular,
+    lineHeight: 16,
   },
   lastStyle: {
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10,
   },
   radioButton: {
-    display: "flex",
+    marginHorizontal: 1,
+  },
+  statusColumn: {
+    justifyContent: "center",
+  },
+  statusRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 3,
   },
-  typeText: {
-    fontSize: 18,
-    fontFamily: Fonts.regular,
-    lineHeight: 22,
+  statusBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
+  },
+  statusBadgeText: {
+    fontSize: 13,
+    fontFamily: Fonts.semibold,
   },
 });

@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -18,6 +18,7 @@ import { styles as S } from "./styles";
 import { LEAVE_DETAIL_CONFIG } from "../../config";
 import ElevatedView from "react-native-elevated-view";
 import { Fonts } from "@/assets";
+import { DocumentViewerModal, getDocumentFileName } from "@/components";
 
 export interface Leave {
   id?: number;
@@ -30,7 +31,8 @@ export interface Leave {
   numberOfDays: number;
   reason?: string;
   comments?: string;
-  documents?: React.ReactNode[];
+  documents?: string[];
+  facultyName?: string;
 }
 
 export interface IBody {
@@ -41,6 +43,25 @@ export interface IBody {
 
 export const Body = ({ leave, fromHod, onCancel }: IBody) => {
   const { theme } = useTheme();
+  const colors: any = theme.colors;
+  const [documentModalVisible, setDocumentModalVisible] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<{
+    url: string;
+    fileName: string;
+  } | null>(null);
+
+  const openDocumentModal = (documentUrl: string, fileName: string) => {
+    setSelectedDocument({
+      url: documentUrl,
+      fileName,
+    });
+    setDocumentModalVisible(true);
+  };
+
+  const closeDocumentModal = () => {
+    setDocumentModalVisible(false);
+    setSelectedDocument(null);
+  };
 
   const _calculateDays = (start: string, end: string) => {
     const [sd, sm, sy] = start.split(".").map(Number);
@@ -80,7 +101,9 @@ export const Body = ({ leave, fromHod, onCancel }: IBody) => {
 
   const _renderStatus = () => {
     const status = leave.status;
-    const colorKey = LEAVE_DETAIL_CONFIG.color[status.toLowerCase()] ?? "gray";
+    const normalizedStatus =
+      status.toLowerCase() as keyof typeof LEAVE_DETAIL_CONFIG.color;
+    const colorKey = LEAVE_DETAIL_CONFIG.color[normalizedStatus] ?? "gray";
     const backgroundKey = `${colorKey}Background`;
 
     return (
@@ -88,7 +111,7 @@ export const Body = ({ leave, fromHod, onCancel }: IBody) => {
         <Text
           style={StyleSheet.flatten([
             S.keyText,
-            { color: theme.colors.black, opacity: 0.5 },
+            { color: colors.black, opacity: 0.5 },
           ])}
         >
           {LEAVE_DETAIL_CONFIG.status}
@@ -97,14 +120,14 @@ export const Body = ({ leave, fromHod, onCancel }: IBody) => {
         <ElevatedView
           style={StyleSheet.flatten([
             S.statusContainer,
-            { backgroundColor: theme.colors[backgroundKey] },
+            { backgroundColor: colors[backgroundKey] },
           ])}
         >
           <Text
             style={StyleSheet.flatten([
               S.statusText,
               {
-                color: theme.colors[colorKey],
+                color: colors[colorKey],
                 fontFamily: Fonts.regular,
               },
             ])}
@@ -127,7 +150,7 @@ export const Body = ({ leave, fromHod, onCancel }: IBody) => {
         <TouchableOpacity
           style={StyleSheet.flatten([
             S.button,
-            { backgroundColor: theme.colors.red },
+            { backgroundColor: colors.red },
           ])}
           activeOpacity={0.8}
           onPress={onCancel}
@@ -154,7 +177,26 @@ export const Body = ({ leave, fromHod, onCancel }: IBody) => {
       );
     }
 
-    return leave.documents;
+    return leave.documents.map((documentUrl: string, index: number) => {
+      const fileName = getDocumentFileName(documentUrl, index);
+
+      return (
+        <TouchableOpacity
+          key={`${documentUrl}-${index}`}
+          activeOpacity={0.8}
+          onPress={() => openDocumentModal(documentUrl, fileName)}
+        >
+          <Text
+            style={StyleSheet.flatten([
+              S.valueText,
+              { color: theme.colors.primary, textDecorationLine: "underline" },
+            ])}
+          >
+            {fileName}
+          </Text>
+        </TouchableOpacity>
+      );
+    });
   };
 
   const _renderKeyValue = (label: string, value?: string | number) => (
@@ -277,15 +319,24 @@ export const Body = ({ leave, fromHod, onCancel }: IBody) => {
   };
 
   return (
-    <ScrollView
-      style={StyleSheet.flatten([
-        S.container,
-        { backgroundColor: theme.colors.white },
-      ])}
-      showsVerticalScrollIndicator={false}
-    >
-      {_renderData()}
-      {_renderButton()}
-    </ScrollView>
+    <>
+      <ScrollView
+        style={StyleSheet.flatten([
+          S.container,
+          { backgroundColor: theme.colors.white },
+        ])}
+        showsVerticalScrollIndicator={false}
+      >
+        {_renderData()}
+        {_renderButton()}
+      </ScrollView>
+
+      <DocumentViewerModal
+        visible={documentModalVisible}
+        documentUrl={selectedDocument?.url}
+        fileName={selectedDocument?.fileName}
+        onClose={closeDocumentModal}
+      />
+    </>
   );
 };

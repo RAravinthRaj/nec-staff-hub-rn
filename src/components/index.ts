@@ -10,3 +10,4 @@ export * from "./Footer";
 export { CustomToast } from "./Toast";
 export * from "./Loader";
 export * from "./NoDataFound";
+export * from "./DocumentViewerModal";

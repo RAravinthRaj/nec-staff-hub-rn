@@ -5,7 +5,7 @@ Proprietary and confidential.
 Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 import { StyleSheet } from "react-native";
-import { ScreenHeight, ScreenWidth } from "@rneui/base";
+import { ScreenWidth } from "@rneui/base";
 import { Fonts } from "@/assets";
 
 export const styles = StyleSheet.create({
@@ -23,11 +23,16 @@ export const styles = StyleSheet.create({
   },
   categoryContainer: {
     width: "100%",
-    display: "flex",
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 10,
+    gap: 12,
+    marginVertical: 6,
+  },
+  field: {
+    flex: 1,
+  },
+  fullWidthField: {
+    width: "100%",
   },
   typeText: {
     fontSize: 18,
@@ -35,119 +40,118 @@ export const styles = StyleSheet.create({
     lineHeight: 22,
   },
   dateContainer: {
-    display: "flex",
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    gap: 30,
-    marginTop: -12,
+    gap: 12,
+    marginTop: 4,
   },
-  date: {
-    width: ScreenWidth * 0.5,
+  dateField: {
+    flex: 1,
   },
   headerText: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
   },
   titleText: {
-    fontSize: 17,
+    fontSize: 16,
     fontFamily: Fonts.semibold,
     lineHeight: 22,
   },
-  detailContainer: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  detail: {
-    fontSize: 25,
-    letterSpacing: 0.4,
-  },
-  description: {
-    fontSize: 13,
-  },
   searchBarContainer: {
     position: "relative",
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 20,
-    margin: 5,
+    marginVertical: 12,
+    gap: 12,
   },
   searchBarElevatedContainer: {
-    width: ScreenWidth * 0.65,
-    display: "flex",
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 5,
   },
   input: {
     borderWidth: 0.5,
-    width: ScreenWidth * 0.65,
+    width: "100%",
     paddingVertical: 16,
     paddingHorizontal: 18,
     paddingRight: 40,
     fontSize: 15,
     borderRadius: 12,
   },
-  search: {
-    borderRadius: "50%",
-    padding: 5,
-  },
-  icons: {
-    position: "absolute",
-    right: 3,
-    padding: 5,
-    display: "flex",
+  statsContainer: {
+    width: "100%",
     flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 10,
   },
-  modalStyle: {
-    display: "flex",
-    justifyContent: "center",
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    borderWidth: 0.3,
-    pointerEvents: "box-none",
+  statCard: {
+    width: ScreenWidth * 0.42,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    borderRadius: 14,
+  },
+  statValue: {
+    fontSize: 24,
+  },
+  statLabel: {
+    fontSize: 14,
+    marginTop: 6,
+  },
+  actionRow: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+    marginTop: 16,
   },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 15,
+    paddingVertical: 12,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderWidth: 1.5,
-    marginHorizontal: 5,
-    marginTop: 5,
+    marginTop: 18,
     zIndex: 1,
   },
   titleItem: {
     flex: 1,
     alignItems: "center",
   },
+  titleHeaderText: {
+    fontSize: 15,
+    color: "white",
+    fontFamily: Fonts.semibold,
+    textAlign: "center",
+  },
   text: {
     fontSize: 16,
     fontFamily: Fonts.regular,
+    textAlign: "center",
   },
-  buttonContainer: {
-    display: "flex",
+  primaryButton: {
+    flex: 1,
     alignItems: "center",
-    alignSelf: "center",
-    borderRadius: 12,
-  },
-  button: {
-    display: "flex",
-    alignItems: "center",
-    alignSelf: "center",
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 10,
   },
-  buttonTitle: {
-    fontSize: 16,
+  secondaryButton: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    borderWidth: 1.5,
+  },
+  odButton: {
+    marginTop: 14,
+    alignItems: "center",
+    paddingVertical: 14,
+    borderRadius: 10,
   },
   backdrop: {
     backgroundColor: "rgba(0,0,0,0.4)",
@@ -158,8 +162,6 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   bottomTextContainer: {
-    display: "flex",
-    flexDirection: "column",
     alignItems: "center",
     gap: 10,
     marginBottom: 30,
@@ -171,11 +173,37 @@ export const styles = StyleSheet.create({
   bottomSubText: {
     fontSize: 16,
     fontFamily: Fonts.regular,
+    textAlign: "center",
   },
   bottomButtonContainer: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  paginationRow: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 12,
+  },
+  paginationButtons: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  paginationButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  paginationText: {
+    fontSize: 14,
+    fontFamily: Fonts.semibold,
+  },
+  paginationButtonText: {
+    fontSize: 14,
+    fontFamily: Fonts.regular,
   },
 });

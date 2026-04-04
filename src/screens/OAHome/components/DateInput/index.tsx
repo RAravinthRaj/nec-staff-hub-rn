@@ -24,6 +24,7 @@ export const DateInput = ({
   onChange,
 }: DateInputProps) => {
   const { theme } = useTheme();
+  const colors: any = theme.colors;
   const [show, setShow] = useState(false);
 
   const onDateChange = (_: any, selectedDate?: Date) => {
@@ -44,7 +45,7 @@ export const DateInput = ({
       <TouchableOpacity
         style={StyleSheet.flatten([
           styles.container,
-          { borderColor: theme.colors.border },
+          { borderColor: colors.border },
         ])}
         activeOpacity={0.8}
         onPress={() => setShow(true)}
@@ -58,7 +59,7 @@ export const DateInput = ({
           {formattedDate}
         </Text>
 
-        <Icon name="calendar-today" size={20} color={theme.colors.border} />
+        <Icon name="calendar-today" size={20} color={colors.border} />
       </TouchableOpacity>
 
       {show && (

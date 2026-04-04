@@ -6,7 +6,11 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import { apolloClient } from "../../../../clients";
-import { getGraphqlError, getItemInLocalStorage } from "../../../../utils";
+import {
+  getGraphqlError,
+  getItemInLocalStorage,
+  normalizeDocuments,
+} from "../../../../utils";
 import { GET_LEAVE_INTIMATIONS } from "./queries";
 
 export const getLeaveIntimations = async (status?: string) => {
@@ -105,7 +109,7 @@ const formatLeaveIntimations = (items: any[]) => {
       type: formatType(item?.leave_type),
       reason: item?.reason ?? "",
       comments: "",
-      documents: item?.documents ?? [],
+      documents: normalizeDocuments(item?.documents),
     });
   }
 

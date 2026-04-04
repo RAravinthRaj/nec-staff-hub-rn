@@ -22,6 +22,7 @@ import { CustomModal } from "../Modal";
 import { CommentModal } from "../../../LeaveApproval/components/CommentModal";
 import { useLeaveApprovalStore } from "../../../LeaveApproval/stores";
 import { showToast } from "@/utils";
+import { DocumentViewerModal, getDocumentFileName } from "@/components";
 
 export interface IBody {
   leave: any;
@@ -32,11 +33,17 @@ type ActionType = "Approved" | "Declined" | null;
 
 export const Body = ({ leave, onReviewed }: IBody) => {
   const { theme } = useTheme();
+  const colors: any = theme.colors;
   const [visible, setVisible] = useState(false);
   const [commentVisible, setCommentVisible] = useState(false);
   const [comment, setComment] = useState("");
   const [selectedLeave, setSelectedLeave] = useState<any>(null);
   const [actionType, setActionType] = useState<ActionType>(null);
+  const [documentModalVisible, setDocumentModalVisible] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<{
+    url: string;
+    fileName: string;
+  } | null>(null);
   const { reviewLeaveRequest } = useLeaveApprovalStore();
 
   const openConfirmation = (leave: any, action: ActionType) => {
@@ -48,6 +55,19 @@ export const Body = ({ leave, onReviewed }: IBody) => {
   const openCommentModal = () => {
     setVisible(false);
     setCommentVisible(true);
+  };
+
+  const openDocumentModal = (documentUrl: string, fileName: string) => {
+    setSelectedDocument({
+      url: documentUrl,
+      fileName,
+    });
+    setDocumentModalVisible(true);
+  };
+
+  const closeDocumentModal = () => {
+    setDocumentModalVisible(false);
+    setSelectedDocument(null);
   };
 
   const _renderHRStatus = (status: string) => {
@@ -64,9 +84,11 @@ export const Body = ({ leave, onReviewed }: IBody) => {
   };
 
   const _renderStatus = () => {
-    const status = leave?.status;
+    const status = String(leave?.status || "");
+    const normalizedStatus =
+      status.toLowerCase() as keyof typeof LEAVE_APPROVAL_DETAIL_CONFIG.color;
     const colorKey =
-      LEAVE_APPROVAL_DETAIL_CONFIG.color[status.toLowerCase()] ?? "gray";
+      LEAVE_APPROVAL_DETAIL_CONFIG.color[normalizedStatus] ?? "gray";
     const backgroundKey = `${colorKey}Background`;
 
     if (!status) {
@@ -78,7 +100,7 @@ export const Body = ({ leave, onReviewed }: IBody) => {
         <Text
           style={StyleSheet.flatten([
             S.keyText,
-            { color: theme.colors.black, opacity: 0.5 },
+            { color: colors.black, opacity: 0.5 },
           ])}
         >
           {LEAVE_APPROVAL_DETAIL_CONFIG.status}
@@ -87,14 +109,14 @@ export const Body = ({ leave, onReviewed }: IBody) => {
         <ElevatedView
           style={StyleSheet.flatten([
             S.statusContainer,
-            { backgroundColor: theme.colors[backgroundKey] },
+            { backgroundColor: colors[backgroundKey] },
           ])}
         >
           <Text
             style={StyleSheet.flatten([
               S.statusText,
               {
-                color: theme.colors[colorKey],
+                color: colors[colorKey],
                 fontFamily: Fonts.regular,
               },
             ])}
@@ -106,8 +128,9 @@ export const Body = ({ leave, onReviewed }: IBody) => {
     );
   };
 
-  const _renderButton = (title: string, color: string) => {
+  const _renderButton = (title: ActionType, color: string) => {
     if (leave.status !== LEAVE_APPROVAL_DETAIL_CONFIG.pending) return null;
+    if (!title) return null;
 
     return (
       <ElevatedView
@@ -141,7 +164,37 @@ export const Body = ({ leave, onReviewed }: IBody) => {
       );
     }
 
-    return leave.documents;
+    return leave.documents.map((documentUrl: string, index: number) => {
+      const fileName = getDocumentFileName(documentUrl, index);
+
+      return (
+        <TouchableOpacity
+          key={`${documentUrl}-${index}`}
+          activeOpacity={0.8}
+          onPress={() => openDocumentModal(documentUrl, fileName)}
+        >
+          <Text
+            style={StyleSheet.flatten([
+              S.valueText,
+              { color: theme.colors.primary, textDecorationLine: "underline" },
+            ])}
+          >
+            {fileName}
+          </Text>
+        </TouchableOpacity>
+      );
+    });
+  };
+
+  const _renderDocumentModal = () => {
+    return (
+      <DocumentViewerModal
+        visible={documentModalVisible}
+        documentUrl={selectedDocument?.url}
+        fileName={selectedDocument?.fileName}
+        onClose={closeDocumentModal}
+      />
+    );
   };
 
   const _renderKeyValue = (label: string, value?: string | number) => (
@@ -279,10 +332,10 @@ export const Body = ({ leave, onReviewed }: IBody) => {
     return (
       <View style={StyleSheet.flatten([S.approvalContainer])}>
         {_renderButton(
-          LEAVE_APPROVAL_DETAIL_CONFIG.approved,
-          theme.colors.badgeGreen,
+          LEAVE_APPROVAL_DETAIL_CONFIG.approved as ActionType,
+          colors.badgeGreen,
         )}
-        {_renderButton(LEAVE_APPROVAL_DETAIL_CONFIG.declined, theme.colors.red)}
+        {_renderButton(LEAVE_APPROVAL_DETAIL_CONFIG.declined as ActionType, colors.red)}
       </View>
     );
   };
@@ -348,6 +401,7 @@ export const Body = ({ leave, onReviewed }: IBody) => {
           }}
         />
       )}
+      {_renderDocumentModal()}
     </ScrollView>
   );
 };

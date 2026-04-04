@@ -17,6 +17,7 @@ import ElevatedView from "react-native-elevated-view";
 import { Fonts } from "@/assets";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { showToast } from "@/utils";
+import { isAllowedDocumentType } from "@/utils/documents";
 
 export type DocumentItem = {
   uri: string;
@@ -35,12 +36,14 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
 
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const { theme } = useTheme();
+  const colors: any = theme.colors;
 
   const pickDocuments = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         multiple: true,
         copyToCacheDirectory: true,
+        type: ["application/pdf", "image/png", "image/jpeg"],
       });
 
       if (result.canceled) {
@@ -58,6 +61,7 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
 
         let duplicateCount = 0;
         let sizeRejectedCount = 0;
+        let typeRejectedCount = 0;
 
         for (const asset of result.assets) {
           const key = `${asset.name}-${asset.size ?? 0}`;
@@ -69,6 +73,11 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
 
           if (asset.size && asset.size > MAX_FILE_SIZE_BYTES) {
             sizeRejectedCount++;
+            continue;
+          }
+
+          if (!isAllowedDocumentType(asset.name, asset.mimeType ?? undefined)) {
+            typeRejectedCount++;
             continue;
           }
 
@@ -97,6 +106,12 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
 
         if (sizeRejectedCount > 0) {
           showToast(`File exceeds ${MAX_FILE_SIZE_MB}MB limit`, "error");
+          if (onChange) onChange(prev);
+          return prev;
+        }
+
+        if (typeRejectedCount > 0) {
+          showToast("Only PDF, PNG, and JPEG files are allowed", "error");
           if (onChange) onChange(prev);
           return prev;
         }
@@ -194,7 +209,7 @@ export const DocumentsInput = ({ onChange }: DocumentsInputProps) => {
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => removeDocument(doc.uri)}>
-              <Icon name="close" size={24} color={theme.colors.red} />
+              <Icon name="close" size={24} color={colors.red} />
             </TouchableOpacity>
           </View>
         ))}

@@ -20,99 +20,86 @@ export interface IHeader {
 
 export const Header = ({ navigateToNotification }: IHeader) => {
   const { theme } = useTheme();
+  const colors: any = theme.colors;
   const [showBadge, setShowBadge] = useState(true);
 
-  const _renderDesign = () => {
-    return (
-      <View style={StyleSheet.flatten([S.designContainer])}>
-        <View
-          style={StyleSheet.flatten([
-            S.design,
-            { backgroundColor: theme.colors.border },
-          ])}
-        ></View>
-        <View
-          style={StyleSheet.flatten([
-            S.design,
-            { backgroundColor: theme.colors.border, left: -60 },
-          ])}
-        />
-      </View>
-    );
-  };
+  const renderNotification = () => (
+    <View style={StyleSheet.flatten([S.bellIcon])}>
+      <TouchableOpacity
+        style={StyleSheet.flatten([S.badgeContainer])}
+        onPress={navigateToNotification}
+        hitSlop={30}
+        activeOpacity={0.8}
+      >
+        <Octicons name="bell" size={24} color={theme.colors.white} />
+        {showBadge ? (
+          <Badge
+            size={10}
+            style={StyleSheet.flatten([S.badge, { borderColor: theme.colors.white }])}
+          />
+        ) : null}
+      </TouchableOpacity>
+    </View>
+  );
 
-  const _renderUserDetails = () => {
-    return (
-      <View
+  const renderGreeting = () => (
+    <View style={StyleSheet.flatten([S.textContainer])}>
+      <Text
         style={StyleSheet.flatten([
-          S.headerContainer,
-          { backgroundColor: theme.colors.primary },
+          S.greet,
+          { fontFamily: Fonts.regular, color: theme.colors.white },
         ])}
       >
-        <View style={StyleSheet.flatten([S.textContainer])}>
-          <Text
-            style={StyleSheet.flatten([
-              S.greet,
-              { fontFamily: Fonts.regular, color: theme.colors.white },
-            ])}
-          >
-            {OA_HOME_CONFIG.greet}
-          </Text>
-          <View style={StyleSheet.flatten([S.userNameContainer])}>
-            <Text
-              style={StyleSheet.flatten([
-                S.userName,
-                { color: theme.colors.white, fontFamily: Fonts.semibold },
-              ])}
-            >
-              {OA_HOME_CONFIG.userName}
-            </Text>
-            <Text style={StyleSheet.flatten([S.userName])}>
-              {OA_HOME_CONFIG.waveSign}
-            </Text>
-          </View>
-        </View>
-        {_renderNotification()}
-      </View>
-    );
-  };
-
-  const _renderNotification = () => {
-    return (
-      <View style={StyleSheet.flatten([S.bellIcon])}>
-        <TouchableOpacity
-          style={StyleSheet.flatten([S.badgeContainer])}
-          onPress={navigateToNotification}
-          hitSlop={30}
-          activeOpacity={0.8}
+        {OA_HOME_CONFIG.greet}
+      </Text>
+      <View style={StyleSheet.flatten([S.userNameContainer])}>
+        <Text
+          style={StyleSheet.flatten([
+            S.userName,
+            { color: theme.colors.white, fontFamily: Fonts.semibold },
+          ])}
         >
-          <Octicons name="bell" size={24} color="white" />
-          {showBadge && (
-            <Badge
-              size={10}
-              style={StyleSheet.flatten([
-                S.badge,
-                { borderColor: theme.colors.white },
-              ])}
-            />
-          )}
-        </TouchableOpacity>
+          {OA_HOME_CONFIG.userName}
+        </Text>
+        <Text style={StyleSheet.flatten([S.userName])}>
+          {OA_HOME_CONFIG.waveSign}
+        </Text>
       </View>
-    );
-  };
+    </View>
+  );
 
-  const _renderHeader = () => {
-    return (
-      <View>
-        {_renderUserDetails()}
-        <View style={StyleSheet.flatten([S.designMainContainer])}>
-          {_renderDesign()}
-        </View>
-      </View>
-    );
-  };
+  const renderUserDetails = () => (
+    <View
+      style={StyleSheet.flatten([
+        S.headerContainer,
+        { backgroundColor: theme.colors.primary },
+      ])}
+    >
+      {renderGreeting()}
+      {renderNotification()}
+    </View>
+  );
+
+  const renderDecorations = () => (
+    <View style={StyleSheet.flatten([S.designContainer])}>
+      <View
+        style={StyleSheet.flatten([S.design, { backgroundColor: colors.border }])}
+      />
+      <View
+        style={StyleSheet.flatten([
+          S.design,
+          { backgroundColor: colors.border, left: -60 },
+        ])}
+      />
+    </View>
+  );
 
   return (
-    <View style={StyleSheet.flatten([S.container])}>{_renderHeader()}</View>
+    <View style={StyleSheet.flatten([S.container])}>
+      {renderUserDetails()}
+      <View style={StyleSheet.flatten([S.designMainContainer])}>
+        {renderDecorations()}
+      </View>
+    </View>
   );
 };

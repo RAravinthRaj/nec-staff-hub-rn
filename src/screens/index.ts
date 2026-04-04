@@ -18,3 +18,4 @@ export * from "./LeaveIntimation/LeaveIntimation";
 export * from "./LeaveApproval/LeaveApproval";
 export * from "./LeaveApprovalDetails/LeaveApprovalDetails";
 export * from "./OAHome/OAHome";
+export * from "./OAFilter/OAFilter";

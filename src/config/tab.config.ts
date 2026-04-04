@@ -11,6 +11,7 @@ import {
   LeaveApprovalScreen,
   ProfileScreen,
   OAHomeScreen,
+  OAFilterScreen,
   LeaveIntimationScreen,
 } from "@/screens";
 
@@ -103,6 +104,14 @@ export const TAB_CONFIG = {
       icon: {
         focused: { name: "home", type: "entypo" },
         unfocused: { name: "home", type: "antdesign" },
+      },
+    },
+    {
+      name: "OAFilter",
+      component: OAFilterScreen,
+      icon: {
+        focused: { name: "filter", type: "antdesign" },
+        unfocused: { name: "filter-list", type: "material" },
       },
     },
     {

@@ -6,7 +6,11 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import { apolloClient } from "../../../../clients";
-import { getGraphqlError, getItemInLocalStorage } from "../../../../utils";
+import {
+  getGraphqlError,
+  getItemInLocalStorage,
+  normalizeDocuments,
+} from "../../../../utils";
 import { REQUEST_LEAVE } from "./mutations";
 
 export const requestLeave = async (
@@ -33,7 +37,7 @@ export const requestLeave = async (
         startDate,
         endDate,
         reason,
-        documents,
+        documents: normalizeDocuments(documents),
         force,
       },
       context: {

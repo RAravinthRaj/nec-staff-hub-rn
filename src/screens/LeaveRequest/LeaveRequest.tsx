@@ -12,6 +12,9 @@ import { useLeaveCategoriesStore, useLeaveRequestStore } from "./stores";
 import { showToast } from "@/utils";
 import { useEffect, useState } from "react";
 import { useLeaveRequestsStore } from "../Leaves/stores";
+import { DocumentItem } from "./components/Documents";
+import * as FileSystem from "expo-file-system/legacy";
+import { getDocumentMimeType, isAllowedDocumentType } from "@/utils/documents";
 
 export const LeaveRequestScreen = ({ navigation }: any) => {
   const { requestLeave, requestLoading, requestError, resetRequestLeave } =
@@ -34,6 +37,7 @@ export const LeaveRequestScreen = ({ navigation }: any) => {
     reason: string;
     documents?: string[];
   } | null>(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   useEffect(() => {
     if (requestError && requestError.length > 0) {
@@ -62,16 +66,35 @@ export const LeaveRequestScreen = ({ navigation }: any) => {
     startDate: string;
     endDate: string;
     reason: string;
-    documents?: string[];
+    documents?: DocumentItem[];
   }) => {
     try {
+      setUploadLoading(true);
+      const uploadedDocuments = await Promise.all(
+        (payload.documents ?? []).map(async (document) => {
+          if (!isAllowedDocumentType(document.name, document.mimeType)) {
+            throw new Error("Only PDF, PNG, and JPEG files are allowed.");
+          }
+
+          const base64 = await FileSystem.readAsStringAsync(document.uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          const mimeType =
+            getDocumentMimeType(document.name, document.mimeType) ||
+            "application/octet-stream";
+
+          return `data:${mimeType};base64,${base64}`;
+        }),
+      );
+
       const res = await requestLeave(
         payload.leaveType,
         payload.categoryId,
         payload.startDate,
         payload.endDate,
         payload.reason,
-        payload.documents,
+        uploadedDocuments,
       );
 
       const data = res?.payload;
@@ -79,7 +102,10 @@ export const LeaveRequestScreen = ({ navigation }: any) => {
         setConfirmMessage(
           data.warning || "Insufficient leave balance. Submit anyway?"
         );
-        setPendingPayload(payload);
+        setPendingPayload({
+          ...payload,
+          documents: uploadedDocuments,
+        });
         setConfirmVisible(true);
         return;
       }
@@ -93,6 +119,8 @@ export const LeaveRequestScreen = ({ navigation }: any) => {
       navigation.goBack();
     } catch (err: any) {
       showToast(err?.message || "Failed to submit leave request.", "error");
+    } finally {
+      setUploadLoading(false);
     }
   };
 
@@ -154,7 +182,7 @@ export const LeaveRequestScreen = ({ navigation }: any) => {
         {_renderLeaveRequest()}
       </PageContainer>
 
-      {requestLoading && <Loader useModalLoader />}
+      {(requestLoading || uploadLoading) && <Loader useModalLoader />}
 
       {confirmVisible && (
         <CustomModal
