@@ -7,10 +7,10 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 import { CustomThemeProvider } from "@/hooks";
 import { Main } from "@/Main";
 
-// console.log = () => {};
-// console.warn = () => {};
-// console.error = () => {};
-// console.info = () => {};
+console.log = () => {};
+console.warn = () => {};
+console.error = () => {};
+console.info = () => {};
 
 const App = () => {
   return (
