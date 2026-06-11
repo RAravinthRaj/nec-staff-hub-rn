@@ -13,6 +13,8 @@ import { useLeaveApprovalStore } from "./stores";
 import { useEffect, useState } from "react";
 import { showToast } from "@/utils";
 import * as SecureStore from "expo-secure-store";
+import { config } from "@/config";
+import { Text } from "react-native";
 
 export const LeaveApprovalScreen = ({ navigation }: any) => {
   const [status, setStatus] = useState("All");

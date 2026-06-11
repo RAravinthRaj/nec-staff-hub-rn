@@ -1,23 +1,58 @@
-import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
 import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
 export const PUSH_NOTIFICATIONS_ENABLED_KEY = "push_notifications_enabled";
 export const EXPO_PUSH_TOKEN_KEY = "expo_push_token";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+let notificationHandlerConfigured = false;
+
+const loadNotificationsModule = () => {
+  try {
+    return require("expo-notifications") as typeof import("expo-notifications");
+  } catch (_) {
+    return null;
+  }
+};
+
+const loadExpoConstantsModule = () => {
+  try {
+    const module = require("expo-constants") as typeof import("expo-constants");
+    return module.default;
+  } catch (_) {
+    return null;
+  }
+};
+
+export const configurePushNotifications = () => {
+  const Notifications = loadNotificationsModule();
+
+  if (!Notifications || notificationHandlerConfigured) {
+    return Boolean(Notifications);
+  }
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+
+  notificationHandlerConfigured = true;
+  return true;
+};
 
 export const registerForPushNotificationsAsync = async () => {
   try {
+    const Notifications = loadNotificationsModule();
+    const Constants = loadExpoConstantsModule();
+
+    if (!Notifications) {
+      return null;
+    }
+
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
@@ -39,8 +74,8 @@ export const registerForPushNotificationsAsync = async () => {
     }
 
     const projectId =
-      Constants.expoConfig?.extra?.eas?.projectId ||
-      Constants.easConfig?.projectId;
+      Constants?.expoConfig?.extra?.eas?.projectId ||
+      Constants?.easConfig?.projectId;
 
     const token = await Notifications.getExpoPushTokenAsync(
       projectId ? { projectId } : undefined,

@@ -22,6 +22,8 @@ export const LoginScreen = ({ navigation }: any) => {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [email, setEmail] = useState("");
 
+  console.log(config.restBaseURL + " " + config.graphqlBaseURL);
+
   const {
     sendOtpLoading,
     sendOtpResponse,

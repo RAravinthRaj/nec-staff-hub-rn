@@ -13,6 +13,7 @@ import { PROFILE_CONFIG } from "../../config";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import dayjs from "dayjs";
 import { setPushNotificationsEnabled } from "@/utils";
+import { Linking } from "react-native";
 
 export interface IUserDetails {
   userDetails: any;
@@ -40,14 +41,17 @@ export const UserDetails = ({
   };
 
   const _viewAbout = () => {
+    Linking.openURL("https://nec.edu.in/");
     console.log("About");
   };
 
   const _viewPrivacy = () => {
+    Linking.openURL("https://nec.edu.in/");
     console.log("Privacy");
   };
 
   const _viewTerms = () => {
+    Linking.openURL("https://nec.edu.in/");
     console.log("Terms");
   };
 

@@ -6,7 +6,6 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
 import {
   ScrollView,
   StyleSheet,
@@ -314,11 +313,9 @@ export const OAFilterScreen = ({ navigation }: any) => {
     }
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      loadMeta();
-    }, [loadMeta]),
-  );
+  useEffect(() => {
+    loadMeta();
+  }, [loadMeta]);
 
   const navigateToNotification = () => navigation.navigate("Notification");
 

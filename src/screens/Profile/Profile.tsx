@@ -8,7 +8,6 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 import { useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import * as SecureStore from "expo-secure-store";
-import { useFocusEffect } from "@react-navigation/native";
 
 import { PageContainer, Loader } from "@/components";
 import { Body, Header, UserDetails } from "./components";
@@ -35,12 +34,10 @@ export const ProfileScreen = () => {
     };
   }, [resetProfile]);
 
-  useFocusEffect(
-    useCallback(() => {
-      loadPreferences();
-      _getProfile();
-    }, [_getProfile, loadPreferences]),
-  );
+  useEffect(() => {
+    loadPreferences();
+    _getProfile();
+  }, [_getProfile, loadPreferences]);
 
   useEffect(() => {
     if (profileError && profileError.length > 0) {

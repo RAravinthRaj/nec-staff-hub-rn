@@ -57,8 +57,7 @@ export const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        unmountOnBlur: true,
-        lazy: false,
+        lazy: true,
       }}
       tabBar={(props) => <CustomTabBar {...props} />}
     >

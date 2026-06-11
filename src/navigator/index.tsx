@@ -33,6 +33,7 @@ import { TabNavigator } from "./TabNavigator";
 import { Loader } from "@/components";
 import { View } from "react-native";
 import {
+  configurePushNotifications,
   clearStoredExpoPushToken,
   getPushNotificationsEnabled,
   getStoredExpoPushToken,
@@ -74,6 +75,11 @@ export const AppNavigator = () => {
     const syncPushPreference = async () => {
       try {
         if (pushNotificationsEnabled) {
+          if (!configurePushNotifications()) {
+            showToast("Push notifications are not available in this build.", "info");
+            return;
+          }
+
           const expoPushToken = await registerForPushNotificationsAsync();
 
           if (!expoPushToken) {

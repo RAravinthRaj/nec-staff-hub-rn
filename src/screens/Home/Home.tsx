@@ -7,7 +7,6 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 
 import { Loader, PageContainer } from "@/components";
 import { Body, Header, Schedules } from "./components";
-import { useFocusEffect } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
@@ -35,12 +34,10 @@ export const HomeScreen = ({ navigation }: any) => {
     fetchSchedules(formattedDay);
   }, [date, fetchSchedules, resetSchedules]);
 
-  useFocusEffect(
-    useCallback(() => {
-      _fetchSchedules();
-      fetchNotifications("all");
-    }, [_fetchSchedules, fetchNotifications]),
-  );
+  useEffect(() => {
+    _fetchSchedules();
+    fetchNotifications("all");
+  }, [_fetchSchedules, fetchNotifications]);
 
   useEffect(() => {
     if (scheduleError && scheduleError.length > 0) {
@@ -93,7 +90,6 @@ export const HomeScreen = ({ navigation }: any) => {
         showBadge={unreadCount > 0}
       />
       <Body setDate={setDate} />
-
       <PageContainer isLightStatusBar={true}>
         {_renderSchedules()}
       </PageContainer>

@@ -6,11 +6,14 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 import { CustomThemeProvider } from "@/hooks";
 import { Main } from "@/Main";
+import { config } from "@/config";
 
-console.log = () => {};
-console.warn = () => {};
-console.error = () => {};
-console.info = () => {};
+if (config.nodeEnv !== "development") {
+  console.log = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+  console.info = () => {};
+}
 
 const App = () => {
   return (

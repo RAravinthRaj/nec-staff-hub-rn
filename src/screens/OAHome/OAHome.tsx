@@ -6,7 +6,6 @@ Written by Aravinth Raj R <aravinthr235@gmail.com>, 2025.
 */
 
 import { Loader, NoDataFound, PageContainer } from "@/components";
-import { useFocusEffect } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Body, Header, StudentList } from "./components";
@@ -150,12 +149,10 @@ export const OAHomeScreen = ({ navigation }: any) => {
     }
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      loadMeta();
-      fetchNotifications("all");
-    }, [fetchNotifications, loadMeta]),
-  );
+  useEffect(() => {
+    loadMeta();
+    fetchNotifications("all");
+  }, [fetchNotifications, loadMeta]);
 
   const fetchStudents = async (nextPage = page) => {
     if (!department || !year) {
